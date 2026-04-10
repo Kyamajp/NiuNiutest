@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0e0e24">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+<title>牛牛 — Niu Niu</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow-x:hidden}
+body{background:linear-gradient(160deg,#060610 0%,#0e0e24 40%,#141434 70%,#0a0a18 100%);color:#eee;font-family:'Noto Serif JP',Georgia,serif}
+@keyframes cardDeal{from{opacity:0;transform:translateY(-14px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes winPulse{0%,100%{box-shadow:0 0 8px rgba(230,180,34,.1)}50%{box-shadow:0 0 22px rgba(230,180,34,.28)}}
+@keyframes bullGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(249,168,37,.3))}50%{filter:drop-shadow(0 0 12px rgba(249,168,37,.7))}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes squeezePulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes alertRed{0%,100%{box-shadow:0 0 8px rgba(255,0,0,0.3),inset 0 0 12px rgba(255,0,0,0.15)}50%{box-shadow:0 0 25px rgba(255,0,0,0.6),0 0 50px rgba(200,0,0,0.3),inset 0 0 20px rgba(255,0,0,0.25)}}
+@keyframes alertRainbow{0%{box-shadow:0 0 20px rgba(255,0,0,0.5),0 0 40px rgba(255,0,0,0.2)}14%{box-shadow:0 0 20px rgba(255,127,0,0.5),0 0 40px rgba(255,127,0,0.2)}28%{box-shadow:0 0 20px rgba(255,255,0,0.5),0 0 40px rgba(255,255,0,0.2)}42%{box-shadow:0 0 20px rgba(0,255,0,0.5),0 0 40px rgba(0,255,0,0.2)}57%{box-shadow:0 0 20px rgba(0,127,255,0.5),0 0 40px rgba(0,127,255,0.2)}71%{box-shadow:0 0 20px rgba(75,0,130,0.5),0 0 40px rgba(75,0,130,0.2)}85%{box-shadow:0 0 20px rgba(148,0,211,0.5),0 0 40px rgba(148,0,211,0.2)}100%{box-shadow:0 0 20px rgba(255,0,0,0.5),0 0 40px rgba(255,0,0,0.2)}}
+@keyframes alertBorderRed{0%,100%{border-color:rgba(255,0,0,0.4)}50%{border-color:rgba(255,0,0,0.8)}}
+@keyframes alertBorderRainbow{0%{border-color:#f00}14%{border-color:#f70}28%{border-color:#ff0}42%{border-color:#0f0}57%{border-color:#07f}71%{border-color:#4b0082}85%{border-color:#9400d3}100%{border-color:#f00}}
+@keyframes alertGlitch{0%{transform:translate(0,0)}10%{transform:translate(-2px,1px)}20%{transform:translate(2px,-1px)}30%{transform:translate(0,2px)}40%{transform:translate(1px,-2px)}50%{transform:translate(-1px,0)}60%{transform:translate(2px,1px)}70%{transform:translate(-2px,-1px)}80%{transform:translate(0,0)}85%{transform:translate(1px,2px)}90%{transform:translate(-1px,-1px)}100%{transform:translate(0,0)}}
+@keyframes alertGlitchShadow{0%,80%{box-shadow:none;filter:none}82%{box-shadow:2px 0 0 rgba(255,0,0,0.4),-2px 0 0 rgba(0,255,255,0.4);filter:brightness(1.3)}84%{box-shadow:none;filter:none}90%{box-shadow:-1px 0 0 rgba(255,0,255,0.3),1px 0 0 rgba(0,255,0,0.3);filter:brightness(0.8)}92%{box-shadow:none;filter:none}}
+@keyframes alertFlash{0%{background:rgba(14,14,28,0.92)}8%{background:rgba(255,255,255,0.95)}20%{background:rgba(14,14,28,0.92)}28%{background:rgba(255,255,240,0.6)}40%{background:rgba(14,14,28,0.92)}}
+@keyframes alertBlackout{0%{background:rgba(14,14,28,0.92)}5%{background:rgba(0,0,0,1)}30%{background:rgba(0,0,0,1)}50%{background:rgba(14,14,28,0.92)}}
+@keyframes alertQuake{0%{transform:translate(0,0)}5%{transform:translate(-3px,2px)}10%{transform:translate(3px,-2px)}15%{transform:translate(-2px,-3px)}20%{transform:translate(2px,3px)}25%{transform:translate(-3px,1px)}30%{transform:translate(3px,-1px)}35%{transform:translate(0,0)}100%{transform:translate(0,0)}}
+@keyframes alertQuakeCard{0%{transform:translate(0,0) rotate(0)}8%{transform:translate(-4px,2px) rotate(-2deg)}16%{transform:translate(4px,-3px) rotate(2deg)}24%{transform:translate(-3px,-2px) rotate(-1deg)}32%{transform:translate(3px,3px) rotate(1deg)}40%{transform:translate(-2px,1px) rotate(-1deg)}50%{transform:translate(0,0) rotate(0)}}
+#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,#1a1a2e,#16213e);border-top:1px solid rgba(230,180,34,0.2);padding:12px 16px;align-items:center;justify-content:space-between;gap:10px;font-size:13px;animation:fadeUp .4s ease;backdrop-filter:blur(10px)}
+#install-banner.show{display:flex}
+#install-banner button{padding:7px 18px;border-radius:8px;font-weight:700;font-family:inherit;cursor:pointer;font-size:12px;border:none}
+#install-btn{background:linear-gradient(135deg,#e6b422,#d4a017);color:#1a1a2e}
+#dismiss-btn{background:transparent;color:#777;border:1px solid rgba(255,255,255,0.1) !important}
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<canvas id="confetti-canvas"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+"use strict";
+var e=React.createElement;
+var useState=React.useState;
+var useCallback=React.useCallback;
+var useRef=React.useRef;
+var useEffect=React.useEffect;
+
+// ─── Sound Engine (Web Audio API) ────────────────────────────────
+var audioCtx=null;
+function getAudioCtx(){
+  if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+  if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume();
+  return audioCtx;
+}
+
+function playTone(freq,dur,type,vol,delay){
+  var ctx=getAudioCtx();if(!ctx)return;
+  var t=ctx.currentTime+(delay||0);
+  var osc=ctx.createOscillator();
+  var gain=ctx.createGain();
+  osc.type=type||"sine";
+  osc.frequency.setValueAtTime(freq,t);
+  gain.gain.setValueAtTime(vol||0.15,t);
+  gain.gain.exponentialRampToValueAtTime(0.001,t+(dur||0.2));
+  osc.connect(gain);gain.connect(ctx.destination);
+  osc.start(t);osc.stop(t+(dur||0.2));
+}
+
+function playNoise(dur,vol,delay){
+  var ctx=getAudioCtx();if(!ctx)return;
+  var t=ctx.currentTime+(delay||0);
+  var bufSize=ctx.sampleRate*dur;
+  var buf=ctx.createBuffer(1,bufSize,ctx.sampleRate);
+  var data=buf.getChannelData(0);
+  for(var i=0;i<bufSize;i++)data[i]=(Math.random()*2-1)*0.5;
+  var src=ctx.createBufferSource();src.buffer=buf;
+  var gain=ctx.createGain();
+  gain.gain.setValueAtTime(vol||0.08,t);
+  gain.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  var filter=ctx.createBiquadFilter();
+  filter.type="highpass";filter.frequency.value=3000;
+  src.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+  src.start(t);src.stop(t+dur);
+}
+
+var SFX={
+  deal:function(){
+    for(var i=0;i<3;i++){
+      playNoise(0.06,0.12,i*0.08);
+      playTone(800+i*100,0.05,"square",0.04,i*0.08);
+    }
+  },
+  squeeze:function(){
+    playNoise(0.04,0.06);
+    playTone(600,0.08,"sine",0.06);
+  },
+  cardReveal:function(){
+    playNoise(0.05,0.1);
+    playTone(1200,0.1,"sine",0.08);
+    playTone(1500,0.08,"sine",0.05,0.05);
+  },
+  bullFound:function(){
+    playTone(523,0.15,"sine",0.15);
+    playTone(659,0.15,"sine",0.15,0.12);
+    playTone(784,0.25,"sine",0.18,0.24);
+  },
+  noBull:function(){
+    playTone(300,0.2,"triangle",0.1);
+    playTone(250,0.3,"triangle",0.08,0.15);
+  },
+  win:function(){
+    var notes=[523,659,784,1047,784,1047];
+    notes.forEach(function(n,i){
+      playTone(n,0.18,"sine",0.12,i*0.1);
+      if(i<3)playTone(n*1.5,0.12,"triangle",0.05,i*0.1+0.05);
+    });
+  },
+  buttonClick:function(){
+    playTone(1000,0.05,"square",0.06);
+  },
+  alertRed:function(){
+    // Ominous rising dissonance
+    playTone(120,0.6,"sawtooth",0.18);
+    playTone(127,0.6,"sawtooth",0.15);
+    playTone(180,0.4,"square",0.1,0.15);
+    playNoise(0.3,0.15,0.1);
+    playTone(240,0.5,"sawtooth",0.12,0.3);
+    playTone(300,0.3,"square",0.08,0.4);
+  },
+  alertRainbow:function(){
+    // Deep ominous base layer
+    playTone(80,1.2,"sawtooth",0.16);
+    playTone(85,1.2,"sawtooth",0.12);
+    playNoise(0.3,0.1,0.05);
+    // Sparkly high-pitched ascending arpeggios
+    var sparkle=[2093,2349,2637,2793,3136,3520,3951,4186];
+    sparkle.forEach(function(f,i){
+      playTone(f,0.12,"sine",0.08,i*0.07);
+      playTone(f*1.005,0.1,"sine",0.05,i*0.07+0.02); // slight detune for shimmer
+    });
+    // Second wave of sparkle (descending)
+    setTimeout(function(){
+      var sp2=[3951,3520,3136,2793,2637,2349,2093,2637,3136,3951];
+      sp2.forEach(function(f,i){
+        playTone(f,0.1,"sine",0.06,i*0.06);
+        playTone(f*0.998,0.08,"sine",0.04,i*0.06+0.01);
+      });
+    },500);
+    // Chime hits
+    playTone(4186,0.3,"sine",0.07,0.15);
+    playTone(5274,0.25,"sine",0.05,0.3);
+    playTone(6272,0.2,"sine",0.04,0.5);
+  },
+  alertGlitch:function(){
+    playNoise(0.03,0.12,0);
+    playNoise(0.02,0.08,0.15);
+    playTone(440,0.04,"square",0.06,0.1);
+    playNoise(0.03,0.1,0.4);
+    playTone(880,0.02,"square",0.04,0.45);
+    playNoise(0.02,0.06,0.7);
+    playTone(220,0.05,"sawtooth",0.05,0.75);
+    playTone(55,0.8,"sine",0.06,0.2);
+    playTone(57,0.8,"sine",0.04,0.2);
+  },
+  alertFlash:function(){
+    // Sharp electric zap + bright chime
+    playNoise(0.08,0.25,0);
+    playTone(3000,0.06,"square",0.15,0);
+    playTone(4000,0.04,"square",0.1,0.03);
+    playTone(2000,0.1,"sine",0.08,0.08);
+    playTone(5000,0.15,"sine",0.06,0.12);
+    playTone(6000,0.1,"sine",0.04,0.2);
+  },
+  alertBlackout:function(){
+    // Deep void boom + eerie silence then return
+    playTone(30,0.8,"sawtooth",0.25,0);
+    playTone(35,0.8,"sawtooth",0.2,0);
+    playNoise(0.15,0.2,0);
+    playTone(60,0.5,"sine",0.1,0.3);
+    // Return sound
+    playTone(200,0.15,"sine",0.08,0.7);
+    playTone(400,0.1,"sine",0.06,0.8);
+  },
+  alertQuake:function(){
+    // Heavy rumble vibration
+    playTone(40,1.0,"sawtooth",0.2,0);
+    playTone(45,1.0,"sawtooth",0.15,0);
+    playNoise(0.6,0.15,0);
+    playTone(60,0.4,"square",0.1,0.2);
+    playTone(80,0.3,"sawtooth",0.08,0.4);
+    playNoise(0.3,0.1,0.5);
+  },
+  alertCow:function(){
+    // Mystical reveal chime + moo-like low tone
+    playTone(130,0.6,"sawtooth",0.12,0);
+    playTone(138,0.6,"sawtooth",0.1,0);
+    playTone(523,0.2,"sine",0.1,0.2);
+    playTone(659,0.2,"sine",0.1,0.35);
+    playTone(784,0.3,"sine",0.12,0.5);
+    playTone(110,0.4,"triangle",0.08,0.3);
+  }
+};
+
+// ─── Confetti Engine ─────────────────────────────────────────────
+var confettiParts=[];
+var confettiActive=false;
+var confettiCanvas=null;
+var confettiCtx2d=null;
+
+function initConfetti(){
+  confettiCanvas=document.getElementById("confetti-canvas");
+  if(!confettiCanvas)return;
+  confettiCtx2d=confettiCanvas.getContext("2d");
+  resizeConfetti();
+  window.addEventListener("resize",resizeConfetti);
+}
+function resizeConfetti(){
+  if(!confettiCanvas)return;
+  confettiCanvas.width=window.innerWidth;
+  confettiCanvas.height=window.innerHeight;
+}
+function launchConfetti(){
+  confettiParts=[];
+  var colors=["#e6b422","#c0392b","#f39c12","#e74c3c","#2980b9","#27ae60","#f0d060","#ff6b6b"];
+  for(var i=0;i<80;i++){
+    confettiParts.push({
+      x:Math.random()*window.innerWidth,
+      y:-20-Math.random()*200,
+      w:4+Math.random()*6,
+      h:8+Math.random()*10,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      vx:(Math.random()-0.5)*4,
+      vy:2+Math.random()*4,
+      rot:Math.random()*360,
+      rv:(Math.random()-0.5)*8,
+      life:1
+    });
+  }
+  confettiActive=true;
+  requestAnimationFrame(drawConfetti);
+}
+function drawConfetti(){
+  if(!confettiActive||!confettiCtx2d)return;
+  confettiCtx2d.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+  var alive=0;
+  confettiParts.forEach(function(p){
+    if(p.life<=0)return;
+    alive++;
+    p.x+=p.vx;p.y+=p.vy;p.vy+=0.12;p.rot+=p.rv;
+    p.life-=0.006;
+    confettiCtx2d.save();
+    confettiCtx2d.translate(p.x,p.y);
+    confettiCtx2d.rotate(p.rot*Math.PI/180);
+    confettiCtx2d.globalAlpha=Math.max(0,p.life);
+    confettiCtx2d.fillStyle=p.color;
+    confettiCtx2d.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    confettiCtx2d.restore();
+  });
+  if(alive>0)requestAnimationFrame(drawConfetti);
+  else{confettiActive=false;confettiCtx2d.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);}
+}
+
+// ─── Card & Game Logic ───────────────────────────────────────────
+var SUITS=["♠","♥","♦","♣"];
+var RANKS=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+var RANK_ORDER={"A":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10,"J":11,"Q":12,"K":13};
+var SUIT_ORDER={"♠":4,"♥":3,"♦":2,"♣":1};
+
+function cardStrength(card){return RANK_ORDER[card.rank]*10+SUIT_ORDER[card.suit];}
+function rankPoints(r){if(["10","J","Q","K"].indexOf(r)>=0)return 10;if(r==="A")return 1;return parseInt(r);}
+function rankValue(r){if(r==="A")return 1;if(["J","Q","K"].indexOf(r)>=0)return 10;return parseInt(r);}
+
+function highestCard(cards){
+  var best=cards[0];
+  for(var i=1;i<cards.length;i++){if(cardStrength(cards[i])>cardStrength(best))best=cards[i];}
+  return best;
+}
+
+function createDeck(){
+  var deck=[];
+  SUITS.forEach(function(s){RANKS.forEach(function(r){deck.push({suit:s,rank:r});});});
+  for(var i=deck.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=deck[i];deck[i]=deck[j];deck[j]=t;}
+  return deck;
+}
+
+function evaluateHand(cards){
+  var hc=cardStrength(highestCard(cards));
+  var best={hasBull:false,bullValue:0,label:"无牛",highCard:hc};
+  for(var i=0;i<3;i++){for(var j=i+1;j<4;j++){for(var k=j+1;k<5;k++){
+    var s3=rankPoints(cards[i].rank)+rankPoints(cards[j].rank)+rankPoints(cards[k].rank);
+    if(s3%10===0){
+      var rest=cards.filter(function(_,idx){return idx!==i&&idx!==j&&idx!==k;});
+      var s2=rankPoints(rest[0].rank)+rankPoints(rest[1].rank);
+      var v=s2%10===0?10:s2%10;
+      if(v>best.bullValue)best={hasBull:true,bullValue:v,threeIdx:[i,j,k],label:v===10?"牛牛！":"牛"+v,highCard:hc};
+    }
+  }}}
+  if(cards.every(function(c){return["J","Q","K"].indexOf(c.rank)>=0;}))return Object.assign({},best,{hasBull:true,bullValue:15,label:"五花牛！",highCard:hc});
+  if(RANKS.some(function(r){return cards.filter(function(c){return c.rank===r;}).length===4;}))return Object.assign({},best,{hasBull:true,bullValue:16,label:"炸弹牛！",highCard:hc});
+  if(cards.every(function(c){return rankValue(c.rank)<=5;})&&cards.reduce(function(s,c){return s+rankValue(c.rank);},0)<=10)return Object.assign({},best,{hasBull:true,bullValue:14,label:"五小牛！",highCard:hc});
+  return best;
+}
+
+// ─── Pip layouts ─────────────────────────────────────────────────
+var PIP={
+  "A":[[50,50]],"2":[[50,18],[50,82]],"3":[[50,15],[50,50],[50,85]],
+  "4":[[30,15],[70,15],[30,85],[70,85]],"5":[[30,15],[70,15],[50,50],[30,85],[70,85]],
+  "6":[[30,15],[70,15],[30,50],[70,50],[30,85],[70,85]],
+  "7":[[30,15],[70,15],[30,50],[70,50],[50,33],[30,85],[70,85]],
+  "8":[[30,15],[70,15],[30,50],[70,50],[50,33],[50,67],[30,85],[70,85]],
+  "9":[[30,15],[70,15],[30,38],[70,38],[50,50],[30,62],[70,62],[30,85],[70,85]],
+  "10":[[30,15],[70,15],[50,27],[30,38],[70,38],[30,62],[70,62],[50,73],[30,85],[70,85]]
+};
+var CW=74,CH=111;
+
+// ─── Card Components ─────────────────────────────────────────────
+function CardFace(props){
+  var card=props.card,w=props.w||CW,h=props.h||CH,highlight=props.highlight||false,showRank=props.showRank!==false;
+  if(!card)return null;
+  var isRed=card.suit==="♥"||card.suit==="♦",color=isRed?"#c0392b":"#1a1a2e";
+  var isFace=["J","Q","K"].indexOf(card.rank)>=0,pips=PIP[card.rank];
+  var pipSize=card.rank==="A"?w*0.42:w*0.24;
+  var cTop=h*0.10,cLeft=w*0.08,cW2=w*0.84,cH2=h*0.80;
+  var children=[];
+  if(showRank){
+    children.push(e("div",{key:"tl",style:{position:"absolute",top:h*0.03,left:w*0.07,textAlign:"center",lineHeight:1,color:color}},
+      e("div",{style:{fontSize:w*0.19,fontWeight:800}},card.rank),e("div",{style:{fontSize:w*0.16,marginTop:-1}},card.suit)));
+    children.push(e("div",{key:"br",style:{position:"absolute",bottom:h*0.03,right:w*0.07,textAlign:"center",lineHeight:1,color:color,transform:"rotate(180deg)"}},
+      e("div",{style:{fontSize:w*0.19,fontWeight:800}},card.rank),e("div",{style:{fontSize:w*0.16,marginTop:-1}},card.suit)));
+  }
+  if(isFace){
+    var fc2=[e("div",{key:"suit",style:{fontSize:w*0.38,color:color,marginTop:showRank?2:0}},card.suit)];
+    if(showRank)fc2.unshift(e("div",{key:"rank",style:{fontSize:w*0.36,fontWeight:900,color:color,lineHeight:1}},card.rank));
+    children.push(e("div",{key:"fc",style:{position:"absolute",top:cTop,left:cLeft,width:cW2,height:cH2,display:"flex",alignItems:"center",justifyContent:"center"}},
+      e("div",{style:{width:cW2*0.82,height:cH2*0.82,borderRadius:5,
+        background:isRed?"linear-gradient(135deg,#fce4ec 0%,#f8bbd0 100%)":"linear-gradient(135deg,#e8eaf6 0%,#c5cae9 100%)",
+        display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",
+        border:"1.5px solid "+(isRed?"#e57373":"#7986cb")}},fc2)));
+  }else if(pips){
+    children.push(e("div",{key:"pips",style:{position:"absolute",top:cTop,left:cLeft,width:cW2,height:cH2}},
+      pips.map(function(p,idx){return e("div",{key:idx,style:{position:"absolute",left:p[0]+"%",top:p[1]+"%",
+        transform:"translate(-50%,-50%)"+(p[1]>55?" rotate(180deg)":""),fontSize:pipSize,color:color,lineHeight:1}},card.suit);})));
+  }
+  return e("div",{style:{width:w,height:h,position:"relative",
+    background:highlight?"linear-gradient(145deg,#fffde7 0%,#fff9c4 100%)":"linear-gradient(145deg,#fdfdfd 0%,#f5f4ef 100%)",
+    borderRadius:w*0.09,border:highlight?"2px solid #f9a825":"1px solid #bbb8b0",
+    boxShadow:highlight?"0 0 14px rgba(249,168,37,0.35)":"0 2px 5px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9)",
+    overflow:"hidden",fontFamily:"'Georgia','Times New Roman',serif"}},children);
+}
+
+function CardBack(props){
+  var w=props.w||CW,h=props.h||CH,squeeze=props.squeeze||false;
+  return e("div",{style:{width:w,height:h,position:"relative",
+    background:squeeze?"linear-gradient(135deg,#1a0a2e 0%,#2d1548 50%,#1a0a30 100%)":"linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)",
+    borderRadius:w*0.09,border:squeeze?"1.5px solid rgba(180,100,255,0.35)":"1px solid rgba(255,255,255,0.06)",overflow:"hidden"}},
+    e("div",{style:{position:"absolute",top:w*0.06,left:w*0.06,right:w*0.06,bottom:w*0.06,borderRadius:w*0.05,border:"1.5px solid rgba(230,180,34,0.25)"}},
+      e("div",{style:{position:"absolute",top:w*0.04,left:w*0.04,right:w*0.04,bottom:w*0.04,borderRadius:w*0.03,border:"1px solid rgba(230,180,34,0.12)",
+        background:"repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(230,180,34,0.03) 3px,rgba(230,180,34,0.03) 6px)",
+        display:"flex",alignItems:"center",justifyContent:"center"}},
+        e("div",{style:{fontSize:w*0.3,color:"#e6b422",fontWeight:900,opacity:0.4,fontFamily:"serif",textShadow:"0 0 8px rgba(230,180,34,0.2)"}},"牛"))));
+}
+
+// ─── Squeeze Card ────────────────────────────────────────────────
+function SqueezeCard(props){
+  var card=props.card,onRevealed=props.onRevealed,small=props.small;
+  var revState=useState(false),revealed=revState[0],setRevealed=revState[1];
+  var sqState=useState(null),sq=sqState[0],setSq=sqState[1];
+  var ref=useRef(null),startRef=useRef(null),dirLock=useRef(null);
+  var squeezeSounded=useRef(false);
+  var w=props.cw||CW,h=props.ch||CH;
+
+  function getPos(ev){var t=ev.touches?ev.touches[0]:ev;return{x:t.clientX,y:t.clientY};}
+  function onStart(ev){if(revealed)return;ev.preventDefault();startRef.current=getPos(ev);dirLock.current=null;squeezeSounded.current=false;}
+  function onMove(ev){
+    if(revealed||!startRef.current)return;ev.preventDefault();
+    var p=getPos(ev),dx=p.x-startRef.current.x,dy=p.y-startRef.current.y;
+    if(!dirLock.current){if(Math.abs(dx)<4&&Math.abs(dy)<4)return;
+      dirLock.current=Math.abs(dx)>Math.abs(dy)?(dx>0?"right":"left"):(dy>0?"bottom":"top");}
+    var d=dirLock.current,thr=(d==="left"||d==="right")?w*1.1:h*1.1,raw=0;
+    if(d==="right")raw=dx/thr;else if(d==="left")raw=-dx/thr;else if(d==="bottom")raw=dy/thr;else raw=-dy/thr;
+    var prog=Math.max(0,Math.min(1,raw));
+    if(prog>0.1&&!squeezeSounded.current){SFX.squeeze();squeezeSounded.current=true;}
+    setSq({direction:d,progress:prog});
+  }
+  function onEnd(){
+    if(!startRef.current)return;startRef.current=null;dirLock.current=null;
+    if(sq&&sq.progress>0.5){setRevealed(true);setSq(null);SFX.cardReveal();if(onRevealed)onRevealed();}
+    else setSq(null);
+  }
+
+  useEffect(function(){var el=ref.current;if(!el)return;
+    function prevent(ev){if(!revealed)ev.preventDefault();}
+    el.addEventListener("touchmove",prevent,{passive:false});
+    return function(){el.removeEventListener("touchmove",prevent);};},[revealed]);
+
+  function coverClip(){if(!sq)return{};var d=sq.direction,p=sq.progress,pct=p*100;
+    var clip=d==="right"?"inset(0 0 0 "+pct+"%)":d==="left"?"inset(0 "+pct+"% 0 0)":d==="bottom"?"inset("+pct+"% 0 0 0)":"inset(0 0 "+pct+"% 0)";
+    var a=p*30;
+    var tf=d==="right"?"perspective(600px) rotateY("+a+"deg)":d==="left"?"perspective(600px) rotateY("+-a+"deg)":d==="bottom"?"perspective(600px) rotateX("+-a+"deg)":"perspective(600px) rotateX("+a+"deg)";
+    var origin=d==="right"?"left center":d==="left"?"right center":d==="bottom"?"center top":"center bottom";
+    return{clipPath:clip,transform:tf,transformOrigin:origin};}
+  function edgeLine(){if(!sq)return null;var d=sq.direction,pct=sq.progress*100;
+    var base={position:"absolute",zIndex:5,pointerEvents:"none",background:"linear-gradient(to right,rgba(255,255,255,0.35),rgba(255,255,255,0))"};
+    if(d==="right")return Object.assign({},base,{left:pct+"%",top:0,bottom:0,width:3});
+    if(d==="left")return Object.assign({},base,{right:pct+"%",top:0,bottom:0,width:3});
+    if(d==="bottom")return Object.assign({},base,{top:pct+"%",left:0,right:0,height:3,background:"linear-gradient(to bottom,rgba(255,255,255,0.35),rgba(255,255,255,0))"});
+    return Object.assign({},base,{bottom:pct+"%",left:0,right:0,height:3,background:"linear-gradient(to top,rgba(255,255,255,0.35),rgba(255,255,255,0))"});}
+  function foldShadow(){if(!sq)return null;var d=sq.direction,pct=sq.progress*100,op=0.12+sq.progress*0.18,sz=14;
+    var base={position:"absolute",zIndex:4,pointerEvents:"none"};
+    if(d==="right")return Object.assign({},base,{left:pct+"%",top:0,bottom:0,width:sz,background:"linear-gradient(to right,rgba(0,0,0,"+op+"),transparent)"});
+    if(d==="left")return Object.assign({},base,{right:pct+"%",top:0,bottom:0,width:sz,background:"linear-gradient(to left,rgba(0,0,0,"+op+"),transparent)"});
+    if(d==="bottom")return Object.assign({},base,{top:pct+"%",left:0,right:0,height:sz,background:"linear-gradient(to bottom,rgba(0,0,0,"+op+"),transparent)"});
+    return Object.assign({},base,{bottom:pct+"%",left:0,right:0,height:sz,background:"linear-gradient(to top,rgba(0,0,0,"+op+"),transparent)"});}
+
+  if(revealed)return e("div",{style:{animation:"cardDeal .3s ease both"}},e(CardFace,{card:card,w:w,h:h,showRank:true}));
+  var cc=coverClip(),el2=edgeLine(),fs=foldShadow();
+  var kids=[
+    e("div",{key:"face",style:{position:"absolute",top:0,left:0,right:0,bottom:0}},e(CardFace,{card:card,w:w,h:h,showRank:false})),
+    fs&&e("div",{key:"fs",style:fs}),
+    e("div",{key:"cover",style:Object.assign({position:"absolute",top:0,left:0,right:0,bottom:0,zIndex:3,transition:sq?"none":"clip-path .25s ease,transform .25s ease"},cc)},
+      e(CardBack,{w:w,h:h,squeeze:!!sq})),
+    el2&&e("div",{key:"el",style:el2})
+  ];
+  if(!sq)kids.push(e("div",{key:"hint",style:{position:"absolute",top:0,left:0,right:0,bottom:0,zIndex:6,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none"}},
+    e("div",{style:{display:"flex",flexDirection:"column",alignItems:"center",gap:0,animation:"squeezePulse 2s ease-in-out infinite"}},
+      e("div",{style:{fontSize:10,color:"rgba(230,180,34,0.5)"}},"↑"),
+      e("div",{style:{display:"flex",gap:6,alignItems:"center"}},
+        e("span",{style:{fontSize:10,color:"rgba(230,180,34,0.5)"}},"←"),
+        e("span",{style:{fontSize:11,color:"rgba(230,180,34,0.7)",fontWeight:700,letterSpacing:1}},"絞"),
+        e("span",{style:{fontSize:10,color:"rgba(230,180,34,0.5)"}},"→")),
+      e("div",{style:{fontSize:10,color:"rgba(230,180,34,0.5)"}},"↓"))));
+
+  return e("div",{ref:ref,onMouseDown:onStart,onMouseMove:onMove,onMouseUp:onEnd,onMouseLeave:onEnd,
+    onTouchStart:onStart,onTouchMove:onMove,onTouchEnd:onEnd,
+    style:{width:w,height:h,position:"relative",borderRadius:w*0.09,cursor:"grab",userSelect:"none",WebkitUserSelect:"none",
+      touchAction:"none",animation:"cardDeal .4s ease both",overflow:"hidden"}},kids);
+}
+
+// ─── Main App ────────────────────────────────────────────────────
+var PCOLORS=["#e74c3c","#2980b9","#27ae60","#f39c12","#8e44ad","#1abc9c"];
+var PEMOJI=["🐉","🐅","🐍","🦅","🐺","🦊"];
+
+function NiuNiu(){
+  var s1=useState("setup"),phase=s1[0],setPhase=s1[1];
+  var s2=useState(4),pc=s2[0],setPc=s2[1];
+  var s3=useState(["プレイヤー1","プレイヤー2","プレイヤー3","プレイヤー4","プレイヤー5","プレイヤー6"]),names=s3[0],setNames=s3[1];
+  var s4=useState([]),hands=s4[0],setHands=s4[1];
+  var s5=useState([]),revealedCards=s5[0],setRevealedCards=s5[1];
+  var s6=useState([]),results=s6[0],setResults=s6[1];
+  var s7=useState({}),scores=s7[0],setScores=s7[1];
+  var s8=useState(0),roundNum=s8[0],setRoundNum=s8[1];
+  var s9=useState(null),winner=s9[0],setWinner=s9[1];
+  var s10=useState(true),soundOn=s10[0],setSoundOn=s10[1];
+  // Game mode: "simple" (no alerts), "sakibare" (先バレ), "premium" (プレミア)
+  var s13=useState("sakibare"),gameMode=s13[0],setGameMode=s13[1];
+  // Alert system
+  var s11=useState({}),alerts=s11[0],setAlerts=s11[1];
+  var s12=useState(null),forceAlert=s12[0],setForceAlert=s12[1];
+
+  useEffect(function(){initConfetti();},[]);
+
+  // Determine alerts for all players when hands are dealt
+  // Called once after dealing, uses the full 5-card hand to check niuniu
+  function computeAlerts(allHands){
+    var newAlerts={};
+    allHands.forEach(function(hand,pi){
+      var ev=evaluateHand(hand);
+      var isNiuNiu=ev.bullValue>=10;
+      if(forceAlert){
+        newAlerts[pi]={type:forceAlert,timing:Math.random()<0.5?"three":"four"};
+        return;
+      }
+      var roll=Math.random();
+      var premiumTypes=["rainbow","cow","flash","blackout","quake"];
+      if(gameMode==="simple"){
+        // シンプル: 赤なし、違和感7%(70%信頼度)、プレミア各0.2%=1%(100%信頼度)
+        if(isNiuNiu){
+          if(roll<0.01){
+            var pt=premiumTypes[Math.floor(Math.random()*premiumTypes.length)];
+            newAlerts[pi]={type:pt,timing:Math.random()<0.5?"three":"four"};
+          }else if(roll<0.08){
+            newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};
+          }
+        }else{
+          if(roll<0.003){
+            newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};
+          }
+        }
+      }else{
+        // 先バレ: 赤50%(40%信頼度)、違和感7%(70%信頼度)、プレミア各0.2%=1%(100%信頼度)
+        if(isNiuNiu){
+          if(roll<0.002){
+            newAlerts[pi]={type:"rainbow",timing:Math.random()<0.5?"three":"four"};
+          }else if(roll<0.004){
+            newAlerts[pi]={type:"cow",timing:"four"};
+          }else if(roll<0.006){
+            newAlerts[pi]={type:"flash",timing:Math.random()<0.5?"three":"four"};
+          }else if(roll<0.008){
+            newAlerts[pi]={type:"blackout",timing:Math.random()<0.5?"three":"four"};
+          }else if(roll<0.01){
+            newAlerts[pi]={type:"quake",timing:Math.random()<0.5?"three":"four"};
+          }else if(roll<0.08){
+            newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};
+          }else if(roll<0.58){
+            newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};
+          }
+        }else{
+          if(roll<0.003){
+            newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};
+          }else if(roll<0.078){
+            newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};
+          }
+        }
+      }
+    });
+    return newAlerts;
+  }
+
+  function playAlertSFX(type){
+    if(type==="rainbow")SFX.alertRainbow();
+    else if(type==="glitch")SFX.alertGlitch();
+    else if(type==="flash")SFX.alertFlash();
+    else if(type==="blackout")SFX.alertBlackout();
+    else if(type==="quake")SFX.alertQuake();
+    else if(type==="cow")SFX.alertCow();
+    else SFX.alertRed();
+  }
+
+  function dealRound(sc){
+    var deck=createDeck();var h=[];for(var i=0;i<pc;i++)h.push(deck.slice(i*5,i*5+5));
+    setHands(h);var rc=[];for(var i2=0;i2<pc;i2++)rc.push(new Set());setRevealedCards(rc);
+    setResults([]);setWinner(null);setPhase("dealing");if(sc)setScores(sc);
+    setAlerts(computeAlerts(h));
+    setRoundNum(function(r){return r+1;});
+    if(soundOn)SFX.deal();
+    setTimeout(function(){setPhase("reveal");},600);
+  }
+
+  function startGame(){
+    var sc={};for(var i=0;i<pc;i++)sc[i]=0;setScores(sc);setRoundNum(0);
+    if(soundOn)SFX.buttonClick();
+    dealRound(sc);
+  }
+
+  function openThree(pi){
+    if(soundOn)SFX.deal();
+    // Trigger alert if timing is "three"
+    var alert=alerts[pi];
+    if(alert&&alert.timing==="three"&&soundOn){
+      setTimeout(function(){playAlertSFX(alert.type);},400);
+    }
+    setRevealedCards(function(prev){
+      var ns2=prev.map(function(s){return new Set(s);});
+      ns2[pi].add(0);ns2[pi].add(1);ns2[pi].add(2);
+      var c=hands[pi];
+      if(c){
+        var sum=rankPoints(c[0].rank)+rankPoints(c[1].rank)+rankPoints(c[2].rank);
+        if(sum%10===0&&soundOn&&!(alert&&alert.timing==="three"))setTimeout(function(){SFX.bullFound();},300);
+      }
+      return ns2;
+    });
+  }
+
+  function revealCard(pi,ci){
+    setRevealedCards(function(prev){
+      var ns2=prev.map(function(s){return new Set(s);});
+      ns2[pi].add(ci);
+
+      // Trigger "four" timing alert when going from 3->4 cards
+      var alert=alerts[pi];
+      if(ns2[pi].size===4&&alert&&alert.timing==="four"&&soundOn){
+        setTimeout(function(){playAlertSFX(alert.type);},200);
+      }
+
+      // Check if this player just completed 5 cards
+      if(ns2[pi].size===5&&soundOn){
+        var ev2=evaluateHand(hands[pi]);
+        setTimeout(function(){
+          if(ev2.hasBull)SFX.bullFound();else SFX.noBull();
+        },200);
+      }
+
+      // Check partial bull when 4 cards visible (only play sound if no alert active)
+      if(ns2[pi].size===4&&soundOn&&!(alert&&alert.timing==="four")){
+        var c=hands[pi],vi=Array.from(ns2[pi]);
+        for(var a=0;a<vi.length;a++)for(var b=a+1;b<vi.length;b++)for(var d=b+1;d<vi.length;d++){
+          if((rankPoints(c[vi[a]].rank)+rankPoints(c[vi[b]].rank)+rankPoints(c[vi[d]].rank))%10===0){
+            setTimeout(function(){SFX.bullFound();},200);a=b=d=99;
+          }
+        }
+      }
+
+      if(ns2.every(function(s){return s.size===5;})){
+        setTimeout(function(){
+          var ev=hands.map(function(h){return evaluateHand(h);});
+          setResults(ev);
+          var bb=-1,bh=-1,bi=0;
+          ev.forEach(function(x,i){if(x.bullValue>bb||(x.bullValue===bb&&x.highCard>bh)){bb=x.bullValue;bh=x.highCard;bi=i;}});
+          setScores(function(p){var n=Object.assign({},p);n[bi]=(n[bi]||0)+1;return n;});
+          setWinner(bi);setPhase("result");
+          if(soundOn){SFX.win();setTimeout(launchConfetti,100);}
+        },400);
+      }
+      return ns2;
+    });
+  }
+
+  function visSet(pi){return revealedCards[pi]||new Set();}
+  function findPartialBull(pi){
+    var rc=revealedCards[pi],c=hands[pi];if(!c||!rc||rc.size<3||rc.size===5)return null;
+    var vi=Array.from(rc);
+    for(var a=0;a<vi.length;a++)for(var b=a+1;b<vi.length;b++)for(var d=b+1;d<vi.length;d++){
+      if((rankPoints(c[vi[a]].rank)+rankPoints(c[vi[b]].rank)+rankPoints(c[vi[d]].rank))%10===0)return new Set([vi[a],vi[b],vi[d]]);}
+    return null;
+  }
+  function partialInfo(pi){
+    var rc=revealedCards[pi],c=hands[pi];if(!c||!rc||rc.size<3||rc.size===5)return null;
+    var idx=Array.from(rc),sum=idx.reduce(function(a,i){return a+rankPoints(c[i].rank);},0);
+    return{text:idx.length+"枚合計: "+sum,bullSet:findPartialBull(pi)};
+  }
+
+  var sm=pc>4;
+  // Card sizes: maximize within 2-col layout (each col ~170px on mobile)
+  var cw=pc>=5?52:pc>=4?56:CW;
+  var ch=pc>=5?78:pc>=4?84:CH;
+
+  // ─── Setup screen ──────────────────────────────────────────
+  if(phase==="setup"){
+    return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:420,margin:"0 auto",padding:"26px 16px",textAlign:"center"}},
+        e("div",{style:{display:"flex",justifyContent:"center",gap:6,marginBottom:8,animation:"float 3s ease-in-out infinite"}},
+          e("span",{style:{fontSize:48,fontWeight:900,color:"#e6b422",textShadow:"0 0 18px rgba(230,180,34,0.35)"}},"牛"),
+          e("span",{style:{fontSize:48,fontWeight:900,color:"#c0392b",textShadow:"0 0 18px rgba(192,57,43,0.35)"}},"牛")),
+        e("h1",{style:{fontSize:22,fontWeight:900,margin:"4px 0 2px",letterSpacing:3,background:"linear-gradient(90deg,#e6b422,#f0d060)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}},"牛牛 — Niu Niu"),
+        e("p",{style:{color:"#555",fontSize:11,letterSpacing:2}},"中国式カードゲーム"),
+        e("div",{style:{margin:"22px 0 12px"}},
+          e("label",{style:{color:"#777",fontSize:10}},"プレイヤー人数"),
+          e("div",{style:{display:"flex",gap:7,justifyContent:"center",marginTop:7}},
+            [2,3,4,5,6].map(function(n){return e("button",{key:n,onClick:function(){setPc(n);if(soundOn)SFX.buttonClick();},style:{padding:"7px 12px",borderRadius:7,fontSize:12,cursor:"pointer",
+              background:pc===n?"#e6b422":"rgba(255,255,255,0.06)",color:pc===n?"#1a1a2e":"#aaa",fontWeight:pc===n?800:400,
+              border:pc===n?"2px solid #e6b422":"2px solid rgba(255,255,255,0.07)"}},n+"人");}))),
+        e("div",{style:{margin:"16px 0"}},
+          e("label",{style:{color:"#777",fontSize:10}},"プレイヤー名"),
+          e("div",{style:{display:"grid",gridTemplateColumns:"1fr",gap:6,marginTop:7}},
+            Array.from({length:pc}).map(function(_,i){return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:5}},
+              e("span",{style:{fontSize:17}},PEMOJI[i]),
+              e("input",{value:names[i],onChange:function(ev){var n=names.slice();n[i]=ev.target.value;setNames(n);},maxLength:10,
+                style:{flex:1,padding:"5px 7px",borderRadius:6,border:"1px solid rgba(255,255,255,0.07)",background:"rgba(255,255,255,0.03)",color:"#ccc",fontSize:11,fontFamily:"inherit",outline:"none"}}));}))),
+        e("button",{onClick:startGame,style:{padding:"11px 36px",fontSize:15,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
+          background:"linear-gradient(135deg,#e6b422,#d4a017)",color:"#1a1a2e",letterSpacing:2,marginTop:10,boxShadow:"0 3px 12px rgba(230,180,34,0.22)"}},"ゲーム開始"),
+        e("div",{style:{margin:"20px 0 12px"}},
+          e("label",{style:{color:"#777",fontSize:10}},"ゲームモード"),
+          e("div",{style:{display:"flex",gap:7,justifyContent:"center",marginTop:7}},
+            [
+              {id:"simple",icon:"🃏",name:"シンプル"},
+              {id:"sakibare",icon:"🔮",name:"先バレ"}
+            ].map(function(m){
+              var sel=gameMode===m.id;
+              return e("button",{key:m.id,onClick:function(){setGameMode(m.id);if(soundOn)SFX.buttonClick();},style:{
+                display:"flex",alignItems:"center",gap:5,padding:"8px 16px",borderRadius:8,cursor:"pointer",
+                background:sel?"rgba(230,180,34,0.12)":"rgba(255,255,255,0.04)",
+                border:sel?"2px solid #e6b422":"2px solid rgba(255,255,255,0.07)",
+                color:sel?"#e6b422":"#aaa",fontSize:13,fontWeight:sel?700:400,fontFamily:"inherit",
+                transition:"all 0.2s"}},
+                e("span",{style:{fontSize:16}},m.icon),m.name);
+            }))),
+        e("div",{style:{marginTop:18,padding:11,borderRadius:9,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.04)",textAlign:"left"}},
+          e("h3",{style:{margin:"0 0 5px",color:"#e6b422",fontSize:12}},"📖 遊び方"),
+          e("p",{style:{margin:0,fontSize:11,lineHeight:1.7,color:"#888"}},"5枚配られたカードのうち3枚をオープン。残り2枚はドラッグで絞ります。絞り中はマーク（♠♥♦♣）のみ見え、数字は確定後に表示されます。3枚の合計が10の倍数＝牛。残り2枚の下一桁が役の強さです。"))));
+  }
+
+  // ─── Game screen ───────────────────────────────────────────
+  var gameChildren=[];
+
+  // Header with sound toggle
+  var modeLabel=gameMode==="simple"?"🃏":"🔮";
+  gameChildren.push(e("div",{key:"hdr",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:7,padding:"4px 0",borderBottom:"1px solid rgba(255,255,255,0.04)"}},
+    e("div",{style:{display:"flex",alignItems:"center",gap:6}},
+      e("span",{style:{fontSize:22,fontWeight:800,color:"#e6b422",fontFamily:"serif"}},"牛牛"),
+      e("span",{style:{color:"#666",fontSize:11}},"R"+roundNum),
+      e("span",{style:{fontSize:11}},modeLabel)),
+    e("div",{style:{display:"flex",alignItems:"center",gap:5}},
+      e("button",{onClick:function(){setSoundOn(!soundOn);},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:soundOn?"#e6b422":"#444",fontSize:14,cursor:"pointer"}},soundOn?"🔊":"🔇"),
+      (function(){
+        var types=[null,"red","glitch","rainbow","cow","flash","blackout","quake"];
+        var labels={"red":"🔴","glitch":"👻","rainbow":"🌈","cow":"🐮","flash":"⚡","blackout":"💀","quake":"🔥"};
+        var curIdx=types.indexOf(forceAlert);
+        return e("button",{onClick:function(){var next=types[(curIdx+1)%types.length];setForceAlert(next);},
+          style:{padding:"2px 6px",borderRadius:5,border:"1px solid "+(forceAlert?"rgba(230,180,34,0.5)":"rgba(255,255,255,0.08)"),
+            background:forceAlert?"rgba(230,180,34,0.1)":"transparent",
+            color:forceAlert?"#e6b422":"#444",fontSize:9,cursor:"pointer",fontFamily:"inherit",minWidth:32,textAlign:"center"}},
+          forceAlert?(labels[forceAlert]||""):"🧪");
+      })(),
+      e("button",{onClick:function(){setPhase("setup");setHands([]);setResults([]);setRoundNum(0);setRevealedCards([]);setForceAlert(null);},
+        style:{padding:"3px 10px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#555",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"リセット"))));
+
+  // Scores
+  gameChildren.push(e("div",{key:"scores",style:{display:"flex",justifyContent:"center",gap:12,flexWrap:"wrap",padding:"6px 0",marginBottom:7,borderBottom:"1px solid rgba(255,255,255,0.04)"}},
+    Array.from({length:pc}).map(function(_,i){
+      return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:4,fontSize:11}},
+        e("span",null,PEMOJI[i]),
+        e("span",{style:{color:PCOLORS[i],fontWeight:700}},names[i]),
+        e("span",{style:{color:"#e6b422",fontWeight:800,fontSize:13}},scores[i]||0));})));
+
+  // Player cards
+  var playerBoxes=Array.from({length:pc}).map(function(_,i){
+    var rc=revealedCards[i]||new Set(),res=results[i],isW=winner===i,vs=visSet(i),pi=partialInfo(i),full=rc.size===5;
+    // Determine if alert is active for this player's unrevealed cards
+    var alert=alerts[i];
+    var alertActive=false,alertType=null;
+    if(alert&&!full){
+      if(alert.timing==="three"&&rc.size>=3)alertActive=true;
+      if(alert.timing==="four"&&rc.size>=4)alertActive=true;
+      if(alertActive)alertType=alert.type;
+    }
+
+    var cardEls=hands[i]?hands[i].map(function(card,ci){
+      var vis=vs.has(ci),canSq=phase==="reveal"&&!vis&&rc.size>=3&&(ci===3||ci===4);
+      var partialGlow=!full&&pi&&pi.bullSet&&pi.bullSet.has(ci);
+      var finalGlow=full&&res&&res.hasBull&&res.threeIdx&&res.threeIdx.indexOf(ci)>=0;
+      if(canSq){
+        // Wrap squeeze card with alert glow if active
+        var sqCard=e(SqueezeCard,{key:roundNum+"-"+i+"-"+ci,card:card,small:sm,cw:cw,ch:ch,onRevealed:function(){revealCard(i,ci);}});
+        if(alertActive){
+          var alertAnim,alertBorder,extraStyle={};
+          if(alertType==="rainbow"){
+            alertAnim="alertRainbow 1.2s linear infinite,alertBorderRainbow 1.2s linear infinite";
+            alertBorder="2px solid #f00";
+          }else if(alertType==="glitch"){
+            alertAnim="alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite";
+            alertBorder="1px solid rgba(255,255,255,0.15)";
+          }else if(alertType==="quake"){
+            alertAnim="alertQuakeCard 0.4s ease-in-out infinite";
+            alertBorder="2px solid rgba(255,100,0,0.5)";
+            extraStyle={boxShadow:"0 0 15px rgba(255,100,0,0.3)"};
+          }else if(alertType==="flash"||alertType==="blackout"){
+            // flash/blackout affect the player box, card just gets a subtle glow
+            alertAnim="bullGlow 1s ease-in-out infinite";
+            alertBorder="2px solid rgba(255,255,255,0.3)";
+          }else if(alertType==="cow"){
+            // Cow mark: card shows 🐮 instead of 絞
+            alertAnim="bullGlow 1.2s ease-in-out infinite";
+            alertBorder="2px solid #e6b422";
+          }else{
+            alertAnim="alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite";
+            alertBorder="2px solid rgba(255,0,0,0.5)";
+          }
+          // For cow type, replace the squeeze card hint with 🐮
+          if(alertType==="cow"){
+            return e("div",{key:roundNum+"-"+i+"-"+ci+"-wrap",style:Object.assign({
+              borderRadius:cw*0.09+4,animation:alertAnim,border:alertBorder,padding:1,position:"relative"
+            },extraStyle)},
+              sqCard,
+              e("div",{style:{position:"absolute",top:0,left:0,right:0,bottom:0,display:"flex",alignItems:"center",justifyContent:"center",
+                pointerEvents:"none",zIndex:10,fontSize:sm?24:32,animation:"squeezePulse 1s ease-in-out infinite"}},"🐮"));
+          }
+          return e("div",{key:roundNum+"-"+i+"-"+ci+"-wrap",style:Object.assign({
+            borderRadius:cw*0.09+4,animation:alertAnim,border:alertBorder,padding:1
+          },extraStyle)},sqCard);
+        }
+        return sqCard;
+      }
+      if(vis)return e("div",{key:ci,style:{animation:partialGlow?"cardDeal .35s ease "+(ci*0.05)+"s both,bullGlow 1.2s ease-in-out infinite":"cardDeal .35s ease "+(ci*0.05)+"s both",borderRadius:cw*0.09+2}},
+        e(CardFace,{card:card,w:cw,h:ch,showRank:true,highlight:finalGlow||partialGlow}));
+      return e("div",{key:ci,style:{animation:"cardDeal .35s ease "+(ci*0.05)+"s both"}},e(CardBack,{w:cw,h:ch}));}):[];
+
+    var pKids=[];
+    var compactMode=pc>=4;
+    pKids.push(e("div",{key:"ph",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:compactMode?4:7}},
+      e("div",{style:{display:"flex",alignItems:"center",gap:3}},
+        e("span",{style:{fontSize:compactMode?14:17}},PEMOJI[i]),
+        e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:compactMode?10:12}},names[i]),
+        rc.size>=3&&!full?e("span",{style:{fontSize:compactMode?7:9,fontWeight:600,color:"#c084fc",background:"rgba(192,132,252,0.07)",padding:"1px 4px",borderRadius:3}},rc.size===3?"絞り中":"ラスト！"):null),
+      isW?e("span",{style:{fontSize:compactMode?8:10,fontWeight:700,color:"#e6b422",background:"rgba(230,180,34,0.08)",padding:"1px 5px",borderRadius:4}},"👑 勝ち"):null));
+    pKids.push(e("div",{key:"cards"},
+      e("div",{style:{display:"flex",gap:compactMode?2:4,justifyContent:"center",marginBottom:compactMode?2:4}},cardEls.slice(0,3)),
+      e("div",{style:{display:"flex",gap:compactMode?2:4,justifyContent:"center"}},cardEls.slice(3))));
+    if(pi)pKids.push(e("div",{key:"info",style:{marginTop:4,textAlign:"center",fontSize:10,color:"#555",animation:"fadeUp .3s ease"}},
+      pi.text,pi.bullSet?e("span",{style:{color:"#e6b422",marginLeft:4,fontWeight:700,animation:"squeezePulse 1.5s ease-in-out infinite"}},"🐂 牛確定！"):null));
+
+    var actionContent=null;
+    if(full){var indResult=res||evaluateHand(hands[i]);
+      actionContent=e("div",{style:{fontSize:indResult.hasBull?(compactMode?14:19):(compactMode?10:13),fontWeight:800,color:indResult.hasBull?"#e6b422":"#555",fontFamily:"serif",animation:"fadeUp .4s ease"}},indResult.label);
+    }else if(phase==="reveal"&&rc.size===0){
+      actionContent=e("button",{onClick:function(){openThree(i);},style:{padding:compactMode?"3px 14px":"5px 20px",fontSize:compactMode?10:12,fontWeight:700,fontFamily:"inherit",borderRadius:7,border:"1.5px solid #e6b422",background:"transparent",color:"#e6b422",cursor:"pointer",letterSpacing:1}},"3枚オープン");
+    }else if(phase==="reveal"&&rc.size>=3){
+      actionContent=e("div",{style:{fontSize:compactMode?8:10,color:"#c084fc",animation:"squeezePulse 2s ease-in-out infinite",fontWeight:600}},"ドラッグして絞る");
+    }
+    pKids.push(e("div",{key:"action",style:{marginTop:compactMode?3:7,textAlign:"center",minHeight:compactMode?20:28}},actionContent));
+
+    // Determine player box animation
+    var boxAnim=isW?"winPulse 1.5s ease infinite":"none";
+    var boxBg=isW?"linear-gradient(135deg,rgba(230,180,34,0.07) 0%,rgba(10,10,20,0.95) 100%)":"rgba(14,14,28,0.92)";
+    if(alertActive&&alertType==="flash"){
+      boxAnim="alertFlash 1.5s ease-in-out 1";
+    }else if(alertActive&&alertType==="blackout"){
+      boxAnim="alertBlackout 2s ease-in-out 1";
+    }else if(alertActive&&alertType==="quake"){
+      boxAnim="alertQuake 0.5s ease-in-out infinite";
+    }
+
+    return e("div",{key:i,style:{padding:pc>=4?7:11,borderRadius:pc>=4?8:11,transition:"all .3s ease",
+      border:isW?"2px solid #e6b422":"1.5px solid "+(rc.size>0?"rgba(255,255,255,0.08)":"rgba(255,255,255,0.03)"),
+      background:boxBg,
+      animation:boxAnim}},pKids);
+  });
+
+  var gridCols=pc>=4?"repeat(2,1fr)":"1fr";
+  gameChildren.push(e("div",{key:"grid",style:{display:"grid",gridTemplateColumns:gridCols,gap:pc>=5?5:8}},playerBoxes));
+
+  if(phase==="result"){
+    gameChildren.push(e("div",{key:"next",style:{textAlign:"center",marginTop:14,animation:"fadeUp .5s ease"}},
+      e("button",{onClick:function(){if(soundOn)SFX.buttonClick();dealRound(scores);},style:{padding:"9px 30px",fontSize:14,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
+        background:"linear-gradient(135deg,#e6b422,#d4a017)",color:"#1a1a2e",letterSpacing:2,boxShadow:"0 3px 12px rgba(230,180,34,0.22)"}},"次のラウンド →")));
+  }
+
+  return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},gameChildren);
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(NiuNiu));
+</script>
+
+<div id="install-banner">
+  <span style="color:#e6b422">📲 ホーム画面に追加してアプリとして使えます</span>
+  <div style="display:flex;gap:6px">
+    <button id="dismiss-btn" onclick="document.getElementById('install-banner').classList.remove('show')">閉じる</button>
+    <button id="install-btn" onclick="installApp()">追加</button>
+  </div>
+</div>
+
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").then(function(r){}).catch(function(e){});});}
+var deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",function(ev){ev.preventDefault();deferredPrompt=ev;document.getElementById("install-banner").classList.add("show");});
+function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){deferredPrompt=null;document.getElementById("install-banner").classList.remove("show");});}
+window.addEventListener("appinstalled",function(){document.getElementById("install-banner").classList.remove("show");deferredPrompt=null;});
+(function(){
+  var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  var isStandalone=window.navigator.standalone===true;
+  if(isIOS&&!isStandalone){var b=document.getElementById("install-banner");b.classList.add("show");
+    document.getElementById("install-btn").style.display="none";
+    b.querySelector("span").textContent="📲 Safari「共有」→「ホーム画面に追加」でアプリ化できます";}
+})();
+</script>
+</body>
+</html>
