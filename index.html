@@ -175,141 +175,20 @@ var SFX_CLASSIC={
   bullFound:function(){playTone(523,0.15,"sine",0.15);playTone(659,0.15,"sine",0.15,0.12);playTone(784,0.25,"sine",0.18,0.24);},
   noBull:function(){playTone(300,0.2,"triangle",0.1);playTone(250,0.3,"triangle",0.08,0.15);},
   win:function(){var n=[523,659,784,1047,784,1047];n.forEach(function(f,i){playTone(f,0.18,"sine",0.12,i*0.1);if(i<3)playTone(f*1.5,0.12,"triangle",0.05,i*0.1+0.05);});},
-  buttonClick:function(){playTone(1000,0.05,"square",0.06);}
-};
-// リアル: 本格カジノ風。リアルなカード・チップ音
-var SFX_REAL={
-  deal:function(){
-    // カードをテーブルに配る: スナップ3回（パッパッパッ）
-    for(var i=0;i<3;i++){
-      playSnap(0.25,i*0.13);
-      playFilteredNoise(0.06,0.12,i*0.13,"bandpass",2000,1); // カード接触のザッ
-    }
-  },
-  squeeze:function(){
-    // カードがフェルト上で擦れる：ローパスの長いノイズ
-    playFilteredNoise(0.2,0.06,0,"lowpass",800,0.5);
-    playFilteredNoise(0.15,0.04,0.05,"lowpass",600,0.5);
-    playFilteredNoise(0.1,0.03,0.12,"bandpass",1200,1);
-  },
-  cardReveal:function(){
-    // カードをパッとめくる: シャープなスナップ+紙のフリック
-    playSnap(0.3,0);
-    playFilteredNoise(0.04,0.15,0.01,"bandpass",4000,2); // 高い紙音
-    playFilteredNoise(0.08,0.06,0.02,"lowpass",1500,1); // 余韻
-  },
-  bullFound:function(){
-    // チップ同士がぶつかるカチカチ音
-    for(var i=0;i<4;i++){
-      playFilteredNoise(0.015,0.15,i*0.07,"bandpass",5000+i*800,6); // 硬い高音クリック
-      playFilteredNoise(0.02,0.08,i*0.07+0.005,"bandpass",2500,3);
-    }
-    // 低い共鳴（満足感）
-    playTone(220,0.3,"sine",0.06,0.2);
-    playTone(330,0.25,"sine",0.04,0.25);
-  },
-  noBull:function(){
-    // カードをテーブルに投げ出す
-    playSnap(0.15,0);
-    playFilteredNoise(0.12,0.1,0.02,"lowpass",500,0.5); // 重い音
-    playTone(100,0.15,"sine",0.04,0.05); // 低いドスン
-  },
-  win:function(){
-    // チップの山が崩れてスライドする音（ザラザラザラ）
-    for(var i=0;i<12;i++){
-      playFilteredNoise(0.02,0.08+Math.random()*0.06,i*0.035,"bandpass",3000+Math.random()*3000,4);
-    }
-    // チップが積み上がるカチカチ（後半）
-    for(var j=0;j<5;j++){
-      playFilteredNoise(0.012,0.12,0.45+j*0.06,"bandpass",6000+j*500,8);
-    }
-    // 満足の低い和音
-    playTone(165,0.5,"sine",0.06,0.6);
-    playTone(220,0.45,"sine",0.05,0.65);
-    playTone(262,0.4,"sine",0.04,0.7);
-  },
-  buttonClick:function(){playSnap(0.1,0);}
-};
-// レトロ: ガッツリ8bit。デューティ比の粗いsquare波、ピッチベンド、短い音
-var SFX_RETRO={
-  deal:function(){
-    playTone(110,0.03,"square",0.1);playTone(165,0.03,"square",0.08,0.05);playTone(220,0.03,"square",0.06,0.1);
-  },
-  squeeze:function(){
-    playTone(55,0.08,"square",0.04);playTone(65,0.06,"square",0.03,0.03);playTone(75,0.04,"square",0.02,0.06);
-  },
-  cardReveal:function(){
-    playTone(880,0.03,"square",0.12);playTone(1320,0.02,"square",0.08,0.03);
-  },
-  bullFound:function(){
-    // ドラクエ風レベルアップ
-    var n=[262,330,392,523];n.forEach(function(f,i){playTone(f,0.08,"square",0.12,i*0.08);});
-    playTone(523,0.05,"square",0.1,0.32);playTone(659,0.05,"square",0.1,0.37);playTone(784,0.12,"square",0.15,0.42);
-  },
-  noBull:function(){
-    // ミス音：下降3音
-    playTone(440,0.08,"square",0.1);playTone(330,0.08,"square",0.08,0.1);playTone(220,0.15,"square",0.06,0.2);
-  },
-  win:function(){
-    // ファンファーレ：8bit風ドレミファソラシド上昇
-    var n=[262,294,330,349,392,440,494,523,659,784,1047];
-    n.forEach(function(f,i){playTone(f,0.06,"square",0.1,i*0.055);});
-    // 最後に和音
-    playTone(523,0.2,"square",0.1,0.65);playTone(659,0.2,"square",0.08,0.65);playTone(784,0.2,"square",0.06,0.65);
-  },
-  buttonClick:function(){playTone(1047,0.02,"square",0.1);}
-};
-// エレガント: ピアノ・ハープ風。倍音豊か、長い余韻、アルペジオ
-var SFX_ELEGANT={
-  deal:function(){
-    // ハープの弦を弾く
-    for(var i=0;i<3;i++){
-      var f=880+i*220;
-      playTone(f,0.15,"sine",0.04,i*0.14);playTone(f*2,0.1,"sine",0.015,i*0.14);
-      playTone(f*3,0.08,"sine",0.008,i*0.14+0.01);playTone(f*0.5,0.12,"triangle",0.02,i*0.14);
-    }
-  },
-  squeeze:function(){
-    playTone(1760,0.15,"sine",0.02);playTone(3520,0.1,"sine",0.008,0.02);
-    playTone(880,0.12,"triangle",0.015,0.01);
-  },
-  cardReveal:function(){
-    // ピアノの1音。倍音構成
-    playTone(1047,0.25,"sine",0.06);playTone(2094,0.15,"sine",0.025,0.01);
-    playTone(3141,0.1,"sine",0.012,0.01);playTone(4188,0.08,"sine",0.006,0.02);
-    playTone(523,0.2,"triangle",0.03,0.01);
-  },
-  bullFound:function(){
-    // ハープのアルペジオ上昇（ドミソド）
-    var notes=[523,659,784,1047,1319];
-    notes.forEach(function(f,i){
-      playTone(f,0.3,"sine",0.06,i*0.1);playTone(f*2,0.2,"sine",0.02,i*0.1+0.01);
-      playTone(f*3,0.12,"sine",0.008,i*0.1+0.02);
-    });
-  },
-  noBull:function(){
-    // 短調の和音。ラドミ
-    playTone(440,0.35,"sine",0.05);playTone(523,0.3,"sine",0.04,0.02);
-    playTone(659,0.25,"sine",0.03,0.04);
-    playTone(880,0.15,"sine",0.015,0.02);playTone(220,0.3,"triangle",0.03);
-  },
-  win:function(){
-    // グランドピアノ風のキラキラしたアルペジオ
-    var notes=[523,659,784,1047,1319,1568,2093,1568,2093,2637];
-    notes.forEach(function(f,i){
-      playTone(f,0.3,"sine",0.05,i*0.09);playTone(f*2,0.2,"sine",0.018,i*0.09+0.01);
-      playTone(f*3,0.12,"sine",0.008,i*0.09+0.02);playTone(f*4,0.08,"sine",0.004,i*0.09+0.02);
-    });
-    // 最後にペダル付き和音
-    playTone(523,0.8,"sine",0.04,0.9);playTone(659,0.7,"sine",0.03,0.9);
-    playTone(784,0.6,"sine",0.025,0.9);playTone(1047,0.5,"sine",0.02,0.9);
-  },
-  buttonClick:function(){
-    playTone(2093,0.08,"sine",0.03);playTone(4186,0.05,"sine",0.01,0.01);playTone(1047,0.06,"triangle",0.015);
+  buttonClick:function(){playTone(1000,0.05,"square",0.06);},
+  alertFizzle:function(){
+    // ガセ確定の残念音：力の抜けるような下降音＋息の音
+    playTone(440,0.15,"sawtooth",0.08);
+    playTone(330,0.2,"sawtooth",0.06,0.12);
+    playTone(220,0.3,"triangle",0.05,0.25);
+    playNoise(0.3,0.06,0.1);
+    // 低いため息
+    playTone(110,0.4,"sine",0.04,0.3);
   }
 };
-// Alert SFX are shared across packs (always dramatic)
-var SFX_ALERTS={
+// ─── Alert Sound Packs (カスタマイズ可能) ─────────────────────
+// クラシック: 従来通りの不穏な音
+var ALERT_CLASSIC={
   alertRed:function(){playTone(120,0.6,"sawtooth",0.18);playTone(127,0.6,"sawtooth",0.15);playTone(180,0.4,"square",0.1,0.15);playNoise(0.3,0.15,0.1);playTone(240,0.5,"sawtooth",0.12,0.3);playTone(300,0.3,"square",0.08,0.4);},
   alertRainbow:function(){playTone(80,1.2,"sawtooth",0.16);playTone(85,1.2,"sawtooth",0.12);playNoise(0.3,0.1,0.05);var sp=[2093,2349,2637,2793,3136,3520,3951,4186];sp.forEach(function(f,i){playTone(f,0.12,"sine",0.08,i*0.07);playTone(f*1.005,0.1,"sine",0.05,i*0.07+0.02);});setTimeout(function(){var sp2=[3951,3520,3136,2793,2637,2349,2093,2637,3136,3951];sp2.forEach(function(f,i){playTone(f,0.1,"sine",0.06,i*0.06);playTone(f*0.998,0.08,"sine",0.04,i*0.06+0.01);});},500);playTone(4186,0.3,"sine",0.07,0.15);playTone(5274,0.25,"sine",0.05,0.3);playTone(6272,0.2,"sine",0.04,0.5);},
   alertGlitch:function(){playNoise(0.03,0.12,0);playNoise(0.02,0.08,0.15);playTone(440,0.04,"square",0.06,0.1);playNoise(0.03,0.1,0.4);playTone(880,0.02,"square",0.04,0.45);playNoise(0.02,0.06,0.7);playTone(220,0.05,"sawtooth",0.05,0.75);playTone(55,0.8,"sine",0.06,0.2);playTone(57,0.8,"sine",0.04,0.2);},
@@ -321,26 +200,25 @@ var SFX_ALERTS={
   alertGrowBull:function(){playTone(60,2.5,"sine",0.04,0);playTone(63,2.5,"sine",0.03,0);playTone(90,1.5,"triangle",0.03,0.8);playTone(120,1.0,"sine",0.05,1.5);playTone(180,0.8,"sine",0.06,2.0);}
 };
 
-// Active SFX dispatcher
-var activeSoundPack="default";
-function getSFXPack(){return activeSoundPack==="real"?SFX_REAL:activeSoundPack==="retro"?SFX_RETRO:activeSoundPack==="elegant"?SFX_ELEGANT:SFX_CLASSIC;}
+
 var SFX={
-  deal:function(){getSFXPack().deal();},
-  squeeze:function(){getSFXPack().squeeze();},
-  cardReveal:function(){getSFXPack().cardReveal();},
-  bullFound:function(){getSFXPack().bullFound();},
-  noBull:function(){getSFXPack().noBull();},
-  win:function(){getSFXPack().win();},
-  buttonClick:function(){getSFXPack().buttonClick();},
-  alertRed:function(){SFX_ALERTS.alertRed();},
-  alertRainbow:function(){SFX_ALERTS.alertRainbow();},
-  alertGlitch:function(){SFX_ALERTS.alertGlitch();},
-  alertFlash:function(){SFX_ALERTS.alertFlash();},
-  alertBlackout:function(){SFX_ALERTS.alertBlackout();},
-  alertQuake:function(){SFX_ALERTS.alertQuake();},
-  alertCow:function(){SFX_ALERTS.alertCow();},
-  alertSpecial:function(){SFX_ALERTS.alertSpecial();},
-  alertGrowBull:function(){SFX_ALERTS.alertGrowBull();}
+  deal:function(){SFX_CLASSIC.deal();},
+  squeeze:function(){SFX_CLASSIC.squeeze();},
+  cardReveal:function(){SFX_CLASSIC.cardReveal();},
+  bullFound:function(){SFX_CLASSIC.bullFound();},
+  noBull:function(){SFX_CLASSIC.noBull();},
+  win:function(){SFX_CLASSIC.win();},
+  buttonClick:function(){SFX_CLASSIC.buttonClick();},
+  alertRed:function(){ALERT_CLASSIC.alertRed();},
+  alertRainbow:function(){ALERT_CLASSIC.alertRainbow();},
+  alertGlitch:function(){ALERT_CLASSIC.alertGlitch();},
+  alertFlash:function(){ALERT_CLASSIC.alertFlash();},
+  alertBlackout:function(){ALERT_CLASSIC.alertBlackout();},
+  alertQuake:function(){ALERT_CLASSIC.alertQuake();},
+  alertCow:function(){ALERT_CLASSIC.alertCow();},
+  alertSpecial:function(){ALERT_CLASSIC.alertSpecial();},
+  alertGrowBull:function(){ALERT_CLASSIC.alertGrowBull();},
+  alertFizzle:function(){SFX_CLASSIC.alertFizzle();}
 };
 
 // ─── Confetti Engine ─────────────────────────────────────────────
@@ -457,6 +335,56 @@ function evaluateHand(cards){
   if(!best.hasBull&&cards.every(function(c){return rankValue(c.rank)<=5;}))return Object.assign({},best,{hasBull:true,bullValue:15,bullRank:14,label:"五小牛！",highCard:hc});
   return best;
 }
+
+// Check if niuniu+ is still possible given `known` revealed cards (1-4 cards).
+// Returns true if there exists at least one remaining card that would complete niuniu+.
+function canStillBeNiuNiu(known){
+  if(!known||known.length>=5)return false;
+  if(known.length===0)return true;
+  // Build set of known card keys
+  var knownKeys={};
+  known.forEach(function(c){knownKeys[c.rank+c.suit]=true;});
+  // Enumerate all possible fill-in combinations for remaining slots
+  var needed=5-known.length;
+  // For simple 4-revealed case (common): just try all 48 remaining cards
+  if(needed===1){
+    for(var si=0;si<SUITS.length;si++){
+      for(var ri=0;ri<RANKS.length;ri++){
+        var key=RANKS[ri]+SUITS[si];
+        if(knownKeys[key])continue;
+        var testHand=known.concat([{rank:RANKS[ri],suit:SUITS[si],flipped:false}]);
+        var ev=evaluateHand(testHand);
+        if(ev.bullRank>=10)return true;
+      }
+    }
+    return false;
+  }
+  // For 3-revealed case: try all pairs of 2 remaining cards
+  if(needed===2){
+    for(var si1=0;si1<SUITS.length;si1++){
+      for(var ri1=0;ri1<RANKS.length;ri1++){
+        var key1=RANKS[ri1]+SUITS[si1];
+        if(knownKeys[key1])continue;
+        for(var si2=0;si2<SUITS.length;si2++){
+          for(var ri2=0;ri2<RANKS.length;ri2++){
+            var key2=RANKS[ri2]+SUITS[si2];
+            if(knownKeys[key2]||key1===key2)continue;
+            var testHand2=known.concat([
+              {rank:RANKS[ri1],suit:SUITS[si1],flipped:false},
+              {rank:RANKS[ri2],suit:SUITS[si2],flipped:false}
+            ]);
+            var ev2=evaluateHand(testHand2);
+            if(ev2.bullRank>=10)return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+  // For fewer revealed, too expensive, assume possible
+  return true;
+}
+
 
 // ─── Pip layouts ─────────────────────────────────────────────────
 var PIP={
@@ -863,21 +791,21 @@ function SqueezeTrainer(){
 
 // ─── Shop & Customization Data ──────────────────────────────
 var CARD_SKINS=[
-  {id:"default",name:"クラシック",colors:["#0a2015","#1a4030","#0a2018"],accent:"#d4af37",pattern:"diamond",free:true},
-  {id:"crimson",name:"クリムゾン",colors:["#2a0a10","#4a1a25","#2a0a12"],accent:"#e8a0a0",pattern:"diamond",free:false},
+  {id:"default",name:"クラシック",colors:["#152818","#2a4825","#152820"],accent:"#d4af37",pattern:"diamond",free:true},
+  {id:"crimson",name:"エメラルド",colors:["#0a3028","#185048","#0a3028"],accent:"#5ee8c0",pattern:"diamond",free:false},
   {id:"midnight",name:"ミッドナイト",colors:["#08080f","#15152a","#0a0a15"],accent:"#8888cc",pattern:"diamond",free:false},
-  {id:"gold",name:"ゴールド",colors:["#2a2008","#3a3018","#2a2008"],accent:"#e8c840",pattern:"ornate",free:false},
+  {id:"gold",name:"ゴールド",colors:["#4a3810","#6a5024","#4a3810"],accent:"#ffe060",pattern:"ornate",free:false},
   {id:"navy",name:"ネイビー",colors:["#0a1028","#182848","#0a1028"],accent:"#c8c8e0",pattern:"classic",free:false},
-  {id:"redback",name:"レッドバック",colors:["#300808","#501818","#300808"],accent:"#f0c0c0",pattern:"classic",free:false},
+  {id:"redback",name:"シルバー",colors:["#2a2a30","#484850","#2a2a30"],accent:"#e8e8f0",pattern:"classic",free:false},
 ];
 var CARD_FACES=[
   {id:"default",name:"クラシック",desc:"定番デザイン",
     bg:["#fdfdfd","#f5f4ef"],hlBg:["#fffde7","#fff9c4"],red:"#c0392b",black:"#0d2818",border:"#bbb8b0",
     faceRedBg:["#fce4ec","#f8bbd0"],faceBlackBg:["#e8eaf6","#c5cae9"],faceRedBorder:"#e57373",faceBlackBorder:"#7986cb",
     font:"'Georgia','Times New Roman',serif",rankWeight:800,suitScale:1,free:true},
-  {id:"noir",name:"ノワール",desc:"闇に浮かぶシャープなカード",
-    bg:["#1c1c1c","#0e0e0e"],hlBg:["#333310","#2a2a08"],red:"#ff2020",black:"#d0d0d0",border:"#333333",
-    faceRedBg:["#350a10","#280508"],faceBlackBg:["#1e1e2a","#141420"],faceRedBorder:"#662020",faceBlackBorder:"#444460",
+  {id:"noir",name:"ノワール",desc:"シックなモノトーンカード",
+    bg:["#3a3a3a","#2a2a2a"],hlBg:["#555530","#444420"],red:"#ff5555",black:"#f0f0f0",border:"#555555",
+    faceRedBg:["#5a2028","#4a1818"],faceBlackBg:["#383848","#2e2e3e"],faceRedBorder:"#884444",faceBlackBorder:"#6a6a88",
     font:"'Playfair Display',Georgia,serif",rankWeight:900,suitScale:1,free:false},
   {id:"fourcolor",name:"4色",desc:"スートごとに異なる色",
     bg:["#fdfdfd","#f5f4ef"],hlBg:["#fffde7","#fff9c4"],red:"#c0392b",black:"#0d2818",border:"#bbb8b0",
@@ -897,39 +825,32 @@ var TABLE_BGS=[
     card:"var(--card)",cardBorder:"rgba(212,175,55,0.08)",
     accent:"#d4af37",accentDark:"#b8960c",text:"#f0e6d2",textMuted:"#8faa8f",textDim:"#5a7a5a",
     btnBg:"rgba(212,175,55,0.06)",tabActive:"rgba(212,175,55,0.15)",free:true},
-  {id:"ocean",name:"ディープオーシャン",bg:"#0a1520",grad:"rgba(20,40,80,0.5)",
-    card:"rgba(10,20,35,0.92)",cardBorder:"rgba(100,160,220,0.1)",
-    accent:"#5aaddd",accentDark:"#3888bb",text:"#d8e8f5",textMuted:"#7aa0c0",textDim:"#4a7090",
-    btnBg:"rgba(100,160,220,0.06)",tabActive:"rgba(100,160,220,0.15)",free:false},
-  {id:"wine",name:"ワインレッド",bg:"#1a0a0f",grad:"rgba(60,20,30,0.5)",
-    card:"rgba(26,10,15,0.92)",cardBorder:"rgba(200,120,140,0.1)",
-    accent:"#d4788a",accentDark:"#aa5060",text:"#f0e0e4",textMuted:"#b08090",textDim:"#705060",
-    btnBg:"rgba(200,120,140,0.06)",tabActive:"rgba(200,120,140,0.15)",free:false},
-  {id:"noir",name:"ノワール",bg:"#0a0a0a",grad:"rgba(30,30,30,0.5)",
-    card:"rgba(15,15,15,0.92)",cardBorder:"rgba(180,180,180,0.08)",
-    accent:"#cccccc",accentDark:"#999999",text:"#e0e0e0",textMuted:"#888888",textDim:"#555555",
-    btnBg:"rgba(180,180,180,0.06)",tabActive:"rgba(180,180,180,0.15)",free:false},
-  {id:"gold",name:"ゴールドルーム",bg:"#1a150a",grad:"rgba(60,45,15,0.5)",
-    card:"rgba(26,22,10,0.92)",cardBorder:"rgba(212,175,55,0.1)",
-    accent:"#e8c840",accentDark:"#c0a020",text:"#f5ecd0",textMuted:"#b0a070",textDim:"#706830",
-    btnBg:"rgba(212,175,55,0.06)",tabActive:"rgba(212,175,55,0.15)",free:false},
-  {id:"aurora",name:"オーロラ",bg:"#0a151a",grad:"rgba(20,50,60,0.5)",
-    card:"rgba(10,22,28,0.92)",cardBorder:"rgba(80,200,180,0.1)",
-    accent:"#4ecdc4",accentDark:"#2aaa9a",text:"#d8f0ec",textMuted:"#70b0a8",textDim:"#408880",
-    btnBg:"rgba(80,200,180,0.06)",tabActive:"rgba(80,200,180,0.15)",free:false},
-];
-var SOUND_PACKS=[
-  {id:"default",name:"クラシック",desc:"落ち着いたスタンダード音",free:true},
-  {id:"real",name:"リアル",desc:"本格カジノ風のカード音",free:false},
-  {id:"retro",name:"レトロ",desc:"ファミコン風8bitサウンド",free:false},
-  {id:"elegant",name:"エレガント",desc:"ピアノ＆ハープの優雅な響き",free:false},
+  {id:"ocean",name:"ディープオーシャン",bg:"#152838",grad:"rgba(60,120,180,0.45)",
+    card:"rgba(20,40,60,0.92)",cardBorder:"rgba(150,200,240,0.14)",
+    accent:"#8ed0f0",accentDark:"#5aa8d0",text:"#e8f2fc",textMuted:"#a8c8e0",textDim:"#708aa8",
+    btnBg:"rgba(150,200,240,0.08)",tabActive:"rgba(150,200,240,0.2)",free:false},
+  {id:"wine",name:"ワインレッド",bg:"#2a1520",grad:"rgba(120,60,80,0.45)",
+    card:"rgba(42,20,30,0.92)",cardBorder:"rgba(230,160,180,0.14)",
+    accent:"#f4a0b0",accentDark:"#c87088",text:"#fce8ec",textMuted:"#d8a8b8",textDim:"#957080",
+    btnBg:"rgba(230,160,180,0.08)",tabActive:"rgba(230,160,180,0.2)",free:false},
+  {id:"noir",name:"ノワール",bg:"#1a1a1a",grad:"rgba(70,70,70,0.5)",
+    card:"rgba(30,30,30,0.92)",cardBorder:"rgba(200,200,200,0.1)",
+    accent:"#e8e8e8",accentDark:"#aaaaaa",text:"#f0f0f0",textMuted:"#a0a0a0",textDim:"#707070",
+    btnBg:"rgba(200,200,200,0.08)",tabActive:"rgba(200,200,200,0.2)",free:false},
+  {id:"gold",name:"ゴールドルーム",bg:"#2a2210",grad:"rgba(120,90,30,0.5)",
+    card:"rgba(42,34,16,0.92)",cardBorder:"rgba(240,210,100,0.14)",
+    accent:"#ffd860",accentDark:"#d4a830",text:"#fff4d8",textMuted:"#d8c480",textDim:"#907840",
+    btnBg:"rgba(240,210,100,0.08)",tabActive:"rgba(240,210,100,0.2)",free:false},
+  {id:"aurora",name:"オーロラ",bg:"#142830",grad:"rgba(40,110,120,0.45)",
+    card:"rgba(18,38,46,0.92)",cardBorder:"rgba(120,230,210,0.14)",
+    accent:"#6dd8cd",accentDark:"#3aaa9a",text:"#e0f4f0",textMuted:"#88c8c0",textDim:"#508880",
+    btnBg:"rgba(120,230,210,0.08)",tabActive:"rgba(120,230,210,0.2)",free:false},
 ];
 var SHOP_ITEMS=[
-  {id:"skins",name:"カードデザインパック",icon:"🎴",price:"¥160",desc:"裏面6種＋表面5種"},
+  {id:"skins",name:"カードデザインパック",icon:"🎴",price:"¥160",desc:"裏面6種＋表面3種"},
   {id:"tables",name:"テーブル背景パック",icon:"🎰",price:"¥160",desc:"テーブル背景6種"},
-  {id:"sounds",name:"サウンドパック",icon:"🔊",price:"¥160",desc:"効果音セット4種"},
   {id:"noads",name:"広告解除",icon:"🚫",price:"¥320",desc:"永久に広告を非表示"},
-  {id:"allpass",name:"全部入りパス",icon:"👑",price:"¥480",desc:"全コンテンツ解放（33%OFF）",highlight:true},
+  {id:"allpass",name:"全部入りパス",icon:"👑",price:"¥480",desc:"全コンテンツ解放（25%OFF）",highlight:true},
 ];
 
 // ─── Main App ────────────────────────────────────────────────────
@@ -977,11 +898,44 @@ function PlayerCards(props){
 
   var alert=alerts[i];
   var alertActive=false,alertType=null;
+  var alertFizzled=false;
   if(alert&&!full){
     if(alert.timing==="three"&&rc.size>=3)alertActive=true;
     if(alert.timing==="four"&&rc.size>=4)alertActive=true;
+    // Suppress fake alerts (red/glitch) if niuniu is mathematically impossible
+    if(alertActive&&hands[i]&&(alert.type==="red"||alert.type==="glitch")){
+      var revealedCardsList=[];
+      rc.forEach(function(idx){revealedCardsList.push(hands[i][idx]);});
+      if(!canStillBeNiuNiu(revealedCardsList)){
+        alertActive=false;
+        // Fizzle: only if alert was a "three" timing AND visual was already shown (rc.size===4 now)
+        // At rc.size===3: if already impossible, no sound was played, no fizzle needed
+        // At rc.size===4: alert was visually on at 3 cards, now 4th card killed it → fizzle
+        if(alert.timing==="three"&&rc.size===4){
+          // Check if at 3 cards it was possible (= alert did show)
+          var first3=[];
+          var rcArr=Array.from(rc);rcArr.sort();
+          for(var fi=0;fi<3;fi++)first3.push(hands[i][rcArr[fi]]);
+          if(canStillBeNiuNiu(first3)){
+            alertFizzled=true;
+          }
+        }
+      }
+    }
     if(alertActive)alertType=alert.type;
   }
+
+  // Play fizzle sound when alert transitions from shown-at-3 to impossible-at-4
+  var fizzleRef=useRef({played:false,roundNum:-1});
+  useEffect(function(){
+    if(fizzleRef.current.roundNum!==roundNum){
+      fizzleRef.current={played:false,roundNum:roundNum};
+    }
+    if(alertFizzled&&!fizzleRef.current.played&&soundOn){
+      fizzleRef.current.played=true;
+      SFX.alertFizzle();
+    }
+  },[alertFizzled,rc.size,roundNum]);
 
   var cardEls=hands[i]?hands[i].map(function(card,ci){
     var vis=vs.has(ci),canSq=phase==="reveal"&&!vis&&rc.size>=3&&(ci===3||ci===4);
@@ -1121,9 +1075,9 @@ function NiuNiu(){
   var c1=useState("default"),skinId=c1[0],setSkinId=c1[1];
   var c1b=useState("default"),faceId=c1b[0],setFaceId=c1b[1];
   var c2=useState("default"),tableId=c2[0],setTableId=c2[1];
-  var c3=useState("default"),soundPackId=c3[0],setSoundPackId=c3[1];
+  var c3=useState("default"),soundPackId=c3[0],setSoundPackId=c3[1];  // unused, kept for backward compat
   var c4=useState({}),purchased=c4[0],setPurchased=c4[1]; // {skins:true,tables:true,...}
-  var c5=useState("shop"),shopTab=c5[0],setShopTab=c5[1]; // "shop","skins","tables","sounds"
+  var c5=useState(null),settingsFrom=c5[0],setSettingsFrom=c5[1]; // track where settings was opened from
   var c6=useState(0),adCounter=c6[0],setAdCounter=c6[1]; // count rounds for ad timing
   var c7=useState(false),showAdPlaceholder=c7[0],setShowAdPlaceholder=c7[1];
 
@@ -1135,7 +1089,7 @@ function NiuNiu(){
     if(purchased.allpass)return true;
     var purchaseKey=category==="faces"?"skins":category;
     if(purchased[purchaseKey])return true;
-    var list=category==="skins"?CARD_SKINS:category==="faces"?CARD_FACES:category==="tables"?TABLE_BGS:SOUND_PACKS;
+    var list=category==="skins"?CARD_SKINS:category==="faces"?CARD_FACES:TABLE_BGS;
     var item=list.find(function(x){return x.id===itemId;});
     return item&&item.free;
   }
@@ -1165,7 +1119,7 @@ function NiuNiu(){
   },[tableId]);
 
   // Sync sound pack
-  useEffect(function(){activeSoundPack=soundPackId;},[soundPackId]);
+  // sound pack effect removed (all users use classic)
 
   function computeAlerts(allHands){
     var newAlerts={};
@@ -1188,7 +1142,7 @@ function NiuNiu(){
           else if(roll<0.05){newAlerts[pi]={type:"cowPip",timing:"three",cowPipIdx:Math.floor(Math.random()*3)};}
           else if(roll<0.15){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
         }else{
-          if(roll<0.0033){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
+          if(roll<0.00471){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
         }
       }else{
         if(isNiuNiu){
@@ -1200,8 +1154,8 @@ function NiuNiu(){
           else if(roll<0.15){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
           else if(roll<0.65){newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};}
         }else{
-          if(roll<0.0033){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
-          else if(roll<0.060){newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};}
+          if(roll<0.00471){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.0877){newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};}
         }
       }
     });
@@ -1234,13 +1188,19 @@ function NiuNiu(){
   function openThree(pi){
     if(soundOn)SFX.deal();
     var alert=alerts[pi];
-    if(alert&&alert.timing==="three"&&soundOn){setTimeout(function(){playAlertSFX(alert.type);},400);}
+    // Check if alert would be suppressed (niuniu impossible with 3 cards revealed)
+    var willSuppress=false;
+    if(alert&&(alert.type==="red"||alert.type==="glitch")&&hands[pi]){
+      var first3=[hands[pi][0],hands[pi][1],hands[pi][2]];
+      if(!canStillBeNiuNiu(first3))willSuppress=true;
+    }
+    if(alert&&alert.timing==="three"&&soundOn&&!willSuppress){setTimeout(function(){playAlertSFX(alert.type);},400);}
     setRevealedCards(function(prev){
       var ns2=prev.map(function(s){return new Set(s);});
       ns2[pi].add(0);ns2[pi].add(1);ns2[pi].add(2);
       var c=hands[pi];
       if(c){var sum=rankPoints(c[0].rank)+rankPoints(c[1].rank)+rankPoints(c[2].rank);
-        if(sum%10===0&&soundOn&&!(alert&&alert.timing==="three"))setTimeout(function(){SFX.bullFound();},300);}
+        if(sum%10===0&&soundOn&&!(alert&&alert.timing==="three"&&!willSuppress))setTimeout(function(){SFX.bullFound();},300);}
       return ns2;
     });
   }
@@ -1250,9 +1210,16 @@ function NiuNiu(){
       var ns2=prev.map(function(s){return new Set(s);});
       ns2[pi].add(ci);
       var alert=alerts[pi];
-      if(ns2[pi].size===4&&alert&&alert.timing==="four"&&soundOn){setTimeout(function(){playAlertSFX(alert.type);},200);}
+      // Check suppression for 4-card alert
+      var willSuppress4=false;
+      if(ns2[pi].size===4&&alert&&(alert.type==="red"||alert.type==="glitch")&&hands[pi]){
+        var revealed4=[];
+        ns2[pi].forEach(function(idx){revealed4.push(hands[pi][idx]);});
+        if(!canStillBeNiuNiu(revealed4))willSuppress4=true;
+      }
+      if(ns2[pi].size===4&&alert&&alert.timing==="four"&&soundOn&&!willSuppress4){setTimeout(function(){playAlertSFX(alert.type);},200);}
       if(ns2[pi].size===5&&soundOn){var ev2=evaluateHand(hands[pi]);setTimeout(function(){if(ev2.hasBull)SFX.bullFound();else SFX.noBull();},200);}
-      if(ns2[pi].size===4&&soundOn&&!(alert&&alert.timing==="four")){
+      if(ns2[pi].size===4&&soundOn&&!(alert&&alert.timing==="four"&&!willSuppress4)){
         var c=hands[pi],vi=Array.from(ns2[pi]);
         for(var a=0;a<vi.length;a++)for(var b=a+1;b<vi.length;b++)for(var d=b+1;d<vi.length;d++){
           if((rankPoints(c[vi[a]].rank)+rankPoints(c[vi[b]].rank)+rankPoints(c[vi[d]].rank))%10===0){setTimeout(function(){SFX.bullFound();},200);a=b=d=99;}
@@ -1342,39 +1309,37 @@ function NiuNiu(){
     return e("div",{style:{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",padding:20,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:500,margin:"0 auto",textAlign:"center",width:"100%"}},
         // Logo area with decorative line
-        e("div",{style:{marginBottom:40}},
-          e("div",{style:{width:40,height:1,background:"linear-gradient(90deg,transparent,var(--accent),transparent)",margin:"0 auto 16px"}}),
+        e("div",{style:{marginBottom:28}},
+          e("div",{style:{width:40,height:1,background:"linear-gradient(90deg,transparent,var(--accent),transparent)",margin:"0 auto 14px"}}),
           e("div",{style:{display:"flex",justifyContent:"center",gap:4,marginBottom:6,animation:"float 3s ease-in-out infinite"}},
             e("span",{style:{fontSize:52,fontWeight:900,color:"var(--accent)",textShadow:"0 2px 20px rgba(212,175,55,0.3),0 0 40px rgba(212,175,55,0.1)",fontFamily:"'Playfair Display','Noto Serif JP',serif"}},"牛"),
             e("span",{style:{fontSize:52,fontWeight:900,color:"#c0392b",textShadow:"0 2px 20px rgba(192,57,43,0.3),0 0 40px rgba(192,57,43,0.1)",fontFamily:"'Playfair Display','Noto Serif JP',serif"}},"牛")),
           e("div",{style:{fontSize:13,fontWeight:700,letterSpacing:6,color:"var(--accent)",opacity:0.7,fontFamily:"'Playfair Display',serif"}},"NIU NIU"),
-          e("div",{style:{width:40,height:1,background:"linear-gradient(90deg,transparent,var(--accent),transparent)",margin:"12px auto"}})),
-        // Main mode buttons - 2 column grid
+          e("div",{style:{width:40,height:1,background:"linear-gradient(90deg,transparent,var(--accent),transparent)",margin:"10px auto"}})),
+        // Main mode buttons - 2 column grid, bigger
         e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:14}},
           // Flip mode
           e("button",{onClick:function(){setAppMode("flip");setPhase("setup");if(soundOn)SFX.buttonClick();},
-            style:{padding:"28px 16px",borderRadius:16,border:"1px solid var(--card-border)",
+            style:{padding:"36px 16px",borderRadius:16,border:"1px solid var(--card-border)",
               background:"linear-gradient(135deg,rgba(212,175,55,0.1) 0%,var(--card) 100%)",
-              cursor:"pointer",textAlign:"center",fontFamily:"inherit",minHeight:160,
-              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,
-              boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(212,175,55,0.1)",
-              transition:"transform 0.15s ease"}},
-            e("div",{style:{width:64,height:64,borderRadius:16,background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",display:"flex",alignItems:"center",justifyContent:"center",fontSize:32,boxShadow:"0 4px 14px rgba(212,175,55,0.4)"}},"🎴"),
+              cursor:"pointer",textAlign:"center",fontFamily:"inherit",minHeight:260,
+              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:18,
+              boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(212,175,55,0.1)"}},
+            e("div",{style:{width:88,height:88,borderRadius:22,background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,boxShadow:"0 6px 20px rgba(212,175,55,0.4)"}},"🎴"),
             e("div",null,
-              e("div",{style:{fontSize:16,fontWeight:800,color:"var(--text)",letterSpacing:1,marginBottom:4}},"フリップ"),
-              e("div",{style:{fontSize:9,color:"var(--text-muted)",lineHeight:1.5}},"サクッと勝負"))),
+              e("div",{style:{fontSize:20,fontWeight:800,color:"var(--text)",letterSpacing:1.5,marginBottom:6}},"フリップ"),
+              e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.5}},"サクッと勝負"))),
           // Battle mode
           e("button",{onClick:function(){setAppMode("battle");setPhase("setup");if(soundOn)SFX.buttonClick();},
-            style:{padding:"28px 16px",borderRadius:16,border:"1px solid rgba(192,57,43,0.2)",
+            style:{padding:"36px 16px",borderRadius:16,border:"1px solid rgba(192,57,43,0.2)",
               background:"linear-gradient(135deg,rgba(192,57,43,0.1) 0%,var(--card) 100%)",
-              cursor:"pointer",textAlign:"center",fontFamily:"inherit",minHeight:160,
-              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,
-              boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(192,57,43,0.1)",
-              transition:"transform 0.15s ease"}},
-            e("div",{style:{width:64,height:64,borderRadius:16,background:"linear-gradient(135deg,#c0392b,#962d22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:32,boxShadow:"0 4px 14px rgba(192,57,43,0.4)"}},"⚔️"),
+              cursor:"pointer",textAlign:"center",fontFamily:"inherit",minHeight:260,
+              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:18,
+              boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(192,57,43,0.1)"}},
+            e("div",{style:{width:88,height:88,borderRadius:22,background:"linear-gradient(135deg,#c0392b,#962d22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,boxShadow:"0 6px 20px rgba(192,57,43,0.4)"}},"⚔️"),
             e("div",null,
-              e("div",{style:{fontSize:16,fontWeight:800,color:"var(--text)",letterSpacing:1,marginBottom:4}},"対戦"),
-              e("div",{style:{fontSize:9,color:"var(--text-muted)",lineHeight:1.5}},"親子＋チップ計算")))),
+              e("div",{style:{fontSize:20,fontWeight:800,color:"var(--text)",letterSpacing:1.5,marginBottom:6}},"対戦"),
+              e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.5}},"親子＋チップ計算")))),
         // Sub buttons - 2 column
         e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}},
           e("button",{onClick:function(){setAppMode("rulebook");if(soundOn)SFX.buttonClick();},
@@ -1383,14 +1348,14 @@ function NiuNiu(){
               display:"flex",alignItems:"center",justifyContent:"center",gap:8}},
             e("span",{style:{fontSize:18}},"📖"),
             e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"遊び方")),
-          e("button",{onClick:function(){setAppMode("shop");setShopTab("shop");if(soundOn)SFX.buttonClick();},
+          e("button",{onClick:function(){setSettingsFrom("home");setAppMode("settings");if(soundOn)SFX.buttonClick();},
             style:{padding:"14px 16px",borderRadius:12,border:"1px solid var(--card-border)",
               background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
               display:"flex",alignItems:"center",justifyContent:"center",gap:8}},
-            e("span",{style:{fontSize:18}},"🛍️"),
-            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"ショップ"))),
+            e("span",{style:{fontSize:18}},"⚙️"),
+            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"設定"))),
         // Footer
-        e("div",{style:{marginTop:36,opacity:0.3,fontSize:9,color:"var(--text-muted)",letterSpacing:2}},"v1.0")));
+        e("div",{style:{marginTop:20,opacity:0.3,fontSize:9,color:"var(--text-muted)",letterSpacing:2,textAlign:"center"}},"v1.0")));
   }
 
   // ─── SHOP Screen ──────────────────────────────────────────
@@ -1404,108 +1369,111 @@ function NiuNiu(){
       e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},"🛍️ ショップ"),
       e("div",{style:{width:50}})));
 
-    // Tab bar
-    var shTabs=[{id:"shop",label:"購入"},{id:"skins",label:"カード"},{id:"tables",label:"背景"},{id:"sounds",label:"音"}];
-    shKids.push(e("div",{key:"tabs",style:{display:"flex",gap:0,marginBottom:16,borderRadius:10,overflow:"hidden",border:"1px solid var(--card-border)"}},
-      shTabs.map(function(t){
-        var sel=shopTab===t.id;
-        return e("button",{key:t.id,onClick:function(){setShopTab(t.id);},style:{
-          flex:1,padding:"9px 0",fontSize:11,fontWeight:sel?800:400,cursor:"pointer",fontFamily:"inherit",border:"none",
-          background:sel?"rgba(212,175,55,0.15)":"rgba(0,0,0,0.2)",
-          color:sel?"#d4af37":"#6b8f6b",
-          borderBottom:sel?"2px solid #d4af37":"2px solid transparent"}},t.label);
-      })));
+    // Intro note
+    shKids.push(e("div",{key:"intro",style:{fontSize:11,color:"var(--text-muted)",textAlign:"center",marginBottom:16,lineHeight:1.6}},
+      "カードデザイン・背景のカスタマイズを解放できます。",e("br"),
+      "購入後は「設定」から自由に変更できます。"));
 
-    // ─── 購入 TAB ───
-    if(shopTab==="shop"){
-      SHOP_ITEMS.forEach(function(item){
-        var owned=purchased[item.id]||purchased.allpass;
-        shKids.push(e("div",{key:item.id,style:Object.assign({},shCard,item.highlight?{border:"1.5px solid var(--accent)",background:"var(--btn-bg)"}:{})},
-          e("div",{style:{display:"flex",alignItems:"center",gap:12}},
-            e("div",{style:{fontSize:28,width:40,textAlign:"center"}},item.icon),
-            e("div",{style:{flex:1}},
-              e("div",{style:{display:"flex",alignItems:"center",gap:6}},
-                e("span",{style:{fontSize:14,fontWeight:800,color:"var(--text)"}},item.name),
-                item.highlight?e("span",{style:{fontSize:8,fontWeight:700,color:"var(--accent)",background:"var(--tab-active)",padding:"1px 5px",borderRadius:3}},"お得"):null),
-              e("div",{style:{fontSize:10,color:"var(--text-muted)",marginTop:2}},item.desc)),
-            owned?
-              e("div",{style:{fontSize:11,fontWeight:700,color:"#27ae60",padding:"6px 12px"}},"✓ 購入済"):
-              e("button",{onClick:function(){doPurchase(item.id);if(soundOn)SFX.buttonClick();},style:{
-                padding:"8px 14px",borderRadius:8,fontSize:12,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
-                background:item.highlight?"linear-gradient(135deg,#d4af37,#b8960c)":"rgba(212,175,55,0.1)",
-                color:item.highlight?"#0a1a0f":"#d4af37",
-                border:item.highlight?"none":"1px solid rgba(212,175,55,0.3)",
-                boxShadow:item.highlight?"0 2px 8px rgba(212,175,55,0.3)":"none"}},item.price))));
-      });
-      shKids.push(e("div",{key:"note",style:{fontSize:9,color:"var(--text-dim)",textAlign:"center",marginTop:8,lineHeight:1.6}},
-        "※ 現在はデモ版です。実際の課金はCapacitor移行後に実装されます。",e("br"),
-        "購入ボタンを押すとこのセッション中のみ解放されます。"));
-    }
+    // Purchase items
+    SHOP_ITEMS.forEach(function(item){
+      var owned=purchased[item.id]||purchased.allpass;
+      shKids.push(e("div",{key:item.id,style:Object.assign({},shCard,item.highlight?{border:"1.5px solid var(--accent)",background:"var(--btn-bg)"}:{})},
+        e("div",{style:{display:"flex",alignItems:"center",gap:12}},
+          e("div",{style:{fontSize:28,width:40,textAlign:"center"}},item.icon),
+          e("div",{style:{flex:1}},
+            e("div",{style:{display:"flex",alignItems:"center",gap:6}},
+              e("span",{style:{fontSize:14,fontWeight:800,color:"var(--text)"}},item.name),
+              item.highlight?e("span",{style:{fontSize:8,fontWeight:700,color:"var(--accent)",background:"var(--tab-active)",padding:"1px 5px",borderRadius:3}},"お得"):null),
+            e("div",{style:{fontSize:10,color:"var(--text-muted)",marginTop:2}},item.desc)),
+          owned?
+            e("div",{style:{fontSize:11,fontWeight:700,color:"#27ae60",padding:"6px 12px"}},"✓ 購入済"):
+            e("button",{onClick:function(){doPurchase(item.id);if(soundOn)SFX.buttonClick();},style:{
+              padding:"8px 14px",borderRadius:8,fontSize:12,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+              background:item.highlight?"linear-gradient(135deg,var(--accent),var(--accent-dark))":"var(--btn-bg)",
+              color:item.highlight?"var(--bg)":"var(--accent)",
+              border:item.highlight?"none":"1px solid var(--card-border)",
+              boxShadow:item.highlight?"0 2px 8px rgba(212,175,55,0.3)":"none"}},item.price))));
+    });
+    shKids.push(e("div",{key:"note",style:{fontSize:9,color:"var(--text-dim)",textAlign:"center",marginTop:8,lineHeight:1.6}},
+      "※ 現在はデモ版です。実際の課金はCapacitor移行後に実装されます。",e("br"),
+      "購入ボタンを押すと即時解放されます（テスト用）。"));
 
-    // ─── カード TAB ───
-    if(shopTab==="skins"){
-      // Preview: current back + face side by side
-      shKids.push(e("div",{key:"skprev",style:Object.assign({},shCard,{textAlign:"center"})},
-        e("div",{style:{fontSize:10,color:"var(--accent)",fontWeight:700,marginBottom:8}},"現在のカードデザイン"),
-        e("div",{style:{display:"flex",justifyContent:"center",gap:8}},
-          e(CardBack,{w:48,h:72,skin:curSkin}),
-          e(CardFace,{card:{rank:"K",suit:"♠"},w:48,h:72,showRank:true,faceTheme:curFace}),
-          e(CardFace,{card:{rank:"7",suit:"♥"},w:48,h:72,showRank:true,faceTheme:curFace}))));
+    return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},shKids));
+  }
 
-      // Back designs
-      shKids.push(e("div",{key:"backlabel",style:{fontSize:11,fontWeight:700,color:"var(--accent)",marginBottom:6,marginTop:4}},"裏面デザイン"));
-      shKids.push(e("div",{key:"sklist",style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:14}},
+  // ─── SETTINGS Screen ──────────────────────────────────────
+  if(appMode==="settings"){
+    var setCard={padding:"14px 16px",borderRadius:12,background:"var(--card)",border:"1px solid var(--card-border)",marginBottom:12,boxShadow:"0 2px 12px rgba(0,0,0,0.2)"};
+    var setKids=[];
+    var backTo=settingsFrom||"home";
+
+    // Header
+    setKids.push(e("div",{key:"hdr",style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}},
+      e("button",{onClick:function(){setAppMode(backTo);setSettingsFrom(null);},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 戻る"),
+      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},"⚙️ 設定"),
+      e("div",{style:{width:50}})));
+
+    // ─── カードデザイン ─────
+    setKids.push(e("div",{key:"cardsec",style:setCard},
+      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},"🎴 カードデザイン"),
+      // Preview
+      e("div",{style:{display:"flex",justifyContent:"center",gap:8,marginBottom:14,padding:"10px 0",background:"rgba(0,0,0,0.15)",borderRadius:8}},
+        e(CardBack,{w:48,h:72,skin:curSkin}),
+        e(CardFace,{card:{rank:"K",suit:"♠"},w:48,h:72,showRank:true,faceTheme:curFace}),
+        e(CardFace,{card:{rank:"7",suit:"♥"},w:48,h:72,showRank:true,faceTheme:curFace})),
+      // Back label
+      e("div",{style:{fontSize:10,fontWeight:700,color:"var(--text-muted)",marginBottom:6}},"裏面"),
+      e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:14}},
         CARD_SKINS.map(function(sk){
           var sel=skinId===sk.id;
           var unlocked=canUse("skins",sk.id);
           return e("button",{key:sk.id,onClick:function(){if(unlocked){setSkinId(sk.id);if(soundOn)SFX.buttonClick();}},
             style:{padding:8,borderRadius:10,cursor:unlocked?"pointer":"default",fontFamily:"inherit",textAlign:"center",
-              background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
-              border:sel?"1.5px solid #d4af37":"1px solid rgba(212,175,55,0.08)",
-              opacity:unlocked?1:0.5}},
+              background:sel?"var(--tab-active)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid var(--accent)":"1px solid var(--card-border)",
+              opacity:unlocked?1:0.45}},
             e("div",{style:{display:"flex",justifyContent:"center",marginBottom:4}},
               e(CardBack,{w:32,h:48,skin:sk})),
-            e("div",{style:{fontSize:9,fontWeight:sel?700:400,color:sel?"#d4af37":"#8faa8f"}},sk.name),
+            e("div",{style:{fontSize:9,fontWeight:sel?700:400,color:sel?"var(--accent)":"var(--text-muted)"}},sk.name),
             !unlocked?e("div",{style:{fontSize:7,color:"#c0392b",marginTop:1}},"🔒"):
             sel?e("div",{style:{fontSize:7,color:"#27ae60",marginTop:1}},"✓"):null);
-        })));
-
-      // Face designs
-      shKids.push(e("div",{key:"facelabel",style:{fontSize:11,fontWeight:700,color:"var(--accent)",marginBottom:6}},"表面デザイン"));
-      shKids.push(e("div",{key:"facelist",style:{display:"grid",gap:8}},
+        })),
+      // Face label
+      e("div",{style:{fontSize:10,fontWeight:700,color:"var(--text-muted)",marginBottom:6}},"表面"),
+      e("div",{style:{display:"grid",gap:6}},
         CARD_FACES.map(function(fc){
           var sel=faceId===fc.id;
           var unlocked=canUse("faces",fc.id);
           return e("button",{key:fc.id,onClick:function(){if(unlocked){setFaceId(fc.id);if(soundOn)SFX.buttonClick();}},
-            style:{padding:12,borderRadius:10,cursor:unlocked?"pointer":"default",fontFamily:"inherit",textAlign:"center",
-              background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
-              border:sel?"1.5px solid #d4af37":"1px solid rgba(212,175,55,0.08)",
-              opacity:unlocked?1:0.5}},
+            style:{padding:10,borderRadius:10,cursor:unlocked?"pointer":"default",fontFamily:"inherit",textAlign:"center",
+              background:sel?"var(--tab-active)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid var(--accent)":"1px solid var(--card-border)",
+              opacity:unlocked?1:0.45}},
             e("div",{style:{display:"flex",alignItems:"center",gap:10}},
               e("div",{style:{display:"flex",gap:2,flexShrink:0}},
-                e(CardFace,{card:{rank:"K",suit:"♠"},w:28,h:42,showRank:true,faceTheme:fc}),
-                e(CardFace,{card:{rank:"7",suit:"♥"},w:28,h:42,showRank:true,faceTheme:fc}),
-                e(CardFace,{card:{rank:"A",suit:"♦"},w:28,h:42,showRank:true,faceTheme:fc})),
+                e(CardFace,{card:{rank:"K",suit:"♠"},w:26,h:38,showRank:true,faceTheme:fc}),
+                e(CardFace,{card:{rank:"7",suit:"♥"},w:26,h:38,showRank:true,faceTheme:fc}),
+                e(CardFace,{card:{rank:"A",suit:"♦"},w:26,h:38,showRank:true,faceTheme:fc})),
               e("div",{style:{flex:1,textAlign:"left"}},
-                e("div",{style:{fontSize:11,fontWeight:sel?700:500,color:sel?"#d4af37":"#c5d8c5"}},fc.name),
+                e("div",{style:{fontSize:11,fontWeight:sel?700:500,color:sel?"var(--accent)":"var(--text)"}},fc.name),
                 e("div",{style:{fontSize:9,color:"var(--text-muted)",marginTop:2}},fc.desc)),
               !unlocked?e("span",{style:{fontSize:9,color:"#c0392b"}},"🔒"):
               sel?e("span",{style:{fontSize:9,color:"#27ae60"}},"✓"):null));
-        })));
-    }
+        }))));
 
-    // ─── 背景 TAB ───
-    if(shopTab==="tables"){
-      shKids.push(e("div",{key:"tblist",style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
+    // ─── 背景 ─────
+    setKids.push(e("div",{key:"bgsec",style:setCard},
+      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},"🎨 テーブル背景"),
+      e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
         TABLE_BGS.map(function(tb){
           var sel=tableId===tb.id;
           var unlocked=canUse("tables",tb.id);
           return e("button",{key:tb.id,onClick:function(){if(unlocked){setTableId(tb.id);if(soundOn)SFX.buttonClick();}},
             style:{padding:10,borderRadius:10,cursor:unlocked?"pointer":"default",fontFamily:"inherit",textAlign:"center",
-              background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
-              border:sel?"1.5px solid #d4af37":"1px solid rgba(212,175,55,0.08)",
-              opacity:unlocked?1:0.5}},
-            // Color preview swatch with accent
+              background:sel?"var(--tab-active)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid var(--accent)":"1px solid var(--card-border)",
+              opacity:unlocked?1:0.45}},
             e("div",{style:{width:"100%",height:40,borderRadius:6,marginBottom:6,position:"relative",
               background:"radial-gradient(ellipse at 50% 50%,"+tb.grad+","+tb.bg+")",
               border:"1px solid rgba(255,255,255,0.05)"}},
@@ -1513,43 +1481,51 @@ function NiuNiu(){
             e("div",{style:{fontSize:10,fontWeight:sel?700:400,color:sel?"var(--accent)":"var(--text-muted)"}},tb.name),
             !unlocked?e("div",{style:{fontSize:8,color:"#c0392b",marginTop:2}},"🔒 要購入"):
             sel?e("div",{style:{fontSize:8,color:"#27ae60",marginTop:2}},"✓ 使用中"):null);
-        })));
-    }
+        }))));
 
-    // ─── 音 TAB ───
-    if(shopTab==="sounds"){
-      shKids.push(e("div",{key:"sdlist",style:{display:"grid",gap:8}},
-        SOUND_PACKS.map(function(sp){
-          var sel=soundPackId===sp.id;
-          var unlocked=canUse("sounds",sp.id);
-          return e("div",{key:sp.id,style:{padding:"12px 16px",borderRadius:10,
-              display:"flex",alignItems:"center",gap:10,
-              background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
-              border:sel?"1.5px solid #d4af37":"1px solid rgba(212,175,55,0.08)"}},
-            e("span",{style:{fontSize:22}},sp.id==="default"?"🔊":sp.id==="real"?"🎰":sp.id==="retro"?"👾":"🎹"),
-            e("div",{style:{flex:1,textAlign:"left"}},
-              e("div",{style:{fontSize:12,fontWeight:sel?700:400,color:sel?"#d4af37":"#8faa8f"}},sp.name),
-              e("div",{style:{fontSize:9,color:"var(--text-dim)",marginTop:2}},sp.desc)),
-            // Preview button - always available
-            e("button",{onClick:function(){
-              var prev=activeSoundPack;activeSoundPack=sp.id;
-              SFX.deal();
-              setTimeout(function(){SFX.bullFound();},500);
-              setTimeout(function(){SFX.win();activeSoundPack=prev;},1000);
-            },style:{padding:"5px 10px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
-              background:"rgba(212,175,55,0.08)",border:"1px solid var(--card-border)",color:"var(--accent)"}},"♪ 試聴"),
-            // Select/lock
-            unlocked?e("button",{onClick:function(){setSoundPackId(sp.id);},style:{padding:"5px 10px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
-              background:sel?"#27ae60":"rgba(212,175,55,0.08)",border:sel?"none":"1px solid rgba(212,175,55,0.2)",
-              color:sel?"#fff":"#8faa8f"}},sel?"✓ 使用中":"選択"):
-            e("span",{style:{fontSize:9,color:"#c0392b",padding:"5px 6px"}},"🔒 要購入"));
-        })));
-      shKids.push(e("div",{key:"sdnote",style:{fontSize:9,color:"var(--text-dim)",textAlign:"center",marginTop:8}},
-        "全パック試聴可能。使用するには購入が必要です。"));
-    }
+    // ─── ゲーム設定 ─────
+    setKids.push(e("div",{key:"gamesec",style:setCard},
+      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},"🎮 ゲーム設定"),
+      // Sound toggle
+      e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid var(--card-border)"}},
+        e("div",null,
+          e("div",{style:{fontSize:12,color:"var(--text)",fontWeight:600}},"🔊 サウンド"),
+          e("div",{style:{fontSize:9,color:"var(--text-muted)",marginTop:2}},"効果音の再生")),
+        e("button",{onClick:function(){setSoundOn(!soundOn);},style:{
+          padding:"6px 14px",borderRadius:20,fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+          background:soundOn?"linear-gradient(135deg,var(--accent),var(--accent-dark))":"rgba(0,0,0,0.3)",
+          color:soundOn?"var(--bg)":"var(--text-muted)",
+          border:soundOn?"none":"1px solid var(--card-border)"}},soundOn?"ON":"OFF")),
+      // Game mode (alert style)
+      e("div",{style:{padding:"12px 0 4px"}},
+        e("div",{style:{fontSize:12,color:"var(--text)",fontWeight:600,marginBottom:4}},"🎴 予告スタイル"),
+        e("div",{style:{fontSize:9,color:"var(--text-muted)",marginBottom:10}},"牛が出る時の演出頻度"),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
+          e("button",{onClick:function(){setGameMode("simple");if(soundOn)SFX.buttonClick();},style:{
+            padding:"10px 8px",borderRadius:10,fontSize:11,fontWeight:gameMode==="simple"?800:400,cursor:"pointer",fontFamily:"inherit",
+            background:gameMode==="simple"?"var(--tab-active)":"rgba(0,0,0,0.2)",
+            border:gameMode==="simple"?"1.5px solid var(--accent)":"1px solid var(--card-border)",
+            color:gameMode==="simple"?"var(--accent)":"var(--text-muted)"}},
+            e("div",{style:{fontSize:16,marginBottom:2}},"🃏"),"シンプル",
+            e("div",{style:{fontSize:8,marginTop:2,opacity:0.7}},"プレミアのみ")),
+          e("button",{onClick:function(){setGameMode("spoiler");if(soundOn)SFX.buttonClick();},style:{
+            padding:"10px 8px",borderRadius:10,fontSize:11,fontWeight:gameMode==="spoiler"?800:400,cursor:"pointer",fontFamily:"inherit",
+            background:gameMode==="spoiler"?"var(--tab-active)":"rgba(0,0,0,0.2)",
+            border:gameMode==="spoiler"?"1.5px solid var(--accent)":"1px solid var(--card-border)",
+            color:gameMode==="spoiler"?"var(--accent)":"var(--text-muted)"}},
+            e("div",{style:{fontSize:16,marginBottom:2}},"🔮"),"先バレ",
+            e("div",{style:{fontSize:8,marginTop:2,opacity:0.7}},"赤オーラ＋プレミア"))))));
+
+    // Shop link
+    setKids.push(e("button",{key:"shoplink",onClick:function(){setAppMode("shop");if(soundOn)SFX.buttonClick();},
+      style:{width:"100%",padding:"12px 16px",borderRadius:12,border:"1px solid var(--card-border)",
+        background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
+        display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginTop:6}},
+      e("span",{style:{fontSize:16}},"🛍️"),
+      e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"ショップで追加コンテンツを購入")));
 
     return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
-      e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},shKids));
+      e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},setKids));
   }
 
   // ─── RULEBOOK Screen ──────────────────────────────────────
@@ -1734,12 +1710,12 @@ function NiuNiu(){
       rbKids.push(e("div",{key:"e5",style:rbCard},
         e("div",{style:rbTitle},"先告知演出"),
         e("div",{style:rbText},"「先バレ」モードでは、絞りの前にヒントが出ることがあります。"),
-        e("div",{style:rbSub},"🔴 赤オーラ — 信頼度 約40%"),
+        e("div",{style:rbSub},"🔴 赤オーラ — 信頼度 約30%"),
         e("div",{style:{display:"flex",alignItems:"center",gap:12,margin:"8px 0"}},
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite",border:"2px solid rgba(180,30,30,0.5)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite",border:"2px solid rgba(180,30,30,0.5)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
           e("div",{style:{flex:1,fontSize:10,color:"var(--text-muted)",lineHeight:1.7}},"4・5枚目が赤く脈動。",e("br"),"出ても牛牛とは限らない。")),
-        e("div",{style:rbSub},"👻 違和感 — 信頼度 約70%"),
+        e("div",{style:rbSub},"👻 違和感 — 信頼度 約60%"),
         e("div",{style:{display:"flex",alignItems:"center",gap:12,margin:"8px 0"}},
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite",border:"1px solid rgba(255,255,255,0.15)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite",border:"1px solid rgba(255,255,255,0.15)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
@@ -2040,7 +2016,8 @@ function NiuNiu(){
       e("span",{style:{color:"#5a8a5a",fontSize:11}},"R"+roundNum),
       e("span",{style:{fontSize:11}},modeIcon+modeLabel)),
     e("div",{style:{display:"flex",alignItems:"center",gap:5}},
-      e("button",{onClick:function(){setSoundOn(!soundOn);},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:soundOn?"#d4af37":"#444",fontSize:14,cursor:"pointer"}},soundOn?"🔊":"🔇"),
+      e("button",{onClick:function(){setSoundOn(!soundOn);},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:soundOn?"var(--accent)":"#444",fontSize:14,cursor:"pointer"}},soundOn?"🔊":"🔇"),
+      e("button",{onClick:function(){setSettingsFrom(appMode);setAppMode("settings");},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-muted)",fontSize:14,cursor:"pointer"}},"⚙️"),
       e("button",{onClick:function(){setAppMode("home");setPhase("setup");setHands([]);setResults([]);setRoundNum(0);setRevealedCards([]);},
         style:{padding:"3px 10px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-dim)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"リセット"))));
 
@@ -2109,7 +2086,7 @@ function NiuNiu(){
           e("div",{style:{color:"var(--text-dim)",fontSize:11}},"広告エリア（Capacitor移行後に実装）")),
         e("div",{style:{fontSize:10,color:"var(--text-dim)"}},"3秒後に自動で閉じます..."),
         e("div",{style:{marginTop:10}},
-          e("button",{onClick:function(){setAppMode("shop");setShopTab("shop");setShowAdPlaceholder(false);},style:{
+          e("button",{onClick:function(){setAppMode("shop");setShowAdPlaceholder(false);},style:{
             padding:"5px 14px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
             background:"transparent",border:"1px solid var(--card-border)",color:"var(--accent)"}},
             "🚫 広告を消す → ショップ")))));

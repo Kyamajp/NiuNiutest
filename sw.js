@@ -1,4 +1,4 @@
-const CACHE_NAME="niuniu-v38";
+const CACHE_NAME="niuniu-v52";
 const ASSETS=["./","./index.html","./manifest.json","./icons/icon-192x192.png","./icons/icon-512x512.png","./icons/icon-180x180.png","./icons/icon-maskable-512x512.png"];
 self.addEventListener("install",function(e){
   e.waitUntil(caches.open(CACHE_NAME).then(function(c){return c.addAll(ASSETS);}));
