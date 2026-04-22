@@ -5,42 +5,69 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0e0e24">
+<meta name="theme-color" content="#0a1a0f">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-180x180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
 <title>牛牛 — Niu Niu</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <style>
+:root{--bg:#0a1a0f;--card:var(--card);--card-border:rgba(212,175,55,0.08);--accent:#d4af37;--accent-dark:#b8960c;--text:#f0e6d2;--text-muted:#8faa8f;--text-dim:#5a7a5a;--btn-bg:rgba(212,175,55,0.06);--tab-active:rgba(212,175,55,0.15)}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow-x:hidden}
-body{background:linear-gradient(160deg,#060610 0%,#0e0e24 40%,#141434 70%,#0a0a18 100%);color:#eee;font-family:'Noto Serif JP',Georgia,serif}
+body{background:var(--bg);color:var(--text);font-family:'Noto Serif JP',Georgia,serif;
+  background-image:
+    radial-gradient(ellipse at 50% 0%,rgba(20,60,30,0.5) 0%,transparent 70%),
+    repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(0,0,0,0.03) 8px,rgba(0,0,0,0.03) 16px),
+    linear-gradient(180deg,#0a1a0f 0%,#0d2818 30%,#0f3020 60%,#0a1a0f 100%)}
 @keyframes cardDeal{from{opacity:0;transform:translateY(-14px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-@keyframes winPulse{0%,100%{box-shadow:0 0 8px rgba(230,180,34,.1)}50%{box-shadow:0 0 22px rgba(230,180,34,.28)}}
-@keyframes bullGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(249,168,37,.3))}50%{filter:drop-shadow(0 0 12px rgba(249,168,37,.7))}}
+@keyframes winPulse{0%,100%{box-shadow:0 0 8px rgba(212,175,55,.15),inset 0 0 8px rgba(212,175,55,.05)}50%{box-shadow:0 0 22px rgba(212,175,55,.35),inset 0 0 15px rgba(212,175,55,.1)}}
+@keyframes bullGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(212,175,55,.3))}50%{filter:drop-shadow(0 0 12px rgba(212,175,55,.7))}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 @keyframes squeezePulse{0%,100%{opacity:.35}50%{opacity:1}}
-@keyframes alertRed{0%,100%{box-shadow:0 0 8px rgba(255,0,0,0.3),inset 0 0 12px rgba(255,0,0,0.15)}50%{box-shadow:0 0 25px rgba(255,0,0,0.6),0 0 50px rgba(200,0,0,0.3),inset 0 0 20px rgba(255,0,0,0.25)}}
+@keyframes alertRed{0%,100%{box-shadow:0 0 8px rgba(180,30,30,0.3),inset 0 0 12px rgba(180,30,30,0.15)}50%{box-shadow:0 0 25px rgba(200,30,30,0.6),0 0 50px rgba(150,20,20,0.3),inset 0 0 20px rgba(180,30,30,0.25)}}
 @keyframes alertRainbow{0%{box-shadow:0 0 20px rgba(255,0,0,0.5),0 0 40px rgba(255,0,0,0.2)}14%{box-shadow:0 0 20px rgba(255,127,0,0.5),0 0 40px rgba(255,127,0,0.2)}28%{box-shadow:0 0 20px rgba(255,255,0,0.5),0 0 40px rgba(255,255,0,0.2)}42%{box-shadow:0 0 20px rgba(0,255,0,0.5),0 0 40px rgba(0,255,0,0.2)}57%{box-shadow:0 0 20px rgba(0,127,255,0.5),0 0 40px rgba(0,127,255,0.2)}71%{box-shadow:0 0 20px rgba(75,0,130,0.5),0 0 40px rgba(75,0,130,0.2)}85%{box-shadow:0 0 20px rgba(148,0,211,0.5),0 0 40px rgba(148,0,211,0.2)}100%{box-shadow:0 0 20px rgba(255,0,0,0.5),0 0 40px rgba(255,0,0,0.2)}}
-@keyframes alertBorderRed{0%,100%{border-color:rgba(255,0,0,0.4)}50%{border-color:rgba(255,0,0,0.8)}}
+@keyframes alertBorderRed{0%,100%{border-color:rgba(180,30,30,0.4)}50%{border-color:rgba(200,30,30,0.8)}}
 @keyframes alertBorderRainbow{0%{border-color:#f00}14%{border-color:#f70}28%{border-color:#ff0}42%{border-color:#0f0}57%{border-color:#07f}71%{border-color:#4b0082}85%{border-color:#9400d3}100%{border-color:#f00}}
 @keyframes alertGlitch{0%{transform:translate(0,0)}10%{transform:translate(-2px,1px)}20%{transform:translate(2px,-1px)}30%{transform:translate(0,2px)}40%{transform:translate(1px,-2px)}50%{transform:translate(-1px,0)}60%{transform:translate(2px,1px)}70%{transform:translate(-2px,-1px)}80%{transform:translate(0,0)}85%{transform:translate(1px,2px)}90%{transform:translate(-1px,-1px)}100%{transform:translate(0,0)}}
 @keyframes alertGlitchShadow{0%,80%{box-shadow:none;filter:none}82%{box-shadow:2px 0 0 rgba(255,0,0,0.4),-2px 0 0 rgba(0,255,255,0.4);filter:brightness(1.3)}84%{box-shadow:none;filter:none}90%{box-shadow:-1px 0 0 rgba(255,0,255,0.3),1px 0 0 rgba(0,255,0,0.3);filter:brightness(0.8)}92%{box-shadow:none;filter:none}}
-@keyframes alertFlash{0%{background:rgba(14,14,28,0.92)}8%{background:rgba(255,255,255,0.95)}20%{background:rgba(14,14,28,0.92)}28%{background:rgba(255,255,240,0.6)}40%{background:rgba(14,14,28,0.92)}}
-@keyframes alertBlackout{0%{background:rgba(14,14,28,0.92)}5%{background:rgba(0,0,0,1)}30%{background:rgba(0,0,0,1)}50%{background:rgba(14,14,28,0.92)}}
+@keyframes alertFlash{0%{background:var(--card)}8%{background:rgba(255,255,255,0.95)}20%{background:var(--card)}28%{background:rgba(255,255,240,0.6)}40%{background:var(--card)}}
+@keyframes alertBlackout{0%{background:var(--card)}5%{background:rgba(0,0,0,1)}30%{background:rgba(0,0,0,1)}50%{background:var(--card)}}
 @keyframes alertQuake{0%{transform:translate(0,0)}5%{transform:translate(-3px,2px)}10%{transform:translate(3px,-2px)}15%{transform:translate(-2px,-3px)}20%{transform:translate(2px,3px)}25%{transform:translate(-3px,1px)}30%{transform:translate(3px,-1px)}35%{transform:translate(0,0)}100%{transform:translate(0,0)}}
 @keyframes alertQuakeCard{0%{transform:translate(0,0) rotate(0)}8%{transform:translate(-4px,2px) rotate(-2deg)}16%{transform:translate(4px,-3px) rotate(2deg)}24%{transform:translate(-3px,-2px) rotate(-1deg)}32%{transform:translate(3px,3px) rotate(1deg)}40%{transform:translate(-2px,1px) rotate(-1deg)}50%{transform:translate(0,0) rotate(0)}}
-@keyframes alertSpecial{0%{box-shadow:0 0 15px rgba(230,180,34,0.6),0 0 30px rgba(230,180,34,0.3)}25%{box-shadow:0 0 20px rgba(255,215,0,0.7),0 0 40px rgba(255,215,0,0.3)}50%{box-shadow:0 0 25px rgba(255,255,255,0.6),0 0 50px rgba(230,180,34,0.4)}75%{box-shadow:0 0 20px rgba(255,200,0,0.7),0 0 40px rgba(255,200,0,0.3)}100%{box-shadow:0 0 15px rgba(230,180,34,0.6),0 0 30px rgba(230,180,34,0.3)}}
-@keyframes alertSpecialBorder{0%{border-color:#e6b422}33%{border-color:#fff}66%{border-color:#ffd700}100%{border-color:#e6b422}}
+@keyframes alertSpecial{0%{box-shadow:0 0 15px rgba(212,175,55,0.6),0 0 30px rgba(212,175,55,0.3)}25%{box-shadow:0 0 20px rgba(255,215,0,0.7),0 0 40px rgba(255,215,0,0.3)}50%{box-shadow:0 0 25px rgba(255,255,255,0.6),0 0 50px rgba(212,175,55,0.4)}75%{box-shadow:0 0 20px rgba(255,200,0,0.7),0 0 40px rgba(255,200,0,0.3)}100%{box-shadow:0 0 15px rgba(212,175,55,0.6),0 0 30px rgba(212,175,55,0.3)}}
+@keyframes alertSpecialBorder{0%{border-color:#d4af37}33%{border-color:#fff}66%{border-color:#ffd700}100%{border-color:#d4af37}}
 @keyframes growBull{0%{font-size:6px;opacity:0}5%{opacity:0.05}20%{font-size:20px;opacity:0.08}40%{font-size:50px;opacity:0.12}60%{font-size:100px;opacity:0.16}80%{font-size:200px;opacity:0.2}100%{font-size:300px;opacity:0.3}}
 @keyframes cowPipIn{0%{opacity:0;transform:translate(-50%,-50%) scale(0.3)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 @keyframes fadeOut{0%{opacity:1}100%{opacity:0}}
-#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,#1a1a2e,#16213e);border-top:1px solid rgba(230,180,34,0.2);padding:12px 16px;align-items:center;justify-content:space-between;gap:10px;font-size:13px;animation:fadeUp .4s ease;backdrop-filter:blur(10px)}
+@keyframes chipUp{0%{opacity:0;transform:translateY(8px)}30%{opacity:1}100%{opacity:1;transform:translateY(0)}}
+@keyframes chipPulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes chipFlyUp{0%{opacity:1;transform:translateY(0) scale(1)}60%{opacity:1}100%{opacity:0;transform:translateY(-40px) scale(0.5)}}
+@keyframes chipFlyDown{0%{opacity:1;transform:translateY(0) scale(1)}60%{opacity:1}100%{opacity:0;transform:translateY(40px) scale(0.5)}}
+@keyframes chipBounce{0%{transform:translateY(0) scale(0)}30%{transform:translateY(-8px) scale(1.2)}50%{transform:translateY(0) scale(1)}70%{transform:translateY(-4px) scale(1.08)}100%{transform:translateY(0) scale(1)}}
+@keyframes chipSpread0{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(-20px,-35px) scale(0.3)}}
+@keyframes chipSpread1{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(5px,-40px) scale(0.3)}}
+@keyframes chipSpread2{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(20px,-30px) scale(0.3)}}
+@keyframes chipSpread3{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(-15px,-25px) scale(0.3)}}
+@keyframes chipSpread4{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(15px,-28px) scale(0.3)}}
+@keyframes chipLose0{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(-18px,30px) scale(0.3)}}
+@keyframes chipLose1{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(5px,35px) scale(0.3)}}
+@keyframes chipLose2{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(18px,28px) scale(0.3)}}
+@keyframes demoSlide{0%{opacity:0;transform:translateX(-20px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes demoPulseGreen{0%,100%{color:#27ae60;text-shadow:0 0 4px rgba(39,174,96,0.3)}50%{color:#2ecc71;text-shadow:0 0 14px rgba(39,174,96,0.7)}}
+@keyframes demoPulseRed{0%,100%{color:#e74c3c;text-shadow:0 0 4px rgba(231,76,60,0.3)}50%{color:#ff6b6b;text-shadow:0 0 14px rgba(231,76,60,0.7)}}
+@keyframes demoChipTravel{0%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(var(--dx,60px))}}
+@keyframes demoBetBadge{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes splashIn{0%{opacity:0;transform:scale(0.8)}40%{opacity:1;transform:scale(1.02)}60%{transform:scale(1)}100%{opacity:1;transform:scale(1)}}
+@keyframes splashGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(212,175,55,0.2))}50%{filter:drop-shadow(0 0 25px rgba(212,175,55,0.5))}}
+@keyframes splashFadeOut{0%{opacity:1}80%{opacity:1}100%{opacity:0}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,#0d2818,#1a3a28);border-top:1px solid rgba(212,175,55,0.25);padding:12px 16px;align-items:center;justify-content:space-between;gap:10px;font-size:13px;animation:fadeUp .4s ease;backdrop-filter:blur(10px)}
 #install-banner.show{display:flex}
 #install-banner button{padding:7px 18px;border-radius:8px;font-weight:700;font-family:inherit;cursor:pointer;font-size:12px;border:none}
-#install-btn{background:linear-gradient(135deg,#e6b422,#d4a017);color:#1a1a2e}
-#dismiss-btn{background:transparent;color:#777;border:1px solid rgba(255,255,255,0.1) !important}
+#install-btn{background:linear-gradient(135deg,#d4af37,#b8960c);color:#0a1a0f}
+#dismiss-btn{background:transparent;color:#6b8f6b;border:1px solid rgba(212,175,55,0.15) !important}
 #confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998}
 </style>
 </head>
@@ -95,142 +122,225 @@ function playNoise(dur,vol,delay){
   src.start(t);src.stop(t+dur);
 }
 
-var SFX={
+// Filtered noise for realistic sound design
+function playFilteredNoise(dur,vol,delay,filterType,freq,Q){
+  var ctx=getAudioCtx();if(!ctx)return;
+  var t=ctx.currentTime+(delay||0);
+  var bufSize=Math.max(1,Math.floor(ctx.sampleRate*dur));
+  var buf=ctx.createBuffer(1,bufSize,ctx.sampleRate);
+  var data=buf.getChannelData(0);
+  for(var i=0;i<bufSize;i++)data[i]=(Math.random()*2-1);
+  var src=ctx.createBufferSource();src.buffer=buf;
+  var gain=ctx.createGain();
+  gain.gain.setValueAtTime(vol||0.1,t);
+  gain.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  var filter=ctx.createBiquadFilter();
+  filter.type=filterType||"lowpass";
+  filter.frequency.setValueAtTime(freq||1000,t);
+  filter.Q.setValueAtTime(Q||1,t);
+  src.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+  src.start(t);src.stop(t+dur);
+}
+
+// Snappy percussive hit (for card slap)
+function playSnap(vol,delay){
+  var ctx=getAudioCtx();if(!ctx)return;
+  var t=ctx.currentTime+(delay||0);
+  // Short noise burst through bandpass
+  var bufSize=Math.floor(ctx.sampleRate*0.03);
+  var buf=ctx.createBuffer(1,bufSize,ctx.sampleRate);
+  var data=buf.getChannelData(0);
+  for(var i=0;i<bufSize;i++)data[i]=(Math.random()*2-1);
+  var src=ctx.createBufferSource();src.buffer=buf;
+  var gain=ctx.createGain();
+  gain.gain.setValueAtTime(vol||0.3,t);
+  gain.gain.exponentialRampToValueAtTime(0.001,t+0.03);
+  var bp=ctx.createBiquadFilter();bp.type="bandpass";bp.frequency.value=3000;bp.Q.value=2;
+  var lp=ctx.createBiquadFilter();lp.type="lowpass";lp.frequency.value=6000;
+  src.connect(bp);bp.connect(lp);lp.connect(gain);gain.connect(ctx.destination);
+  src.start(t);src.stop(t+0.03);
+  // Impact thud
+  var osc=ctx.createOscillator();osc.type="sine";
+  osc.frequency.setValueAtTime(200,t);
+  osc.frequency.exponentialRampToValueAtTime(60,t+0.05);
+  var g2=ctx.createGain();g2.gain.setValueAtTime((vol||0.3)*0.4,t);
+  g2.gain.exponentialRampToValueAtTime(0.001,t+0.06);
+  osc.connect(g2);g2.connect(ctx.destination);osc.start(t);osc.stop(t+0.06);
+}
+
+var SFX_CLASSIC={
+  deal:function(){for(var i=0;i<3;i++){playNoise(0.06,0.12,i*0.08);playTone(800+i*100,0.05,"square",0.04,i*0.08);}},
+  squeeze:function(){playNoise(0.04,0.06);playTone(600,0.08,"sine",0.06);},
+  cardReveal:function(){playNoise(0.05,0.1);playTone(1200,0.1,"sine",0.08);playTone(1500,0.08,"sine",0.05,0.05);},
+  bullFound:function(){playTone(523,0.15,"sine",0.15);playTone(659,0.15,"sine",0.15,0.12);playTone(784,0.25,"sine",0.18,0.24);},
+  noBull:function(){playTone(300,0.2,"triangle",0.1);playTone(250,0.3,"triangle",0.08,0.15);},
+  win:function(){var n=[523,659,784,1047,784,1047];n.forEach(function(f,i){playTone(f,0.18,"sine",0.12,i*0.1);if(i<3)playTone(f*1.5,0.12,"triangle",0.05,i*0.1+0.05);});},
+  buttonClick:function(){playTone(1000,0.05,"square",0.06);}
+};
+// リアル: 本格カジノ風。リアルなカード・チップ音
+var SFX_REAL={
   deal:function(){
+    // カードをテーブルに配る: スナップ3回（パッパッパッ）
     for(var i=0;i<3;i++){
-      playNoise(0.06,0.12,i*0.08);
-      playTone(800+i*100,0.05,"square",0.04,i*0.08);
+      playSnap(0.25,i*0.13);
+      playFilteredNoise(0.06,0.12,i*0.13,"bandpass",2000,1); // カード接触のザッ
     }
   },
   squeeze:function(){
-    playNoise(0.04,0.06);
-    playTone(600,0.08,"sine",0.06);
+    // カードがフェルト上で擦れる：ローパスの長いノイズ
+    playFilteredNoise(0.2,0.06,0,"lowpass",800,0.5);
+    playFilteredNoise(0.15,0.04,0.05,"lowpass",600,0.5);
+    playFilteredNoise(0.1,0.03,0.12,"bandpass",1200,1);
   },
   cardReveal:function(){
-    playNoise(0.05,0.1);
-    playTone(1200,0.1,"sine",0.08);
-    playTone(1500,0.08,"sine",0.05,0.05);
+    // カードをパッとめくる: シャープなスナップ+紙のフリック
+    playSnap(0.3,0);
+    playFilteredNoise(0.04,0.15,0.01,"bandpass",4000,2); // 高い紙音
+    playFilteredNoise(0.08,0.06,0.02,"lowpass",1500,1); // 余韻
   },
   bullFound:function(){
-    playTone(523,0.15,"sine",0.15);
-    playTone(659,0.15,"sine",0.15,0.12);
-    playTone(784,0.25,"sine",0.18,0.24);
+    // チップ同士がぶつかるカチカチ音
+    for(var i=0;i<4;i++){
+      playFilteredNoise(0.015,0.15,i*0.07,"bandpass",5000+i*800,6); // 硬い高音クリック
+      playFilteredNoise(0.02,0.08,i*0.07+0.005,"bandpass",2500,3);
+    }
+    // 低い共鳴（満足感）
+    playTone(220,0.3,"sine",0.06,0.2);
+    playTone(330,0.25,"sine",0.04,0.25);
   },
   noBull:function(){
-    playTone(300,0.2,"triangle",0.1);
-    playTone(250,0.3,"triangle",0.08,0.15);
+    // カードをテーブルに投げ出す
+    playSnap(0.15,0);
+    playFilteredNoise(0.12,0.1,0.02,"lowpass",500,0.5); // 重い音
+    playTone(100,0.15,"sine",0.04,0.05); // 低いドスン
   },
   win:function(){
-    var notes=[523,659,784,1047,784,1047];
-    notes.forEach(function(n,i){
-      playTone(n,0.18,"sine",0.12,i*0.1);
-      if(i<3)playTone(n*1.5,0.12,"triangle",0.05,i*0.1+0.05);
+    // チップの山が崩れてスライドする音（ザラザラザラ）
+    for(var i=0;i<12;i++){
+      playFilteredNoise(0.02,0.08+Math.random()*0.06,i*0.035,"bandpass",3000+Math.random()*3000,4);
+    }
+    // チップが積み上がるカチカチ（後半）
+    for(var j=0;j<5;j++){
+      playFilteredNoise(0.012,0.12,0.45+j*0.06,"bandpass",6000+j*500,8);
+    }
+    // 満足の低い和音
+    playTone(165,0.5,"sine",0.06,0.6);
+    playTone(220,0.45,"sine",0.05,0.65);
+    playTone(262,0.4,"sine",0.04,0.7);
+  },
+  buttonClick:function(){playSnap(0.1,0);}
+};
+// レトロ: ガッツリ8bit。デューティ比の粗いsquare波、ピッチベンド、短い音
+var SFX_RETRO={
+  deal:function(){
+    playTone(110,0.03,"square",0.1);playTone(165,0.03,"square",0.08,0.05);playTone(220,0.03,"square",0.06,0.1);
+  },
+  squeeze:function(){
+    playTone(55,0.08,"square",0.04);playTone(65,0.06,"square",0.03,0.03);playTone(75,0.04,"square",0.02,0.06);
+  },
+  cardReveal:function(){
+    playTone(880,0.03,"square",0.12);playTone(1320,0.02,"square",0.08,0.03);
+  },
+  bullFound:function(){
+    // ドラクエ風レベルアップ
+    var n=[262,330,392,523];n.forEach(function(f,i){playTone(f,0.08,"square",0.12,i*0.08);});
+    playTone(523,0.05,"square",0.1,0.32);playTone(659,0.05,"square",0.1,0.37);playTone(784,0.12,"square",0.15,0.42);
+  },
+  noBull:function(){
+    // ミス音：下降3音
+    playTone(440,0.08,"square",0.1);playTone(330,0.08,"square",0.08,0.1);playTone(220,0.15,"square",0.06,0.2);
+  },
+  win:function(){
+    // ファンファーレ：8bit風ドレミファソラシド上昇
+    var n=[262,294,330,349,392,440,494,523,659,784,1047];
+    n.forEach(function(f,i){playTone(f,0.06,"square",0.1,i*0.055);});
+    // 最後に和音
+    playTone(523,0.2,"square",0.1,0.65);playTone(659,0.2,"square",0.08,0.65);playTone(784,0.2,"square",0.06,0.65);
+  },
+  buttonClick:function(){playTone(1047,0.02,"square",0.1);}
+};
+// エレガント: ピアノ・ハープ風。倍音豊か、長い余韻、アルペジオ
+var SFX_ELEGANT={
+  deal:function(){
+    // ハープの弦を弾く
+    for(var i=0;i<3;i++){
+      var f=880+i*220;
+      playTone(f,0.15,"sine",0.04,i*0.14);playTone(f*2,0.1,"sine",0.015,i*0.14);
+      playTone(f*3,0.08,"sine",0.008,i*0.14+0.01);playTone(f*0.5,0.12,"triangle",0.02,i*0.14);
+    }
+  },
+  squeeze:function(){
+    playTone(1760,0.15,"sine",0.02);playTone(3520,0.1,"sine",0.008,0.02);
+    playTone(880,0.12,"triangle",0.015,0.01);
+  },
+  cardReveal:function(){
+    // ピアノの1音。倍音構成
+    playTone(1047,0.25,"sine",0.06);playTone(2094,0.15,"sine",0.025,0.01);
+    playTone(3141,0.1,"sine",0.012,0.01);playTone(4188,0.08,"sine",0.006,0.02);
+    playTone(523,0.2,"triangle",0.03,0.01);
+  },
+  bullFound:function(){
+    // ハープのアルペジオ上昇（ドミソド）
+    var notes=[523,659,784,1047,1319];
+    notes.forEach(function(f,i){
+      playTone(f,0.3,"sine",0.06,i*0.1);playTone(f*2,0.2,"sine",0.02,i*0.1+0.01);
+      playTone(f*3,0.12,"sine",0.008,i*0.1+0.02);
     });
+  },
+  noBull:function(){
+    // 短調の和音。ラドミ
+    playTone(440,0.35,"sine",0.05);playTone(523,0.3,"sine",0.04,0.02);
+    playTone(659,0.25,"sine",0.03,0.04);
+    playTone(880,0.15,"sine",0.015,0.02);playTone(220,0.3,"triangle",0.03);
+  },
+  win:function(){
+    // グランドピアノ風のキラキラしたアルペジオ
+    var notes=[523,659,784,1047,1319,1568,2093,1568,2093,2637];
+    notes.forEach(function(f,i){
+      playTone(f,0.3,"sine",0.05,i*0.09);playTone(f*2,0.2,"sine",0.018,i*0.09+0.01);
+      playTone(f*3,0.12,"sine",0.008,i*0.09+0.02);playTone(f*4,0.08,"sine",0.004,i*0.09+0.02);
+    });
+    // 最後にペダル付き和音
+    playTone(523,0.8,"sine",0.04,0.9);playTone(659,0.7,"sine",0.03,0.9);
+    playTone(784,0.6,"sine",0.025,0.9);playTone(1047,0.5,"sine",0.02,0.9);
   },
   buttonClick:function(){
-    playTone(1000,0.05,"square",0.06);
-  },
-  alertRed:function(){
-    // Ominous rising dissonance
-    playTone(120,0.6,"sawtooth",0.18);
-    playTone(127,0.6,"sawtooth",0.15);
-    playTone(180,0.4,"square",0.1,0.15);
-    playNoise(0.3,0.15,0.1);
-    playTone(240,0.5,"sawtooth",0.12,0.3);
-    playTone(300,0.3,"square",0.08,0.4);
-  },
-  alertRainbow:function(){
-    // Deep ominous base layer
-    playTone(80,1.2,"sawtooth",0.16);
-    playTone(85,1.2,"sawtooth",0.12);
-    playNoise(0.3,0.1,0.05);
-    // Sparkly high-pitched ascending arpeggios
-    var sparkle=[2093,2349,2637,2793,3136,3520,3951,4186];
-    sparkle.forEach(function(f,i){
-      playTone(f,0.12,"sine",0.08,i*0.07);
-      playTone(f*1.005,0.1,"sine",0.05,i*0.07+0.02); // slight detune for shimmer
-    });
-    // Second wave of sparkle (descending)
-    setTimeout(function(){
-      var sp2=[3951,3520,3136,2793,2637,2349,2093,2637,3136,3951];
-      sp2.forEach(function(f,i){
-        playTone(f,0.1,"sine",0.06,i*0.06);
-        playTone(f*0.998,0.08,"sine",0.04,i*0.06+0.01);
-      });
-    },500);
-    // Chime hits
-    playTone(4186,0.3,"sine",0.07,0.15);
-    playTone(5274,0.25,"sine",0.05,0.3);
-    playTone(6272,0.2,"sine",0.04,0.5);
-  },
-  alertGlitch:function(){
-    playNoise(0.03,0.12,0);
-    playNoise(0.02,0.08,0.15);
-    playTone(440,0.04,"square",0.06,0.1);
-    playNoise(0.03,0.1,0.4);
-    playTone(880,0.02,"square",0.04,0.45);
-    playNoise(0.02,0.06,0.7);
-    playTone(220,0.05,"sawtooth",0.05,0.75);
-    playTone(55,0.8,"sine",0.06,0.2);
-    playTone(57,0.8,"sine",0.04,0.2);
-  },
-  alertFlash:function(){
-    // Sharp electric zap + bright chime
-    playNoise(0.08,0.25,0);
-    playTone(3000,0.06,"square",0.15,0);
-    playTone(4000,0.04,"square",0.1,0.03);
-    playTone(2000,0.1,"sine",0.08,0.08);
-    playTone(5000,0.15,"sine",0.06,0.12);
-    playTone(6000,0.1,"sine",0.04,0.2);
-  },
-  alertBlackout:function(){
-    // Deep void boom + eerie silence then return
-    playTone(30,0.8,"sawtooth",0.25,0);
-    playTone(35,0.8,"sawtooth",0.2,0);
-    playNoise(0.15,0.2,0);
-    playTone(60,0.5,"sine",0.1,0.3);
-    // Return sound
-    playTone(200,0.15,"sine",0.08,0.7);
-    playTone(400,0.1,"sine",0.06,0.8);
-  },
-  alertQuake:function(){
-    // Heavy rumble vibration
-    playTone(40,1.0,"sawtooth",0.2,0);
-    playTone(45,1.0,"sawtooth",0.15,0);
-    playNoise(0.6,0.15,0);
-    playTone(60,0.4,"square",0.1,0.2);
-    playTone(80,0.3,"sawtooth",0.08,0.4);
-    playNoise(0.3,0.1,0.5);
-  },
-  alertCow:function(){
-    // Mystical reveal chime + moo-like low tone
-    playTone(130,0.6,"sawtooth",0.12,0);
-    playTone(138,0.6,"sawtooth",0.1,0);
-    playTone(523,0.2,"sine",0.1,0.2);
-    playTone(659,0.2,"sine",0.1,0.35);
-    playTone(784,0.3,"sine",0.12,0.5);
-    playTone(110,0.4,"triangle",0.08,0.3);
-  },
-  alertSpecial:function(){
-    // Dramatic golden fanfare
-    playTone(130,0.8,"sawtooth",0.15,0);
-    playTone(196,0.6,"sawtooth",0.12,0.1);
-    playTone(262,0.4,"sine",0.1,0.2);
-    playTone(330,0.3,"sine",0.12,0.3);
-    playTone(523,0.4,"sine",0.15,0.4);
-    playTone(784,0.5,"sine",0.12,0.55);
-    playTone(1047,0.4,"sine",0.1,0.7);
-    playTone(2093,0.1,"sine",0.06,0.5);
-    playTone(2637,0.1,"sine",0.05,0.6);
-    playTone(3951,0.15,"sine",0.05,0.75);
-  },
-  alertGrowBull:function(){
-    playTone(60,2.5,"sine",0.04,0);
-    playTone(63,2.5,"sine",0.03,0);
-    playTone(90,1.5,"triangle",0.03,0.8);
-    playTone(120,1.0,"sine",0.05,1.5);
-    playTone(180,0.8,"sine",0.06,2.0);
+    playTone(2093,0.08,"sine",0.03);playTone(4186,0.05,"sine",0.01,0.01);playTone(1047,0.06,"triangle",0.015);
   }
+};
+// Alert SFX are shared across packs (always dramatic)
+var SFX_ALERTS={
+  alertRed:function(){playTone(120,0.6,"sawtooth",0.18);playTone(127,0.6,"sawtooth",0.15);playTone(180,0.4,"square",0.1,0.15);playNoise(0.3,0.15,0.1);playTone(240,0.5,"sawtooth",0.12,0.3);playTone(300,0.3,"square",0.08,0.4);},
+  alertRainbow:function(){playTone(80,1.2,"sawtooth",0.16);playTone(85,1.2,"sawtooth",0.12);playNoise(0.3,0.1,0.05);var sp=[2093,2349,2637,2793,3136,3520,3951,4186];sp.forEach(function(f,i){playTone(f,0.12,"sine",0.08,i*0.07);playTone(f*1.005,0.1,"sine",0.05,i*0.07+0.02);});setTimeout(function(){var sp2=[3951,3520,3136,2793,2637,2349,2093,2637,3136,3951];sp2.forEach(function(f,i){playTone(f,0.1,"sine",0.06,i*0.06);playTone(f*0.998,0.08,"sine",0.04,i*0.06+0.01);});},500);playTone(4186,0.3,"sine",0.07,0.15);playTone(5274,0.25,"sine",0.05,0.3);playTone(6272,0.2,"sine",0.04,0.5);},
+  alertGlitch:function(){playNoise(0.03,0.12,0);playNoise(0.02,0.08,0.15);playTone(440,0.04,"square",0.06,0.1);playNoise(0.03,0.1,0.4);playTone(880,0.02,"square",0.04,0.45);playNoise(0.02,0.06,0.7);playTone(220,0.05,"sawtooth",0.05,0.75);playTone(55,0.8,"sine",0.06,0.2);playTone(57,0.8,"sine",0.04,0.2);},
+  alertFlash:function(){playNoise(0.08,0.25,0);playTone(3000,0.06,"square",0.15,0);playTone(4000,0.04,"square",0.1,0.03);playTone(2000,0.1,"sine",0.08,0.08);playTone(5000,0.15,"sine",0.06,0.12);playTone(6000,0.1,"sine",0.04,0.2);},
+  alertBlackout:function(){playTone(30,0.8,"sawtooth",0.25,0);playTone(35,0.8,"sawtooth",0.2,0);playNoise(0.15,0.2,0);playTone(60,0.5,"sine",0.1,0.3);playTone(200,0.15,"sine",0.08,0.7);playTone(400,0.1,"sine",0.06,0.8);},
+  alertQuake:function(){playTone(40,1.0,"sawtooth",0.2,0);playTone(45,1.0,"sawtooth",0.15,0);playNoise(0.6,0.15,0);playTone(60,0.4,"square",0.1,0.2);playTone(80,0.3,"sawtooth",0.08,0.4);playNoise(0.3,0.1,0.5);},
+  alertCow:function(){playTone(130,0.6,"sawtooth",0.12,0);playTone(138,0.6,"sawtooth",0.1,0);playTone(523,0.2,"sine",0.1,0.2);playTone(659,0.2,"sine",0.1,0.35);playTone(784,0.3,"sine",0.12,0.5);playTone(110,0.4,"triangle",0.08,0.3);},
+  alertSpecial:function(){playTone(130,0.8,"sawtooth",0.15,0);playTone(196,0.6,"sawtooth",0.12,0.1);playTone(262,0.4,"sine",0.1,0.2);playTone(330,0.3,"sine",0.12,0.3);playTone(523,0.4,"sine",0.15,0.4);playTone(784,0.5,"sine",0.12,0.55);playTone(1047,0.4,"sine",0.1,0.7);playTone(2093,0.1,"sine",0.06,0.5);playTone(2637,0.1,"sine",0.05,0.6);playTone(3951,0.15,"sine",0.05,0.75);},
+  alertGrowBull:function(){playTone(60,2.5,"sine",0.04,0);playTone(63,2.5,"sine",0.03,0);playTone(90,1.5,"triangle",0.03,0.8);playTone(120,1.0,"sine",0.05,1.5);playTone(180,0.8,"sine",0.06,2.0);}
+};
+
+// Active SFX dispatcher
+var activeSoundPack="default";
+function getSFXPack(){return activeSoundPack==="real"?SFX_REAL:activeSoundPack==="retro"?SFX_RETRO:activeSoundPack==="elegant"?SFX_ELEGANT:SFX_CLASSIC;}
+var SFX={
+  deal:function(){getSFXPack().deal();},
+  squeeze:function(){getSFXPack().squeeze();},
+  cardReveal:function(){getSFXPack().cardReveal();},
+  bullFound:function(){getSFXPack().bullFound();},
+  noBull:function(){getSFXPack().noBull();},
+  win:function(){getSFXPack().win();},
+  buttonClick:function(){getSFXPack().buttonClick();},
+  alertRed:function(){SFX_ALERTS.alertRed();},
+  alertRainbow:function(){SFX_ALERTS.alertRainbow();},
+  alertGlitch:function(){SFX_ALERTS.alertGlitch();},
+  alertFlash:function(){SFX_ALERTS.alertFlash();},
+  alertBlackout:function(){SFX_ALERTS.alertBlackout();},
+  alertQuake:function(){SFX_ALERTS.alertQuake();},
+  alertCow:function(){SFX_ALERTS.alertCow();},
+  alertSpecial:function(){SFX_ALERTS.alertSpecial();},
+  alertGrowBull:function(){SFX_ALERTS.alertGrowBull();}
 };
 
 // ─── Confetti Engine ─────────────────────────────────────────────
@@ -253,7 +363,7 @@ function resizeConfetti(){
 }
 function launchConfetti(){
   confettiParts=[];
-  var colors=["#e6b422","#c0392b","#f39c12","#e74c3c","#2980b9","#27ae60","#f0d060","#ff6b6b"];
+  var colors=["#d4af37","#ffd700","#c0392b","#27ae60","#e8c848","#ff6b6b","#4ecdc4","#f5e6cc"];
   for(var i=0;i<80;i++){
     confettiParts.push({
       x:Math.random()*window.innerWidth,
@@ -310,47 +420,41 @@ function highestCard(cards){
 
 function createDeck(){
   var deck=[];
-  SUITS.forEach(function(s){RANKS.forEach(function(r){deck.push({suit:s,rank:r});});});
+  SUITS.forEach(function(s){RANKS.forEach(function(r){deck.push({suit:s,rank:r,flipped:Math.random()<0.5});});});
   for(var i=deck.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=deck[i];deck[i]=deck[j];deck[j]=t;}
   return deck;
 }
 
 function evaluateHand(cards){
   var hc=cardStrength(highestCard(cards));
-  var best={hasBull:false,bullValue:0,label:"无牛",highCard:hc};
+  // bullValue = 倍率 (支払い計算用), bullRank = 強さ (勝敗判定用)
+  var best={hasBull:false,bullValue:0,bullRank:0,label:"无牛",highCard:hc};
   for(var i=0;i<3;i++){for(var j=i+1;j<4;j++){for(var k=j+1;k<5;k++){
     var s3=rankPoints(cards[i].rank)+rankPoints(cards[j].rank)+rankPoints(cards[k].rank);
     if(s3%10===0){
       var rest=cards.filter(function(_,idx){return idx!==i&&idx!==j&&idx!==k;});
       var s2=rankPoints(rest[0].rank)+rankPoints(rest[1].rank);
       var v=s2%10===0?10:s2%10;
-      if(v>best.bullValue)best={hasBull:true,bullValue:v,threeIdx:[i,j,k],label:v===10?"牛牛！":"牛"+v,highCard:hc};
+      if(v>best.bullRank)best={hasBull:true,bullValue:v,bullRank:v,threeIdx:[i,j,k],label:v===10?"牛牛！":"牛"+v,highCard:hc};
     }
   }}}
-  // Special hands (checked strongest first)
-  // RF牛: 10,J,Q,K,A all same suit
   var sameSuit=cards.every(function(c){return c.suit===cards[0].suit;});
   if(sameSuit){
     var rankSet={};cards.forEach(function(c){rankSet[c.rank]=true;});
     var isRF=rankSet["10"]&&rankSet["J"]&&rankSet["Q"]&&rankSet["K"]&&rankSet["A"];
-    if(isRF)return Object.assign({},best,{hasBull:true,bullValue:20,label:"RF牛！！",highCard:hc});
-    // SF牛: 5 consecutive same suit
+    if(isRF)return Object.assign({},best,{hasBull:true,bullValue:50,bullRank:20,label:"RF牛！！",highCard:hc});
     var orders=cards.map(function(c){return RANK_ORDER[c.rank];}).sort(function(a,b){return a-b;});
     var isStraight=true;
     for(var si=1;si<5;si++){if(orders[si]!==orders[si-1]+1){isStraight=false;break;}}
-    // Also check A-2-3-4-5 straight (A=1)
     if(!isStraight){
       var lowAce=orders[0]===1&&orders[1]===2&&orders[2]===3&&orders[3]===4&&orders[4]===5;
       if(lowAce)isStraight=true;
     }
-    if(isStraight)return Object.assign({},best,{hasBull:true,bullValue:19,label:"SF牛！！",highCard:hc});
+    if(isStraight)return Object.assign({},best,{hasBull:true,bullValue:30,bullRank:19,label:"SF牛！！",highCard:hc});
   }
-  // 炸弹牛: 4 of a kind
-  if(RANKS.some(function(r){return cards.filter(function(c){return c.rank===r;}).length===4;}))return Object.assign({},best,{hasBull:true,bullValue:18,label:"炸弹牛！",highCard:hc});
-  // 五花牛: all J/Q/K
-  if(cards.every(function(c){return["J","Q","K"].indexOf(c.rank)>=0;}))return Object.assign({},best,{hasBull:true,bullValue:15,label:"五花牛！",highCard:hc});
-  // 五小牛: all 5 or below and no bull
-  if(!best.hasBull&&cards.every(function(c){return rankValue(c.rank)<=5;}))return Object.assign({},best,{hasBull:true,bullValue:14,label:"五小牛！",highCard:hc});
+  if(RANKS.some(function(r){return cards.filter(function(c){return c.rank===r;}).length===4;}))return Object.assign({},best,{hasBull:true,bullValue:20,bullRank:18,label:"炸弹牛！",highCard:hc});
+  if(cards.every(function(c){return["J","Q","K"].indexOf(c.rank)>=0;}))return Object.assign({},best,{hasBull:true,bullValue:15,bullRank:15,label:"五花牛！",highCard:hc});
+  if(!best.hasBull&&cards.every(function(c){return rankValue(c.rank)<=5;}))return Object.assign({},best,{hasBull:true,bullValue:15,bullRank:14,label:"五小牛！",highCard:hc});
   return best;
 }
 
@@ -369,43 +473,59 @@ var CW=74,CH=111;
 // ─── Card Components ─────────────────────────────────────────────
 function CardFace(props){
   var card=props.card,w=props.w||CW,h=props.h||CH,highlight=props.highlight||false,showRank=props.showRank!==false;
-  var cowPip=props.cowPip||false; // if true, pips gradually become 🐮
+  var cowPip=props.cowPip||false;
+  var ft=props.faceTheme||CARD_FACES[0];
   if(!card)return null;
-  var isRed=card.suit==="♥"||card.suit==="♦",color=isRed?"#c0392b":"#1a1a2e";
+  var isRed=card.suit==="♥"||card.suit==="♦";
+  // Support 4-color themes if suit-specific colors are defined
+  var color;
+  if(ft.suitColors){
+    color=ft.suitColors[card.suit]||(isRed?ft.red:ft.black);
+  }else{
+    color=isRed?ft.red:ft.black;
+  }
   var isFace=["J","Q","K"].indexOf(card.rank)>=0,pips=PIP[card.rank];
-  var pipSize=card.rank==="A"?w*0.42:w*0.24;
+  var pipSize=card.rank==="A"?w*0.42*(ft.suitScale||1):w*0.24*(ft.suitScale||1);
   var cTop=h*0.10,cLeft=w*0.08,cW2=w*0.84,cH2=h*0.80;
+  var bgGrad=highlight?"linear-gradient(145deg,"+ft.hlBg[0]+" 0%,"+ft.hlBg[1]+" 100%)":"linear-gradient(145deg,"+ft.bg[0]+" 0%,"+ft.bg[1]+" 100%)";
+  var cardFont=ft.font||"'Georgia',serif";
+  var rw=ft.rankWeight||800;
   var children=[];
   if(showRank){
-    children.push(e("div",{key:"tl",style:{position:"absolute",top:h*0.03,left:w*0.07,textAlign:"center",lineHeight:1,color:color}},
-      e("div",{style:{fontSize:w*0.19,fontWeight:800}},card.rank),e("div",{style:{fontSize:w*0.16,marginTop:-1}},card.suit)));
-    children.push(e("div",{key:"br",style:{position:"absolute",bottom:h*0.03,right:w*0.07,textAlign:"center",lineHeight:1,color:color,transform:"rotate(180deg)"}},
-      e("div",{style:{fontSize:w*0.19,fontWeight:800}},card.rank),e("div",{style:{fontSize:w*0.16,marginTop:-1}},card.suit)));
+    children.push(e("div",{key:"tl",style:{position:"absolute",top:h*0.03,left:w*0.07,textAlign:"center",lineHeight:1,color:color,fontFamily:cardFont}},
+      e("div",{style:{fontSize:w*0.19,fontWeight:rw}},card.rank),e("div",{style:{fontSize:w*0.16*(ft.suitScale||1),marginTop:-1}},card.suit)));
+    children.push(e("div",{key:"br",style:{position:"absolute",bottom:h*0.03,right:w*0.07,textAlign:"center",lineHeight:1,color:color,fontFamily:cardFont,transform:"rotate(180deg)"}},
+      e("div",{style:{fontSize:w*0.19,fontWeight:rw}},card.rank),e("div",{style:{fontSize:w*0.16*(ft.suitScale||1),marginTop:-1}},card.suit)));
   }
   if(isFace){
     var fc2Kids=[];
-    if(showRank)fc2Kids.push(e("div",{key:"rank",style:{fontSize:w*0.36,fontWeight:900,color:color,lineHeight:1}},card.rank));
+    if(showRank)fc2Kids.push(e("div",{key:"rank",style:{fontSize:w*0.36,fontWeight:rw,color:color,lineHeight:1,fontFamily:cardFont}},card.rank));
+    var faceBg,faceBorder;
+    if(ft.faceBgs&&ft.faceBgs[card.suit]){
+      var fbg=ft.faceBgs[card.suit];
+      faceBg="linear-gradient(135deg,"+fbg[0]+" 0%,"+fbg[1]+" 100%)";
+      faceBorder=ft.faceBorders&&ft.faceBorders[card.suit]?ft.faceBorders[card.suit]:(isRed?ft.faceRedBorder:ft.faceBlackBorder);
+    }else{
+      faceBg=isRed?"linear-gradient(135deg,"+ft.faceRedBg[0]+" 0%,"+ft.faceRedBg[1]+" 100%)":"linear-gradient(135deg,"+ft.faceBlackBg[0]+" 0%,"+ft.faceBlackBg[1]+" 100%)";
+      faceBorder=isRed?ft.faceRedBorder:ft.faceBlackBorder;
+    }
     if(cowPip){
-      // Face card: suit area becomes a relative container with suit fading out and 🐮 fading in
       fc2Kids.push(e("div",{key:"suit",style:{position:"relative",width:w*0.38,height:w*0.38,marginTop:showRank?2:0}},
-        e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",
-          fontSize:w*0.38,color:color,animation:"fadeOut 0.5s ease 10s forwards"}},card.suit),
-        e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",
-          fontSize:w*0.34,animation:"cowPipIn 0.5s ease 10s both"}},"🐮")));
+        e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",fontSize:w*0.38,color:color,animation:"fadeOut 0.5s ease 10s forwards"}},card.suit),
+        e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",fontSize:w*0.34,animation:"cowPipIn 0.5s ease 10s both"}},"🐮")));
     }else{
       fc2Kids.push(e("div",{key:"suit",style:{fontSize:w*0.38,color:color,marginTop:showRank?2:0}},card.suit));
     }
     children.push(e("div",{key:"fc",style:{position:"absolute",top:cTop,left:cLeft,width:cW2,height:cH2,display:"flex",alignItems:"center",justifyContent:"center"}},
-      e("div",{style:{width:cW2*0.82,height:cH2*0.82,borderRadius:5,
-        background:isRed?"linear-gradient(135deg,#fce4ec 0%,#f8bbd0 100%)":"linear-gradient(135deg,#e8eaf6 0%,#c5cae9 100%)",
+      e("div",{style:{width:cW2*0.82,height:cH2*0.82,borderRadius:5,background:faceBg,
         display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",
-        border:"1.5px solid "+(isRed?"#e57373":"#7986cb")}},fc2Kids)));
+        border:"1.5px solid "+faceBorder}},fc2Kids)));
   }else if(pips){
-    var pipCount=pips.length;
-    // Spread pip transitions over 30s starting at 5s
+    var flipPips=card.flipped?pips.map(function(p){return[p[0],100-p[1]];}):pips;
+    var pipCount=flipPips.length;
     var pipInterval=pipCount>1?30/(pipCount-1):0;
     children.push(e("div",{key:"pips",style:{position:"absolute",top:cTop,left:cLeft,width:cW2,height:cH2}},
-      pips.map(function(p,idx){
+      flipPips.map(function(p,idx){
         if(cowPip){
           var delay=(5+idx*pipInterval)+"s";
           return e("div",{key:idx,style:{position:"absolute",left:p[0]+"%",top:p[1]+"%",
@@ -420,22 +540,90 @@ function CardFace(props){
       })));
   }
   return e("div",{style:{width:w,height:h,position:"relative",
-    background:highlight?"linear-gradient(145deg,#fffde7 0%,#fff9c4 100%)":"linear-gradient(145deg,#fdfdfd 0%,#f5f4ef 100%)",
-    borderRadius:w*0.09,border:highlight?"2px solid #f9a825":"1px solid #bbb8b0",
+    background:bgGrad,
+    borderRadius:w*0.09,border:highlight?"2px solid #f9a825":"1px solid "+ft.border,
     boxShadow:highlight?"0 0 14px rgba(249,168,37,0.35)":"0 2px 5px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9)",
-    overflow:"hidden",fontFamily:"'Georgia','Times New Roman',serif"}},children);
+    overflow:"hidden",fontFamily:cardFont}},children);
 }
 
 function CardBack(props){
   var w=props.w||CW,h=props.h||CH,squeeze=props.squeeze||false;
-  return e("div",{style:{width:w,height:h,position:"relative",
-    background:squeeze?"linear-gradient(135deg,#1a0a2e 0%,#2d1548 50%,#1a0a30 100%)":"linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)",
-    borderRadius:w*0.09,border:squeeze?"1.5px solid rgba(180,100,255,0.35)":"1px solid rgba(255,255,255,0.06)",overflow:"hidden"}},
-    e("div",{style:{position:"absolute",top:w*0.06,left:w*0.06,right:w*0.06,bottom:w*0.06,borderRadius:w*0.05,border:"1.5px solid rgba(230,180,34,0.25)"}},
-      e("div",{style:{position:"absolute",top:w*0.04,left:w*0.04,right:w*0.04,bottom:w*0.04,borderRadius:w*0.03,border:"1px solid rgba(230,180,34,0.12)",
-        background:"repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(230,180,34,0.03) 3px,rgba(230,180,34,0.03) 6px)",
-        display:"flex",alignItems:"center",justifyContent:"center"}},
-        e("div",{style:{fontSize:w*0.3,color:"#e6b422",fontWeight:900,opacity:0.4,fontFamily:"serif",textShadow:"0 0 8px rgba(230,180,34,0.2)"}},"牛"))));
+  var sk=props.skin||CARD_SKINS[0];
+  var c=sk.colors,a=sk.accent||"#d4af37",pt=sk.pattern||"diamond";
+  var bg="linear-gradient(135deg,"+c[0]+" 0%,"+c[1]+" 50%,"+c[2]+" 100%)";
+  var m=Math.max(2,w*0.06); // margin
+  var r=w*0.09;
+
+  // Pattern layers
+  var layers=[];
+
+  // Outer border
+  layers.push(e("div",{key:"ob",style:{position:"absolute",top:m,left:m,right:m,bottom:m,borderRadius:r*0.5,
+    border:sk.id==="default"?"1px solid rgba(212,175,55,0.2)":"1.5px solid "+a}}));
+
+  // Inner border (only for ornate/classic)
+  var m2=m+Math.max(2,w*0.04);
+  if(pt!=="diamond"){
+    layers.push(e("div",{key:"ib",style:{position:"absolute",top:m2,left:m2,right:m2,bottom:m2,borderRadius:r*0.3,
+      border:"1px solid "+a,opacity:0.5}}));
+  }
+
+  // Corner decorations (only for ornate/classic patterns)
+  if(pt!=="diamond"){
+    var cs=Math.max(4,w*0.1);
+    ["top:"+m+"px;left:"+m+"px","top:"+m+"px;right:"+m+"px;transform:scaleX(-1)",
+     "bottom:"+m+"px;left:"+m+"px;transform:scaleY(-1)","bottom:"+m+"px;right:"+m+"px;transform:scale(-1)"].forEach(function(pos,ci){
+      var sty={position:"absolute",width:cs,height:cs,opacity:0.6};
+      pos.split(";").forEach(function(p){var kv=p.split(":");if(kv.length===2)sty[kv[0].trim()]=kv[1].trim();});
+      layers.push(e("div",{key:"c"+ci,style:sty},
+        e("div",{style:{position:"absolute",top:0,left:0,width:"100%",height:"100%",
+          borderTop:"1.5px solid "+a,borderLeft:"1.5px solid "+a,borderRadius:"2px 0 0 0"}}),
+        e("div",{style:{position:"absolute",top:"30%",left:"30%",width:"40%",height:"40%",
+          border:"1px solid "+a,borderRadius:"50%",opacity:0.4}})));
+    });
+  }
+
+  // Center pattern
+  if(pt==="diamond"&&sk.id!=="default"){
+    // Diamond grid pattern (crimson, midnight)
+    var pw=w-m*2-8,ph=h-m*2-8;
+    layers.push(e("div",{key:"pat",style:{position:"absolute",top:m+4,left:m+4,width:pw,height:ph,overflow:"hidden",opacity:0.15,
+      backgroundImage:"repeating-linear-gradient(45deg,transparent,transparent 4px,"+a+" 4px,"+a+" 4.5px),repeating-linear-gradient(-45deg,transparent,transparent 4px,"+a+" 4px,"+a+" 4.5px)",
+      backgroundSize:(w*0.12)+"px "+(w*0.12)+"px"}}));
+  }else if(pt==="ornate"){
+    // Gold ornate: radial burst + diamond overlay
+    layers.push(e("div",{key:"pat",style:{position:"absolute",top:m+4,left:m+4,right:m+4,bottom:m+4,overflow:"hidden",opacity:0.12,
+      backgroundImage:"repeating-linear-gradient(45deg,transparent,transparent 3px,"+a+" 3px,"+a+" 3.5px),repeating-linear-gradient(-45deg,transparent,transparent 3px,"+a+" 3px,"+a+" 3.5px),radial-gradient(circle at 50% 50%,"+a+" 0%,transparent 40%)",
+      backgroundSize:(w*0.1)+"px "+(w*0.1)+"px,"+(w*0.1)+"px "+(w*0.1)+"px,100% 100%"}}));
+    // Center medallion
+    var md=Math.max(12,w*0.3);
+    layers.push(e("div",{key:"medal",style:{position:"absolute",top:"50%",left:"50%",width:md,height:md,
+      transform:"translate(-50%,-50%)",borderRadius:"50%",
+      border:"1.5px solid "+a,opacity:0.35,
+      boxShadow:"0 0 0 "+(md*0.15)+"px "+c[1]+",0 0 0 "+(md*0.18)+"px "+a}}));
+  }else if(pt==="classic"){
+    // Navy/Redback: parallel lines + central oval
+    layers.push(e("div",{key:"pat",style:{position:"absolute",top:m+4,left:m+4,right:m+4,bottom:m+4,overflow:"hidden",opacity:0.1,
+      backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 3px,"+a+" 3px,"+a+" 3.5px)",
+      backgroundSize:"100% "+(w*0.08)+"px"}}));
+    layers.push(e("div",{key:"pat2",style:{position:"absolute",top:m+4,left:m+4,right:m+4,bottom:m+4,overflow:"hidden",opacity:0.08,
+      backgroundImage:"repeating-linear-gradient(90deg,transparent,transparent 3px,"+a+" 3px,"+a+" 3.5px)",
+      backgroundSize:(w*0.08)+"px 100%"}}));
+    var ow=Math.max(14,w*0.35),oh=Math.max(20,h*0.3);
+    layers.push(e("div",{key:"oval",style:{position:"absolute",top:"50%",left:"50%",width:ow,height:oh,
+      transform:"translate(-50%,-50%)",borderRadius:"50%",
+      border:"1.5px solid "+a,opacity:0.3,
+      background:"radial-gradient(ellipse,"+c[1]+" 0%,transparent 70%)"}}));
+  }
+  // default: no pattern, just 牛 mark
+
+  // Center 牛 mark
+  layers.push(e("div",{key:"niu",style:{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",
+    fontSize:Math.max(10,w*0.22),color:a,fontWeight:900,opacity:sk.id==="default"?0.35:0.5,fontFamily:"'Noto Serif JP',serif",
+    textShadow:sk.id==="default"?"none":"0 0 6px "+a.replace(")",",0.2)").replace("rgb","rgba")}},"牛"));
+
+  return e("div",{style:{width:w,height:h,position:"relative",background:bg,
+    borderRadius:r,border:squeeze?"1.5px solid rgba(180,100,255,0.35)":"1px solid rgba(255,255,255,0.08)",overflow:"hidden"}},layers);
 }
 
 // ─── Squeeze Card ────────────────────────────────────────────────
@@ -490,23 +678,23 @@ function SqueezeCard(props){
     if(d==="bottom")return Object.assign({},base,{top:pct+"%",left:0,right:0,height:sz,background:"linear-gradient(to bottom,rgba(0,0,0,"+op+"),transparent)"});
     return Object.assign({},base,{bottom:pct+"%",left:0,right:0,height:sz,background:"linear-gradient(to top,rgba(0,0,0,"+op+"),transparent)"});}
 
-  if(revealed)return e("div",{style:{animation:"cardDeal .3s ease both"}},e(CardFace,{card:card,w:w,h:h,showRank:true}));
+  if(revealed)return e("div",{style:{animation:"cardDeal .3s ease both"}},e(CardFace,{card:card,w:w,h:h,showRank:true,faceTheme:props.faceTheme}));
   var cc=coverClip(),el2=edgeLine(),fs=foldShadow();
   var kids=[
-    e("div",{key:"face",style:{position:"absolute",top:0,left:0,right:0,bottom:0}},e(CardFace,{card:card,w:w,h:h,showRank:false})),
+    e("div",{key:"face",style:{position:"absolute",top:0,left:0,right:0,bottom:0}},e(CardFace,{card:card,w:w,h:h,showRank:false,faceTheme:props.faceTheme})),
     fs&&e("div",{key:"fs",style:fs}),
     e("div",{key:"cover",style:Object.assign({position:"absolute",top:0,left:0,right:0,bottom:0,zIndex:3,transition:sq?"none":"clip-path .25s ease,transform .25s ease"},cc)},
-      e(CardBack,{w:w,h:h,squeeze:!!sq})),
+      e(CardBack,{w:w,h:h,squeeze:!!sq,skin:props.skin})),
     el2&&e("div",{key:"el",style:el2})
   ];
   if(!sq)kids.push(e("div",{key:"hint",style:{position:"absolute",top:0,left:0,right:0,bottom:0,zIndex:6,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none"}},
     e("div",{style:{display:"flex",flexDirection:"column",alignItems:"center",gap:0,animation:"squeezePulse 2s ease-in-out infinite"}},
-      e("div",{style:{fontSize:10,color:"rgba(230,180,34,0.5)"}},"↑"),
+      e("div",{style:{fontSize:10,color:"rgba(212,175,55,0.5)"}},"↑"),
       e("div",{style:{display:"flex",gap:6,alignItems:"center"}},
-        e("span",{style:{fontSize:10,color:"rgba(230,180,34,0.5)"}},"←"),
-        e("span",{style:{fontSize:11,color:"rgba(230,180,34,0.7)",fontWeight:700,letterSpacing:1}},"絞"),
-        e("span",{style:{fontSize:10,color:"rgba(230,180,34,0.5)"}},"→")),
-      e("div",{style:{fontSize:10,color:"rgba(230,180,34,0.5)"}},"↓"))));
+        e("span",{style:{fontSize:10,color:"rgba(212,175,55,0.5)"}},"←"),
+        e("span",{style:{fontSize:11,color:"rgba(212,175,55,0.7)",fontWeight:700,letterSpacing:1}},"絞"),
+        e("span",{style:{fontSize:10,color:"rgba(212,175,55,0.5)"}},"→")),
+      e("div",{style:{fontSize:10,color:"rgba(212,175,55,0.5)"}},"↓"))));
 
   return e("div",{ref:ref,onMouseDown:onStart,onMouseMove:onMove,onMouseUp:onEnd,onMouseLeave:onEnd,
     onTouchStart:onStart,onTouchMove:onMove,onTouchEnd:onEnd,
@@ -514,11 +702,397 @@ function SqueezeCard(props){
       touchAction:"none",animation:"cardDeal .4s ease both",overflow:"hidden"}},kids);
 }
 
+// ─── Chip Flow Demo (for rulebook) ───────────────────────────
+function ChipFlowDemo(){
+  var d1=useState(0),step=d1[0],setStep=d1[1];
+  var d2=useState(false),running=d2[0],setRunning=d2[1];
+  var d3=useState("offset"),demoRule=d3[0],setDemoRule=d3[1];
+  var d4=useState(null),timerRef=d4[0],setTimerRef=d4[1];
+
+  // 親=牛8(8倍), 子A=牛6(6倍) bet5, 子B=牛牛(10倍) bet3
+  var offsetSteps=[
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:"親: 牛8  ／  子A: 牛6 (BET 5)  ／  子B: 牛牛 (BET 3)",phase:"deal"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:"親 牛8 vs 子A 牛6 → 親の勝ち！",focus:"a",phase:"judge"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:"倍率 = |8 - 6| = 2倍 ／ 支払い = BET 5 × 2倍 = 10",focus:"a",phase:"calc",calc:"5 × 2 = 10"},
+    {dealer:{d:10},a:{d:-10},b:{d:0},msg:"子A → 親 に 10 支払い",flow:"a-to-d",amount:10,phase:"pay"},
+    {dealer:{d:10},a:{d:-10},b:{d:0},msg:"親 牛8 vs 子B 牛牛 → 子Bの勝ち！",focus:"b",phase:"judge"},
+    {dealer:{d:10},a:{d:-10},b:{d:0},msg:"倍率 = |8 - 10| = 2倍 ／ 支払い = BET 3 × 2倍 = 6",focus:"b",phase:"calc",calc:"3 × 2 = 6"},
+    {dealer:{d:4},a:{d:-10},b:{d:6},msg:"親 → 子B に 6 支払い",flow:"d-to-b",amount:6,phase:"pay"},
+    {dealer:{d:4},a:{d:-10},b:{d:6},msg:"結果: 親 +4 ／ 子A -10 ／ 子B +6",phase:"result"},
+  ];
+  var nooffsetSteps=[
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:"親: 牛8  ／  子A: 牛6 (BET 5)  ／  子B: 牛牛 (BET 3)",phase:"deal"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:"親 牛8 vs 子A 牛6 → 親の勝ち！",focus:"a",phase:"judge"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:"倍率 = 勝者の倍率 = 8倍 ／ 支払い = BET 5 × 8倍 = 40",focus:"a",phase:"calc",calc:"5 × 8 = 40"},
+    {dealer:{d:40},a:{d:-40},b:{d:0},msg:"子A → 親 に 40 支払い",flow:"a-to-d",amount:40,phase:"pay"},
+    {dealer:{d:40},a:{d:-40},b:{d:0},msg:"親 牛8 vs 子B 牛牛 → 子Bの勝ち！",focus:"b",phase:"judge"},
+    {dealer:{d:40},a:{d:-40},b:{d:0},msg:"倍率 = 勝者の倍率 = 10倍 ／ 支払い = BET 3 × 10倍 = 30",focus:"b",phase:"calc",calc:"3 × 10 = 30"},
+    {dealer:{d:10},a:{d:-40},b:{d:30},msg:"親 → 子B に 30 支払い",flow:"d-to-b",amount:30,phase:"pay"},
+    {dealer:{d:10},a:{d:-40},b:{d:30},msg:"結果: 親 +10 ／ 子A -40 ／ 子B +30",phase:"result"},
+  ];
+
+  var steps=demoRule==="offset"?offsetSteps:nooffsetSteps;
+
+  function runDemo(){
+    setStep(0);setRunning(true);
+    var i=0;
+    var iv=setInterval(function(){
+      i++;if(i>=steps.length){clearInterval(iv);setRunning(false);return;}
+      setStep(i);
+    },2200);
+    setTimerRef(iv);
+  }
+  function stopDemo(){if(timerRef)clearInterval(timerRef);setRunning(false);setStep(0);}
+
+  var s=steps[step]||steps[0];
+  var isDone=s.phase==="result";
+
+  function pBox(label,emoji,role,bet,delta,isFocus,isDealer){
+    var bg="rgba(0,0,0,0.15)";
+    if(isFocus)bg="rgba(212,175,55,0.12)";
+    if(isDone&&delta>0)bg="rgba(39,174,96,0.1)";
+    if(isDone&&delta<0)bg="rgba(231,76,60,0.08)";
+    return e("div",{style:{padding:"10px 6px",borderRadius:10,textAlign:"center",
+      background:bg,border:isFocus?"1.5px solid #d4af37":isDone&&delta!==0?"1.5px solid "+(delta>0?"rgba(39,174,96,0.4)":"rgba(231,76,60,0.3)"):"1px solid rgba(212,175,55,0.08)",
+      transition:"all 0.4s ease",position:"relative"}},
+      e("div",{style:{fontSize:16}},emoji),
+      e("div",{style:{fontSize:10,fontWeight:800,color:isDealer?"#c0392b":"#d4af37",marginTop:2}},label),
+      e("div",{style:{fontSize:10,color:"var(--text-muted)",marginTop:1}},role),
+      // Bet badge
+      !isDealer?e("div",{style:{fontSize:8,color:"#f39c12",marginTop:2,animation:step===0?"demoBetBadge 0.4s ease both":"none"}},"BET "+bet):null,
+      // Delta display
+      e("div",{style:{fontSize:isDone?18:15,fontWeight:900,marginTop:4,minHeight:22,
+        color:delta>0?"#27ae60":delta<0?"#e74c3c":"#5a7a5a",
+        animation:delta!==0?(isDone?(delta>0?"demoPulseGreen":"demoPulseRed")+" 1.5s ease infinite":"chipBounce 0.5s ease both"):"none",
+        textShadow:delta>0?"0 0 10px rgba(39,174,96,0.3)":delta<0?"0 0 10px rgba(231,76,60,0.3)":"none"}},
+        delta===0?"±0":delta>0?"+"+delta:delta));
+  }
+
+  // Chip travel overlay
+  var chipTravel=null;
+  if(s.flow){
+    var isLeft=s.flow==="a-to-d";
+    var chipCount=Math.min(6,Math.ceil(s.amount/5));
+    chipTravel=e("div",{style:{position:"absolute",top:0,left:0,right:0,bottom:0,pointerEvents:"none",zIndex:20}},
+      Array.from({length:chipCount}).map(function(_,ci){
+        var startX=isLeft?"66%":"0%";
+        var endX=isLeft?"-60px":"60px";
+        var yOff=-8+ci*5;
+        return e("div",{key:"ct"+ci,style:{position:"absolute",left:isLeft?"66%":s.flow==="d-to-b"?"33%":"0",top:"calc(50% + "+yOff+"px)",
+          fontSize:16,animation:"demoChipTravel 0.7s ease "+(ci*0.08)+"s both",
+          "--dx":isLeft?"-120px":"120px"}},"🪙");
+      }));
+  }
+
+  // Calc formula highlight
+  var calcEl=null;
+  if(s.calc){
+    calcEl=e("div",{style:{textAlign:"center",margin:"6px 0",padding:"4px 10px",borderRadius:6,
+      background:"rgba(212,175,55,0.08)",border:"1px solid var(--card-border)",display:"inline-block",
+      fontSize:13,fontWeight:800,color:"var(--accent)",letterSpacing:1,animation:"chipBounce 0.4s ease both"}},
+      s.calc);
+  }
+
+  return e("div",null,
+    // Rule toggle
+    e("div",{style:{display:"flex",gap:6,justifyContent:"center",marginBottom:10}},
+      [{id:"offset",label:"相殺あり"},{id:"nooffset",label:"相殺なし"}].map(function(r){
+        var sel=demoRule===r.id;
+        return e("button",{key:r.id,onClick:function(){if(!running){setDemoRule(r.id);setStep(0);}},style:{
+          padding:"4px 12px",borderRadius:6,fontSize:10,fontWeight:sel?700:400,cursor:running?"default":"pointer",fontFamily:"inherit",
+          background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
+          border:sel?"1px solid #d4af37":"1px solid rgba(212,175,55,0.08)",
+          color:sel?"#d4af37":"#6b8f6b",opacity:running?0.5:1}},r.label);
+      })),
+    // Players
+    e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:8,position:"relative"}},
+      pBox("親","🐉","牛8",null,s.dealer.d,s.focus==="dealer",true),
+      pBox("子A","🐅","牛6",5,s.a.d,s.focus==="a",false),
+      pBox("子B","🐍","牛牛",3,s.b.d,s.focus==="b",false),
+      chipTravel),
+    // Calc formula
+    calcEl?e("div",{style:{textAlign:"center"}},calcEl):null,
+    // Message
+    e("div",{style:{textAlign:"center",padding:"8px 12px",borderRadius:8,background:"rgba(0,0,0,0.25)",fontSize:10,color:"#c5d8c5",lineHeight:1.7,minHeight:32,
+      animation:"fadeUp 0.3s ease",marginTop:4}},s.msg),
+    // Controls
+    e("div",{style:{textAlign:"center",marginTop:8}},
+      !running?e("button",{onClick:runDemo,style:{padding:"7px 22px",borderRadius:8,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+        background:isDone?"linear-gradient(135deg,#d4af37,#b8960c)":"rgba(212,175,55,0.1)",
+        color:isDone?"#0a1a0f":"#d4af37",
+        border:isDone?"none":"1px solid rgba(212,175,55,0.3)",
+        boxShadow:isDone?"0 2px 8px rgba(212,175,55,0.3)":"none"}},
+        isDone?"もう一度 ↻":"▶ デモを再生"):
+      e("div",{style:{display:"flex",alignItems:"center",justifyContent:"center",gap:10}},
+        e("div",{style:{fontSize:9,color:"var(--text-dim)"}},"再生中... ("+(step+1)+"/"+steps.length+")"),
+        e("button",{onClick:stopDemo,style:{padding:"3px 10px",borderRadius:5,fontSize:9,cursor:"pointer",fontFamily:"inherit",
+          background:"transparent",border:"1px solid rgba(255,255,255,0.1)",color:"var(--text-muted)"}},"⏹ 停止"))));
+}
+
+// ─── Squeeze Trainer ─────────────────────────────────────────
+function SqueezeTrainer(){
+  var allRanks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+  var allSuits=["♠","♥","♦","♣"];
+  var st1=useState(null),trainerCard=st1[0],setTrainerCard=st1[1];
+  var st2=useState(false),revealed=st2[0],setRevealed=st2[1];
+  var st3=useState(0),count=st3[0],setCount=st3[1];
+
+  function newCard(){
+    var r=allRanks[Math.floor(Math.random()*allRanks.length)];
+    var s=allSuits[Math.floor(Math.random()*allSuits.length)];
+    setTrainerCard({rank:r,suit:s,flipped:Math.random()<0.5});
+    setRevealed(false);setCount(count+1);
+  }
+
+  useEffect(function(){newCard();},[]);
+
+  if(!trainerCard)return null;
+
+  var tw=68,th=102;
+  return e("div",{style:{textAlign:"center"}},
+    e("div",{style:{display:"flex",justifyContent:"center",marginBottom:12}},
+      revealed?
+        e("div",{style:{animation:"cardDeal .3s ease"}},e(CardFace,{card:trainerCard,w:tw,h:th,showRank:true})):
+        e(SqueezeCard,{key:count,card:trainerCard,cw:tw,ch:th,onRevealed:function(){setRevealed(true);}})),
+    revealed?
+      e("button",{onClick:newCard,style:{padding:"8px 24px",borderRadius:8,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",border:"none",
+        boxShadow:"0 2px 8px rgba(212,175,55,0.3)"}},"次のカード →"):
+      e("div",{style:{fontSize:10,color:"#4ecdc4"}},"ドラッグして絞ってみよう"));
+}
+
+// ─── Shop & Customization Data ──────────────────────────────
+var CARD_SKINS=[
+  {id:"default",name:"クラシック",colors:["#0a2015","#1a4030","#0a2018"],accent:"#d4af37",pattern:"diamond",free:true},
+  {id:"crimson",name:"クリムゾン",colors:["#2a0a10","#4a1a25","#2a0a12"],accent:"#e8a0a0",pattern:"diamond",free:false},
+  {id:"midnight",name:"ミッドナイト",colors:["#08080f","#15152a","#0a0a15"],accent:"#8888cc",pattern:"diamond",free:false},
+  {id:"gold",name:"ゴールド",colors:["#2a2008","#3a3018","#2a2008"],accent:"#e8c840",pattern:"ornate",free:false},
+  {id:"navy",name:"ネイビー",colors:["#0a1028","#182848","#0a1028"],accent:"#c8c8e0",pattern:"classic",free:false},
+  {id:"redback",name:"レッドバック",colors:["#300808","#501818","#300808"],accent:"#f0c0c0",pattern:"classic",free:false},
+];
+var CARD_FACES=[
+  {id:"default",name:"クラシック",desc:"定番デザイン",
+    bg:["#fdfdfd","#f5f4ef"],hlBg:["#fffde7","#fff9c4"],red:"#c0392b",black:"#0d2818",border:"#bbb8b0",
+    faceRedBg:["#fce4ec","#f8bbd0"],faceBlackBg:["#e8eaf6","#c5cae9"],faceRedBorder:"#e57373",faceBlackBorder:"#7986cb",
+    font:"'Georgia','Times New Roman',serif",rankWeight:800,suitScale:1,free:true},
+  {id:"noir",name:"ノワール",desc:"闇に浮かぶシャープなカード",
+    bg:["#1c1c1c","#0e0e0e"],hlBg:["#333310","#2a2a08"],red:"#ff2020",black:"#d0d0d0",border:"#333333",
+    faceRedBg:["#350a10","#280508"],faceBlackBg:["#1e1e2a","#141420"],faceRedBorder:"#662020",faceBlackBorder:"#444460",
+    font:"'Playfair Display',Georgia,serif",rankWeight:900,suitScale:1,free:false},
+  {id:"fourcolor",name:"4色",desc:"スートごとに異なる色",
+    bg:["#fdfdfd","#f5f4ef"],hlBg:["#fffde7","#fff9c4"],red:"#c0392b",black:"#0d2818",border:"#bbb8b0",
+    suitColors:{"♠":"#0d2818","♥":"#c0392b","♦":"#2196f3","♣":"#1e7a3a"},
+    faceBgs:{
+      "♠":["#e8eaf6","#c5cae9"],
+      "♥":["#fce4ec","#f8bbd0"],
+      "♦":["#e3f2fd","#bbdefb"],
+      "♣":["#dbeedc","#b8d8ba"]
+    },
+    faceBorders:{"♠":"#7986cb","♥":"#e57373","♦":"#64b5f6","♣":"#6dba72"},
+    faceRedBg:["#fce4ec","#f8bbd0"],faceBlackBg:["#e8eaf6","#c5cae9"],faceRedBorder:"#e57373",faceBlackBorder:"#7986cb",
+    font:"'Georgia','Times New Roman',serif",rankWeight:800,suitScale:1,free:false},
+];
+var TABLE_BGS=[
+  {id:"default",name:"カジノグリーン",bg:"#0a1a0f",grad:"rgba(20,60,30,0.5)",
+    card:"var(--card)",cardBorder:"rgba(212,175,55,0.08)",
+    accent:"#d4af37",accentDark:"#b8960c",text:"#f0e6d2",textMuted:"#8faa8f",textDim:"#5a7a5a",
+    btnBg:"rgba(212,175,55,0.06)",tabActive:"rgba(212,175,55,0.15)",free:true},
+  {id:"ocean",name:"ディープオーシャン",bg:"#0a1520",grad:"rgba(20,40,80,0.5)",
+    card:"rgba(10,20,35,0.92)",cardBorder:"rgba(100,160,220,0.1)",
+    accent:"#5aaddd",accentDark:"#3888bb",text:"#d8e8f5",textMuted:"#7aa0c0",textDim:"#4a7090",
+    btnBg:"rgba(100,160,220,0.06)",tabActive:"rgba(100,160,220,0.15)",free:false},
+  {id:"wine",name:"ワインレッド",bg:"#1a0a0f",grad:"rgba(60,20,30,0.5)",
+    card:"rgba(26,10,15,0.92)",cardBorder:"rgba(200,120,140,0.1)",
+    accent:"#d4788a",accentDark:"#aa5060",text:"#f0e0e4",textMuted:"#b08090",textDim:"#705060",
+    btnBg:"rgba(200,120,140,0.06)",tabActive:"rgba(200,120,140,0.15)",free:false},
+  {id:"noir",name:"ノワール",bg:"#0a0a0a",grad:"rgba(30,30,30,0.5)",
+    card:"rgba(15,15,15,0.92)",cardBorder:"rgba(180,180,180,0.08)",
+    accent:"#cccccc",accentDark:"#999999",text:"#e0e0e0",textMuted:"#888888",textDim:"#555555",
+    btnBg:"rgba(180,180,180,0.06)",tabActive:"rgba(180,180,180,0.15)",free:false},
+  {id:"gold",name:"ゴールドルーム",bg:"#1a150a",grad:"rgba(60,45,15,0.5)",
+    card:"rgba(26,22,10,0.92)",cardBorder:"rgba(212,175,55,0.1)",
+    accent:"#e8c840",accentDark:"#c0a020",text:"#f5ecd0",textMuted:"#b0a070",textDim:"#706830",
+    btnBg:"rgba(212,175,55,0.06)",tabActive:"rgba(212,175,55,0.15)",free:false},
+  {id:"aurora",name:"オーロラ",bg:"#0a151a",grad:"rgba(20,50,60,0.5)",
+    card:"rgba(10,22,28,0.92)",cardBorder:"rgba(80,200,180,0.1)",
+    accent:"#4ecdc4",accentDark:"#2aaa9a",text:"#d8f0ec",textMuted:"#70b0a8",textDim:"#408880",
+    btnBg:"rgba(80,200,180,0.06)",tabActive:"rgba(80,200,180,0.15)",free:false},
+];
+var SOUND_PACKS=[
+  {id:"default",name:"クラシック",desc:"落ち着いたスタンダード音",free:true},
+  {id:"real",name:"リアル",desc:"本格カジノ風のカード音",free:false},
+  {id:"retro",name:"レトロ",desc:"ファミコン風8bitサウンド",free:false},
+  {id:"elegant",name:"エレガント",desc:"ピアノ＆ハープの優雅な響き",free:false},
+];
+var SHOP_ITEMS=[
+  {id:"skins",name:"カードデザインパック",icon:"🎴",price:"¥160",desc:"裏面6種＋表面5種"},
+  {id:"tables",name:"テーブル背景パック",icon:"🎰",price:"¥160",desc:"テーブル背景6種"},
+  {id:"sounds",name:"サウンドパック",icon:"🔊",price:"¥160",desc:"効果音セット4種"},
+  {id:"noads",name:"広告解除",icon:"🚫",price:"¥320",desc:"永久に広告を非表示"},
+  {id:"allpass",name:"全部入りパス",icon:"👑",price:"¥480",desc:"全コンテンツ解放（33%OFF）",highlight:true},
+];
+
 // ─── Main App ────────────────────────────────────────────────────
 var PCOLORS=["#e74c3c","#2980b9","#27ae60","#f39c12","#8e44ad","#1abc9c"];
 var PEMOJI=["🐉","🐅","🐍","🦅","🐺","🦊"];
 
+// Multiplier table: bullValue is already the multiplier
+function calcMultiplierOffset(valA,valB){
+  var diff=Math.abs(valA-valB);
+  if(diff===0)return 1;
+  if(diff===1)return 1.5;
+  return diff;
+}
+function calcMultiplierNoOffset(valWinner){
+  return Math.max(1,valWinner);
+}
+
+// ─── Shared Card Display Component ───────────────────────────────
+function PlayerCards(props){
+  var i=props.idx,hands=props.hands,revealedCards=props.revealedCards,results=props.results,
+    winner=props.winner,phase=props.phase,pc=props.pc,alerts=props.alerts,
+    roundNum=props.roundNum,names=props.names,openThree=props.openThree,
+    revealCard=props.revealCard,soundOn=props.soundOn,isDealer=props.isDealer,
+    chipDelta=props.chipDelta,battleMode=props.battleMode,betAmount=props.betAmount,cardSkin=props.cardSkin,cardFace=props.cardFace;
+
+  var sm=pc>4;
+  var cw=pc>=5?52:pc>=4?56:CW;
+  var ch=pc>=5?78:pc>=4?84:CH;
+  var compactMode=pc>=4;
+
+  var rc=revealedCards[i]||new Set(),res=results[i],isW=winner===i;
+  var vs=rc;
+  var full=rc.size===5;
+
+  // partialInfo
+  var pi2=null;
+  if(hands[i]&&rc&&rc.size>=3&&rc.size<5){
+    var idx2=Array.from(rc),sum2=idx2.reduce(function(a,ii){return a+rankPoints(hands[i][ii].rank);},0);
+    var bullSet2=null;
+    for(var a2=0;a2<idx2.length;a2++)for(var b2=a2+1;b2<idx2.length;b2++)for(var d2=b2+1;d2<idx2.length;d2++){
+      if((rankPoints(hands[i][idx2[a2]].rank)+rankPoints(hands[i][idx2[b2]].rank)+rankPoints(hands[i][idx2[d2]].rank))%10===0)bullSet2=new Set([idx2[a2],idx2[b2],idx2[d2]]);
+    }
+    pi2={text:idx2.length+"枚合計: "+sum2,bullSet:bullSet2};
+  }
+
+  var alert=alerts[i];
+  var alertActive=false,alertType=null;
+  if(alert&&!full){
+    if(alert.timing==="three"&&rc.size>=3)alertActive=true;
+    if(alert.timing==="four"&&rc.size>=4)alertActive=true;
+    if(alertActive)alertType=alert.type;
+  }
+
+  var cardEls=hands[i]?hands[i].map(function(card,ci){
+    var vis=vs.has(ci),canSq=phase==="reveal"&&!vis&&rc.size>=3&&(ci===3||ci===4);
+    var partialGlow=!full&&pi2&&pi2.bullSet&&pi2.bullSet.has(ci);
+    var finalGlow=full&&res&&res.hasBull&&res.threeIdx&&res.threeIdx.indexOf(ci)>=0;
+    if(canSq){
+      var sqCard=e(SqueezeCard,{key:roundNum+"-"+i+"-"+ci,card:card,small:sm,cw:cw,ch:ch,onRevealed:function(){revealCard(i,ci);},skin:cardSkin,faceTheme:cardFace});
+      if(alertActive&&alertType!=="growBull"&&alertType!=="cowPip"){
+        var alertAnim,alertBorder,extraStyle={};
+        if(alertType==="rainbow"){alertAnim="alertRainbow 1.2s linear infinite,alertBorderRainbow 1.2s linear infinite";alertBorder="2px solid #f00";}
+        else if(alertType==="glitch"){alertAnim="alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite";alertBorder="1px solid rgba(255,255,255,0.15)";}
+        else if(alertType==="quake"){alertAnim="alertQuakeCard 0.4s ease-in-out infinite";alertBorder="2px solid rgba(255,100,0,0.5)";extraStyle={boxShadow:"0 0 15px rgba(255,100,0,0.3)"};}
+        else if(alertType==="cow"){alertAnim="bullGlow 1.2s ease-in-out infinite";alertBorder="2px solid #d4af37";}
+        else{alertAnim="alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite";alertBorder="2px solid rgba(255,0,0,0.5)";}
+        if(alertType==="cow"){
+          return e("div",{key:roundNum+"-"+i+"-"+ci+"-wrap",style:Object.assign({borderRadius:cw*0.09+4,animation:alertAnim,border:alertBorder,padding:1,position:"relative"},extraStyle)},
+            sqCard,e("div",{style:{position:"absolute",top:0,left:0,right:0,bottom:0,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none",zIndex:10,fontSize:sm?24:32,animation:"squeezePulse 1s ease-in-out infinite"}},"🐮"));
+        }
+        return e("div",{key:roundNum+"-"+i+"-"+ci+"-wrap",style:Object.assign({borderRadius:cw*0.09+4,animation:alertAnim,border:alertBorder,padding:1},extraStyle)},sqCard);
+      }
+      return sqCard;
+    }
+    if(vis){
+      var useCowPip=alertActive&&alertType==="cowPip"&&alert&&ci===alert.cowPipIdx;
+      return e("div",{key:ci,style:{animation:partialGlow?"cardDeal .35s ease "+(ci*0.05)+"s both,bullGlow 1.2s ease-in-out infinite":"cardDeal .35s ease "+(ci*0.05)+"s both",borderRadius:cw*0.09+2}},
+        e(CardFace,{card:card,w:cw,h:ch,showRank:true,highlight:finalGlow||partialGlow,cowPip:useCowPip,faceTheme:cardFace}));
+    }
+    return e("div",{key:ci,style:{animation:"cardDeal .35s ease "+(ci*0.05)+"s both"}},e(CardBack,{w:cw,h:ch,skin:cardSkin}));
+  }):[];
+
+  var pKids=[];
+  // Header
+  pKids.push(e("div",{key:"ph",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:compactMode?4:7}},
+    e("div",{style:{display:"flex",alignItems:"center",gap:3}},
+      e("span",{style:{fontSize:compactMode?14:17}},PEMOJI[i]),
+      e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:compactMode?10:12}},names[i]),
+      isDealer?e("span",{style:{fontSize:compactMode?7:9,fontWeight:800,color:"#fff",background:"linear-gradient(135deg,#c0392b,#962d22)",padding:"1px 6px",borderRadius:4,letterSpacing:1,boxShadow:"0 1px 4px rgba(192,57,43,0.3)"}},"親"):null,
+      !isDealer&&betAmount?e("span",{style:{fontSize:compactMode?7:9,fontWeight:600,color:"#f39c12",background:"rgba(243,156,18,0.1)",padding:"1px 5px",borderRadius:3}},"BET "+betAmount):null,
+      rc.size>=3&&!full?e("span",{style:{fontSize:compactMode?7:9,fontWeight:600,color:"#4ecdc4",background:"rgba(78,205,196,0.07)",padding:"1px 4px",borderRadius:3}},rc.size===3?"絞り中":"ラスト！"):null),
+    e("div",{style:{display:"flex",alignItems:"center",gap:4}},
+      chipDelta!==undefined&&chipDelta!==null&&chipDelta!==0?e("div",{style:{position:"relative",display:"inline-flex",alignItems:"center"}},
+        // Burst of chip particles spreading outward
+        e("div",{style:{position:"absolute",top:"50%",left:"50%",pointerEvents:"none",zIndex:10}},
+          chipDelta>0?
+            [0,1,2,3,4].map(function(pi2){
+              return e("span",{key:"cw"+pi2,style:{position:"absolute",fontSize:14,
+                animation:"chipSpread"+pi2+" 0.9s ease "+(pi2*0.08)+"s both"}},
+                "🪙");
+            }):
+            [0,1,2].map(function(pi2){
+              return e("span",{key:"cl"+pi2,style:{position:"absolute",fontSize:12,
+                animation:"chipLose"+pi2+" 0.8s ease "+(pi2*0.1)+"s both"}},
+                "💸");
+            })),
+        // Number with bounce and glow
+        e("span",{style:{fontSize:compactMode?14:18,fontWeight:900,
+          color:chipDelta>0?"#27ae60":"#e74c3c",
+          animation:"chipBounce 0.6s ease both",
+          textShadow:chipDelta>0?"0 0 12px rgba(39,174,96,0.5),0 0 24px rgba(39,174,96,0.2)":"0 0 12px rgba(231,76,60,0.5),0 0 24px rgba(231,76,60,0.2)"}},
+          chipDelta>0?"+"+chipDelta:chipDelta)):null,
+      isW?e("span",{style:{fontSize:compactMode?10:14,animation:"chipBounce 0.6s ease 0.3s both"}},"👑"):null)));
+
+  // Cards
+  pKids.push(e("div",{key:"cards"},
+    e("div",{style:{display:"flex",gap:compactMode?2:4,justifyContent:"center",marginBottom:compactMode?2:4}},cardEls.slice(0,3)),
+    e("div",{style:{display:"flex",gap:compactMode?2:4,justifyContent:"center"}},cardEls.slice(3))));
+
+  if(pi2)pKids.push(e("div",{key:"info",style:{marginTop:4,textAlign:"center",fontSize:10,color:"var(--text-dim)",animation:"fadeUp .3s ease"}},
+    pi2.text,pi2.bullSet?e("span",{style:{color:"var(--accent)",marginLeft:4,fontWeight:700,animation:"squeezePulse 1.5s ease-in-out infinite"}},"🐂 牛確定！"):null));
+
+  // Action
+  var actionContent=null;
+  if(full){var indResult=res||evaluateHand(hands[i]);
+    actionContent=e("div",{style:{fontSize:indResult.hasBull?(compactMode?14:19):(compactMode?10:13),fontWeight:800,color:indResult.hasBull?"#d4af37":"#555",fontFamily:"serif",animation:"fadeUp .4s ease"}},indResult.label);
+  }else if(phase==="reveal"&&rc.size===0){
+    actionContent=e("button",{onClick:function(){openThree(i);},style:{padding:compactMode?"3px 14px":"5px 20px",fontSize:compactMode?10:12,fontWeight:700,fontFamily:"inherit",borderRadius:7,border:"1.5px solid var(--accent)",background:"transparent",color:"var(--accent)",cursor:"pointer",letterSpacing:1}},"3枚オープン");
+  }else if(phase==="reveal"&&rc.size>=3){
+    actionContent=e("div",{style:{fontSize:compactMode?8:10,color:"#4ecdc4",animation:"squeezePulse 2s ease-in-out infinite",fontWeight:600}},"ドラッグして絞る");
+  }
+  pKids.push(e("div",{key:"action",style:{marginTop:compactMode?3:7,textAlign:"center",minHeight:compactMode?20:28}},actionContent));
+
+  var boxAnim=isW?"winPulse 1.5s ease infinite":"none";
+  var boxBg=isW?"linear-gradient(135deg,rgba(212,175,55,0.07) 0%,var(--card) 100%)":"var(--card)";
+  if(alertActive&&alertType==="flash")boxAnim="alertFlash 1.5s ease-in-out 1";
+  else if(alertActive&&alertType==="blackout")boxAnim="alertBlackout 2s ease-in-out 1";
+  else if(alertActive&&alertType==="quake")boxAnim="alertQuake 0.5s ease-in-out infinite";
+
+  if(alertActive&&alertType==="growBull"){
+    pKids.push(e("div",{key:"growbull",style:{position:"absolute",top:0,left:0,right:0,bottom:0,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none",zIndex:0,overflow:"hidden",borderRadius:pc>=4?8:11}},
+      e("div",{style:{animation:"growBull 15s ease-in forwards",opacity:0,lineHeight:1}},"🐮")));
+  }
+
+  return e("div",{key:i,style:{padding:pc>=4?7:11,borderRadius:pc>=4?8:11,transition:"all .3s ease",position:"relative",overflow:"hidden",
+    border:isW?"2px solid #d4af37":isDealer?"2px solid rgba(192,57,43,0.5)":"1.5px solid "+(rc.size>0?"rgba(255,255,255,0.08)":"rgba(212,175,55,0.03)"),
+    background:isDealer&&!isW?"linear-gradient(135deg,rgba(192,57,43,0.04) 0%,var(--card) 100%)":boxBg,
+    boxShadow:isDealer&&!isW?"inset 0 0 12px rgba(192,57,43,0.06)":"none",
+    animation:boxAnim}},pKids);
+}
+
+// ─── NiuNiu App ──────────────────────────────────────────────────
 function NiuNiu(){
+  // Top-level mode: "splash", "home", "flip", "battle", "rulebook"
+  var s0=useState("splash"),appMode=s0[0],setAppMode=s0[1];
+
+  // Auto transition from splash to home
+  useEffect(function(){
+    if(appMode==="splash"){
+      var t=setTimeout(function(){setAppMode("home");},2200);
+      return function(){clearTimeout(t);};
+    }
+  },[appMode]);
   var s1=useState("setup"),phase=s1[0],setPhase=s1[1];
   var s2=useState(4),pc=s2[0],setPc=s2[1];
   var s3=useState(["プレイヤー1","プレイヤー2","プレイヤー3","プレイヤー4","プレイヤー5","プレイヤー6"]),names=s3[0],setNames=s3[1];
@@ -529,21 +1103,75 @@ function NiuNiu(){
   var s8=useState(0),roundNum=s8[0],setRoundNum=s8[1];
   var s9=useState(null),winner=s9[0],setWinner=s9[1];
   var s10=useState(true),soundOn=s10[0],setSoundOn=s10[1];
-  // Game mode: "simple" (no alerts), "sakibare" (先バレ), "premium" (プレミア)
   var s13=useState("sakibare"),gameMode=s13[0],setGameMode=s13[1];
-  // Alert system
   var s11=useState({}),alerts=s11[0],setAlerts=s11[1];
   var s12=useState(null),forceAlert=s12[0],setForceAlert=s12[1];
 
+  // Battle mode states
+  var b1=useState(0),dealer=b1[0],setDealer=b1[1];
+  var b2=useState("offset"),betRule=b2[0],setBetRule=b2[1]; // "offset" or "nooffset"
+  var b3=useState({}),chips=b3[0],setChips=b3[1];
+  var b4=useState({}),bets=b4[0],setBets=b4[1];
+  var b5=useState([]),history=b5[0],setHistory=b5[1];
+  var b6=useState(10),maxBet=b6[0],setMaxBet=b6[1];
+  var b7=useState(null),roundDeltas=b7[0],setRoundDeltas=b7[1];
+  var b8=useState("rule"),rbTab=b8[0],setRbTab=b8[1];
+
+  // Shop & customization
+  var c1=useState("default"),skinId=c1[0],setSkinId=c1[1];
+  var c1b=useState("default"),faceId=c1b[0],setFaceId=c1b[1];
+  var c2=useState("default"),tableId=c2[0],setTableId=c2[1];
+  var c3=useState("default"),soundPackId=c3[0],setSoundPackId=c3[1];
+  var c4=useState({}),purchased=c4[0],setPurchased=c4[1]; // {skins:true,tables:true,...}
+  var c5=useState("shop"),shopTab=c5[0],setShopTab=c5[1]; // "shop","skins","tables","sounds"
+  var c6=useState(0),adCounter=c6[0],setAdCounter=c6[1]; // count rounds for ad timing
+  var c7=useState(false),showAdPlaceholder=c7[0],setShowAdPlaceholder=c7[1];
+
+  // Get current skin/table
+  var curSkin=CARD_SKINS.find(function(s){return s.id===skinId;})||CARD_SKINS[0];
+  var curFace=CARD_FACES.find(function(f){return f.id===faceId;})||CARD_FACES[0];
+  var curTable=TABLE_BGS.find(function(t){return t.id===tableId;})||TABLE_BGS[0];
+  function canUse(category,itemId){
+    if(purchased.allpass)return true;
+    var purchaseKey=category==="faces"?"skins":category;
+    if(purchased[purchaseKey])return true;
+    var list=category==="skins"?CARD_SKINS:category==="faces"?CARD_FACES:category==="tables"?TABLE_BGS:SOUND_PACKS;
+    var item=list.find(function(x){return x.id===itemId;});
+    return item&&item.free;
+  }
+  function doPurchase(itemId){
+    setPurchased(function(p){var n=Object.assign({},p);n[itemId]=true;return n;});
+  }
+
   useEffect(function(){initConfetti();},[]);
 
-  // Determine alerts for all players when hands are dealt
-  // Called once after dealing, uses the full 5-card hand to check niuniu
+  // Apply table theme to CSS custom properties
+  useEffect(function(){
+    var tb=TABLE_BGS.find(function(t){return t.id===tableId;})||TABLE_BGS[0];
+    var s=document.documentElement.style;
+    s.setProperty("--bg",tb.bg);
+    s.setProperty("--card",tb.card);
+    s.setProperty("--card-border",tb.cardBorder);
+    s.setProperty("--accent",tb.accent);
+    s.setProperty("--accent-dark",tb.accentDark);
+    s.setProperty("--text",tb.text);
+    s.setProperty("--text-muted",tb.textMuted);
+    s.setProperty("--text-dim",tb.textDim);
+    s.setProperty("--btn-bg",tb.btnBg);
+    s.setProperty("--tab-active",tb.tabActive);
+    document.body.style.background=tb.bg;
+    document.body.style.backgroundImage="radial-gradient(ellipse at 50% 0%,"+tb.grad+" 0%,transparent 70%),repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(0,0,0,0.03) 8px,rgba(0,0,0,0.03) 16px),linear-gradient(180deg,"+tb.bg+" 0%,"+tb.bg+" 100%)";
+    document.body.style.color=tb.text;
+  },[tableId]);
+
+  // Sync sound pack
+  useEffect(function(){activeSoundPack=soundPackId;},[soundPackId]);
+
   function computeAlerts(allHands){
     var newAlerts={};
     allHands.forEach(function(hand,pi){
       var ev=evaluateHand(hand);
-      var bv=ev.bullValue;
+      var bv=ev.bullRank;
       var isNiuNiu=bv>=10;
       if(forceAlert){
         var ft=forceAlert==="cowPip"||forceAlert==="growBull"?"three":Math.random()<0.5?"three":"four";
@@ -551,54 +1179,29 @@ function NiuNiu(){
         return;
       }
       var roll=Math.random();
-
       if(gameMode==="simple"){
-        // シンプル: 赤なし、違和感10%、プレミア各1%=3%
         if(isNiuNiu){
-          if(roll<0.01){
-            newAlerts[pi]={type:"rainbow",timing:Math.random()<0.5?"three":"four"};
-          }else if(roll<0.02){
-            newAlerts[pi]={type:"cow",timing:"four"};
-          }else if(roll<0.03){
-            newAlerts[pi]={type:"quake",timing:Math.random()<0.5?"three":"four"};
-          }else if(roll<0.04){
-            newAlerts[pi]={type:"growBull",timing:"three"};
-          }else if(roll<0.05){
-            newAlerts[pi]={type:"cowPip",timing:"three",cowPipIdx:Math.floor(Math.random()*3)};
-          }else if(roll<0.15){
-            newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};
-          }
+          if(roll<0.01){newAlerts[pi]={type:"rainbow",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.02){newAlerts[pi]={type:"cow",timing:"four"};}
+          else if(roll<0.03){newAlerts[pi]={type:"quake",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.04){newAlerts[pi]={type:"growBull",timing:"three"};}
+          else if(roll<0.05){newAlerts[pi]={type:"cowPip",timing:"three",cowPipIdx:Math.floor(Math.random()*3)};}
+          else if(roll<0.15){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
         }else{
-          // ガセ違和感: ~0.4% for 70% trust
-          if(roll<0.004){
-            newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};
-          }
+          if(roll<0.0033){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
         }
       }else{
-        // 先バレ: 赤50%、違和感10%、プレミア各1%=3%
         if(isNiuNiu){
-          if(roll<0.01){
-            newAlerts[pi]={type:"rainbow",timing:Math.random()<0.5?"three":"four"};
-          }else if(roll<0.02){
-            newAlerts[pi]={type:"cow",timing:"four"};
-          }else if(roll<0.03){
-            newAlerts[pi]={type:"quake",timing:Math.random()<0.5?"three":"four"};
-          }else if(roll<0.04){
-            newAlerts[pi]={type:"growBull",timing:"three"};
-          }else if(roll<0.05){
-            newAlerts[pi]={type:"cowPip",timing:"three",cowPipIdx:Math.floor(Math.random()*3)};
-          }else if(roll<0.15){
-            newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};
-          }else if(roll<0.65){
-            newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};
-          }
+          if(roll<0.01){newAlerts[pi]={type:"rainbow",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.02){newAlerts[pi]={type:"cow",timing:"four"};}
+          else if(roll<0.03){newAlerts[pi]={type:"quake",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.04){newAlerts[pi]={type:"growBull",timing:"three"};}
+          else if(roll<0.05){newAlerts[pi]={type:"cowPip",timing:"three",cowPipIdx:Math.floor(Math.random()*3)};}
+          else if(roll<0.15){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.65){newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};}
         }else{
-          // ガセ違和感: ~0.4%, ガセ赤: ~7.5%
-          if(roll<0.004){
-            newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};
-          }else if(roll<0.079){
-            newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};
-          }
+          if(roll<0.0033){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.060){newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};}
         }
       }
     });
@@ -614,7 +1217,7 @@ function NiuNiu(){
     else if(type==="cow")SFX.alertCow();
     else if(type==="special")SFX.alertSpecial();
     else if(type==="growBull")SFX.alertGrowBull();
-    else if(type==="cowPip"){} // silent - visual only
+    else if(type==="cowPip"){}
     else SFX.alertRed();
   }
 
@@ -622,33 +1225,22 @@ function NiuNiu(){
     var deck=createDeck();var h=[];for(var i=0;i<pc;i++)h.push(deck.slice(i*5,i*5+5));
     setHands(h);var rc=[];for(var i2=0;i2<pc;i2++)rc.push(new Set());setRevealedCards(rc);
     setResults([]);setWinner(null);setPhase("dealing");if(sc)setScores(sc);
-    setAlerts(computeAlerts(h));
+    setAlerts(computeAlerts(h));setRoundDeltas(null);
     setRoundNum(function(r){return r+1;});
     if(soundOn)SFX.deal();
     setTimeout(function(){setPhase("reveal");},600);
   }
 
-  function startGame(){
-    var sc={};for(var i=0;i<pc;i++)sc[i]=0;setScores(sc);setRoundNum(0);
-    if(soundOn)SFX.buttonClick();
-    dealRound(sc);
-  }
-
   function openThree(pi){
     if(soundOn)SFX.deal();
-    // Trigger alert if timing is "three"
     var alert=alerts[pi];
-    if(alert&&alert.timing==="three"&&soundOn){
-      setTimeout(function(){playAlertSFX(alert.type);},400);
-    }
+    if(alert&&alert.timing==="three"&&soundOn){setTimeout(function(){playAlertSFX(alert.type);},400);}
     setRevealedCards(function(prev){
       var ns2=prev.map(function(s){return new Set(s);});
       ns2[pi].add(0);ns2[pi].add(1);ns2[pi].add(2);
       var c=hands[pi];
-      if(c){
-        var sum=rankPoints(c[0].rank)+rankPoints(c[1].rank)+rankPoints(c[2].rank);
-        if(sum%10===0&&soundOn&&!(alert&&alert.timing==="three"))setTimeout(function(){SFX.bullFound();},300);
-      }
+      if(c){var sum=rankPoints(c[0].rank)+rankPoints(c[1].rank)+rankPoints(c[2].rank);
+        if(sum%10===0&&soundOn&&!(alert&&alert.timing==="three"))setTimeout(function(){SFX.bullFound();},300);}
       return ns2;
     });
   }
@@ -657,39 +1249,52 @@ function NiuNiu(){
     setRevealedCards(function(prev){
       var ns2=prev.map(function(s){return new Set(s);});
       ns2[pi].add(ci);
-
-      // Trigger "four" timing alert when going from 3->4 cards
       var alert=alerts[pi];
-      if(ns2[pi].size===4&&alert&&alert.timing==="four"&&soundOn){
-        setTimeout(function(){playAlertSFX(alert.type);},200);
-      }
-
-      // Check if this player just completed 5 cards
-      if(ns2[pi].size===5&&soundOn){
-        var ev2=evaluateHand(hands[pi]);
-        setTimeout(function(){
-          if(ev2.hasBull)SFX.bullFound();else SFX.noBull();
-        },200);
-      }
-
-      // Check partial bull when 4 cards visible (only play sound if no alert active)
+      if(ns2[pi].size===4&&alert&&alert.timing==="four"&&soundOn){setTimeout(function(){playAlertSFX(alert.type);},200);}
+      if(ns2[pi].size===5&&soundOn){var ev2=evaluateHand(hands[pi]);setTimeout(function(){if(ev2.hasBull)SFX.bullFound();else SFX.noBull();},200);}
       if(ns2[pi].size===4&&soundOn&&!(alert&&alert.timing==="four")){
         var c=hands[pi],vi=Array.from(ns2[pi]);
         for(var a=0;a<vi.length;a++)for(var b=a+1;b<vi.length;b++)for(var d=b+1;d<vi.length;d++){
-          if((rankPoints(c[vi[a]].rank)+rankPoints(c[vi[b]].rank)+rankPoints(c[vi[d]].rank))%10===0){
-            setTimeout(function(){SFX.bullFound();},200);a=b=d=99;
-          }
+          if((rankPoints(c[vi[a]].rank)+rankPoints(c[vi[b]].rank)+rankPoints(c[vi[d]].rank))%10===0){setTimeout(function(){SFX.bullFound();},200);a=b=d=99;}
         }
       }
-
       if(ns2.every(function(s){return s.size===5;})){
         setTimeout(function(){
           var ev=hands.map(function(h){return evaluateHand(h);});
           setResults(ev);
-          var bb=-1,bh=-1,bi=0;
-          ev.forEach(function(x,i){if(x.bullValue>bb||(x.bullValue===bb&&x.highCard>bh)){bb=x.bullValue;bh=x.highCard;bi=i;}});
-          setScores(function(p){var n=Object.assign({},p);n[bi]=(n[bi]||0)+1;return n;});
-          setWinner(bi);setPhase("result");
+
+          if(appMode==="flip"){
+            // Flip mode: simple winner
+            var bb=-1,bh=-1,bi=0;
+            ev.forEach(function(x,i){if(x.bullRank>bb||(x.bullRank===bb&&x.highCard>bh)){bb=x.bullRank;bh=x.highCard;bi=i;}});
+            setScores(function(p){var n=Object.assign({},p);n[bi]=(n[bi]||0)+1;return n;});
+            setWinner(bi);
+          }else{
+            // Battle mode: calculate chips
+            var dealerEv=ev[dealer];
+            var deltas={};for(var ii=0;ii<pc;ii++)deltas[ii]=0;
+            for(var ci2=0;ci2<pc;ci2++){
+              if(ci2===dealer)continue;
+              var childEv=ev[ci2];
+              var dealerWins=dealerEv.bullRank>childEv.bullRank||(dealerEv.bullRank===childEv.bullRank&&dealerEv.highCard>childEv.highCard);
+              var bet=bets[ci2]||1;
+              var mult;
+              if(betRule==="offset"){mult=calcMultiplierOffset(dealerEv.bullValue,childEv.bullValue);}
+              else{mult=dealerWins?calcMultiplierNoOffset(dealerEv.bullValue):calcMultiplierNoOffset(childEv.bullValue);}
+              var amount=Math.round(bet*mult);
+              if(dealerWins){deltas[dealer]+=amount;deltas[ci2]-=amount;}
+              else{deltas[dealer]-=amount;deltas[ci2]+=amount;}
+            }
+            setRoundDeltas(deltas);
+            setChips(function(prev){var n=Object.assign({},prev);for(var k in deltas)n[k]=(n[k]||0)+deltas[k];return n;});
+            // Find biggest winner for crown
+            var bestDelta=-Infinity,bestIdx=0;
+            for(var k2 in deltas){if(deltas[k2]>bestDelta){bestDelta=deltas[k2];bestIdx=parseInt(k2);}}
+            setWinner(bestIdx);
+            // Save history
+            setHistory(function(prev){return prev.concat([{round:roundNum+1,dealer:dealer,results:ev,deltas:deltas,bets:Object.assign({},bets)}]);});
+          }
+          setPhase("result");
           if(soundOn){SFX.win();setTimeout(launchConfetti,100);}
         },400);
       }
@@ -697,232 +1302,817 @@ function NiuNiu(){
     });
   }
 
-  function visSet(pi){return revealedCards[pi]||new Set();}
-  function findPartialBull(pi){
-    var rc=revealedCards[pi],c=hands[pi];if(!c||!rc||rc.size<3||rc.size===5)return null;
-    var vi=Array.from(rc);
-    for(var a=0;a<vi.length;a++)for(var b=a+1;b<vi.length;b++)for(var d=b+1;d<vi.length;d++){
-      if((rankPoints(c[vi[a]].rank)+rankPoints(c[vi[b]].rank)+rankPoints(c[vi[d]].rank))%10===0)return new Set([vi[a],vi[b],vi[d]]);}
-    return null;
-  }
-  function partialInfo(pi){
-    var rc=revealedCards[pi],c=hands[pi];if(!c||!rc||rc.size<3||rc.size===5)return null;
-    var idx=Array.from(rc),sum=idx.reduce(function(a,i){return a+rankPoints(c[i].rank);},0);
-    return{text:idx.length+"枚合計: "+sum,bullSet:findPartialBull(pi)};
+  // ─── SPLASH Screen ──────────────────────────────────────────
+  if(appMode==="splash"){
+    return e("div",{style:{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
+      background:"radial-gradient(ellipse at 50% 50%,rgba(20,60,30,0.4) 0%,#0a1a0f 70%)",animation:"splashFadeOut 2.2s ease forwards"},
+      onClick:function(){setAppMode("home");}},
+      // Logo: Card shape with 牛牛
+      e("div",{style:{animation:"splashIn 0.8s ease both,splashGlow 1.5s ease-in-out infinite",position:"relative"}},
+        // Card outline
+        e("div",{style:{width:120,height:168,borderRadius:14,position:"relative",
+          background:"linear-gradient(145deg,#0d2818 0%,#1a4030 50%,#0d2818 100%)",
+          border:"2px solid rgba(212,175,55,0.4)",
+          boxShadow:"0 8px 40px rgba(0,0,0,0.5),0 0 30px rgba(212,175,55,0.1),inset 0 1px 0 rgba(212,175,55,0.2)",
+          display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",overflow:"hidden"}},
+          // Corner marks
+          e("div",{style:{position:"absolute",top:8,left:10,fontSize:11,fontWeight:900,color:"var(--accent)",lineHeight:1,textAlign:"center"}},
+            e("div",null,"牛"),e("div",{style:{fontSize:9}},"♠")),
+          e("div",{style:{position:"absolute",bottom:8,right:10,fontSize:11,fontWeight:900,color:"#c0392b",lineHeight:1,textAlign:"center",transform:"rotate(180deg)"}},
+            e("div",null,"牛"),e("div",{style:{fontSize:9}},"♥")),
+          // Center design
+          e("div",{style:{display:"flex",gap:2,marginBottom:4}},
+            e("span",{style:{fontSize:36,fontWeight:900,color:"var(--accent)",fontFamily:"'Playfair Display',serif",textShadow:"0 2px 10px rgba(212,175,55,0.4)"}},"牛"),
+            e("span",{style:{fontSize:36,fontWeight:900,color:"#c0392b",fontFamily:"'Playfair Display',serif",textShadow:"0 2px 10px rgba(192,57,43,0.4)"}},"牛")),
+          // Decorative border inside
+          e("div",{style:{position:"absolute",top:24,left:14,right:14,bottom:24,borderRadius:6,border:"1px solid var(--card-border)"}}),
+          // Small suits in corners of inner border
+          e("div",{style:{position:"absolute",top:28,left:18,fontSize:8,color:"rgba(212,175,55,0.3)"}},"♠"),
+          e("div",{style:{position:"absolute",top:28,right:18,fontSize:8,color:"rgba(192,57,43,0.3)"}},"♥"),
+          e("div",{style:{position:"absolute",bottom:28,left:18,fontSize:8,color:"rgba(192,57,43,0.3)"}},"♦"),
+          e("div",{style:{position:"absolute",bottom:28,right:18,fontSize:8,color:"rgba(212,175,55,0.3)"}},"♣"))),
+      // Text below card
+      e("div",{style:{marginTop:20,textAlign:"center",animation:"splashIn 1s ease 0.3s both"}},
+        e("div",{style:{fontSize:13,fontWeight:700,letterSpacing:8,color:"var(--accent)",fontFamily:"'Playfair Display',serif"}},"NIU NIU"),
+        e("div",{style:{fontSize:9,color:"#5a8a5a",marginTop:6,letterSpacing:2}},"いつでも、どこでも。")));
   }
 
-  var sm=pc>4;
-  // Card sizes: maximize within 2-col layout (each col ~170px on mobile)
-  var cw=pc>=5?52:pc>=4?56:CW;
-  var ch=pc>=5?78:pc>=4?84:CH;
+  // ─── HOME Screen ───────────────────────────────────────────
+  if(appMode==="home"){
+    return e("div",{style:{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",padding:20,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:500,margin:"0 auto",textAlign:"center",width:"100%"}},
+        // Logo area with decorative line
+        e("div",{style:{marginBottom:40}},
+          e("div",{style:{width:40,height:1,background:"linear-gradient(90deg,transparent,var(--accent),transparent)",margin:"0 auto 16px"}}),
+          e("div",{style:{display:"flex",justifyContent:"center",gap:4,marginBottom:6,animation:"float 3s ease-in-out infinite"}},
+            e("span",{style:{fontSize:52,fontWeight:900,color:"var(--accent)",textShadow:"0 2px 20px rgba(212,175,55,0.3),0 0 40px rgba(212,175,55,0.1)",fontFamily:"'Playfair Display','Noto Serif JP',serif"}},"牛"),
+            e("span",{style:{fontSize:52,fontWeight:900,color:"#c0392b",textShadow:"0 2px 20px rgba(192,57,43,0.3),0 0 40px rgba(192,57,43,0.1)",fontFamily:"'Playfair Display','Noto Serif JP',serif"}},"牛")),
+          e("div",{style:{fontSize:13,fontWeight:700,letterSpacing:6,color:"var(--accent)",opacity:0.7,fontFamily:"'Playfair Display',serif"}},"NIU NIU"),
+          e("div",{style:{width:40,height:1,background:"linear-gradient(90deg,transparent,var(--accent),transparent)",margin:"12px auto"}})),
+        // Main mode buttons - 2 column grid
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:14}},
+          // Flip mode
+          e("button",{onClick:function(){setAppMode("flip");setPhase("setup");if(soundOn)SFX.buttonClick();},
+            style:{padding:"28px 16px",borderRadius:16,border:"1px solid var(--card-border)",
+              background:"linear-gradient(135deg,rgba(212,175,55,0.1) 0%,var(--card) 100%)",
+              cursor:"pointer",textAlign:"center",fontFamily:"inherit",minHeight:160,
+              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,
+              boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(212,175,55,0.1)",
+              transition:"transform 0.15s ease"}},
+            e("div",{style:{width:64,height:64,borderRadius:16,background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",display:"flex",alignItems:"center",justifyContent:"center",fontSize:32,boxShadow:"0 4px 14px rgba(212,175,55,0.4)"}},"🎴"),
+            e("div",null,
+              e("div",{style:{fontSize:16,fontWeight:800,color:"var(--text)",letterSpacing:1,marginBottom:4}},"フリップ"),
+              e("div",{style:{fontSize:9,color:"var(--text-muted)",lineHeight:1.5}},"サクッと勝負"))),
+          // Battle mode
+          e("button",{onClick:function(){setAppMode("battle");setPhase("setup");if(soundOn)SFX.buttonClick();},
+            style:{padding:"28px 16px",borderRadius:16,border:"1px solid rgba(192,57,43,0.2)",
+              background:"linear-gradient(135deg,rgba(192,57,43,0.1) 0%,var(--card) 100%)",
+              cursor:"pointer",textAlign:"center",fontFamily:"inherit",minHeight:160,
+              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,
+              boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(192,57,43,0.1)",
+              transition:"transform 0.15s ease"}},
+            e("div",{style:{width:64,height:64,borderRadius:16,background:"linear-gradient(135deg,#c0392b,#962d22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:32,boxShadow:"0 4px 14px rgba(192,57,43,0.4)"}},"⚔️"),
+            e("div",null,
+              e("div",{style:{fontSize:16,fontWeight:800,color:"var(--text)",letterSpacing:1,marginBottom:4}},"対戦"),
+              e("div",{style:{fontSize:9,color:"var(--text-muted)",lineHeight:1.5}},"親子＋チップ計算")))),
+        // Sub buttons - 2 column
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}},
+          e("button",{onClick:function(){setAppMode("rulebook");if(soundOn)SFX.buttonClick();},
+            style:{padding:"14px 16px",borderRadius:12,border:"1px solid var(--card-border)",
+              background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
+              display:"flex",alignItems:"center",justifyContent:"center",gap:8}},
+            e("span",{style:{fontSize:18}},"📖"),
+            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"遊び方")),
+          e("button",{onClick:function(){setAppMode("shop");setShopTab("shop");if(soundOn)SFX.buttonClick();},
+            style:{padding:"14px 16px",borderRadius:12,border:"1px solid var(--card-border)",
+              background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
+              display:"flex",alignItems:"center",justifyContent:"center",gap:8}},
+            e("span",{style:{fontSize:18}},"🛍️"),
+            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"ショップ"))),
+        // Footer
+        e("div",{style:{marginTop:36,opacity:0.3,fontSize:9,color:"var(--text-muted)",letterSpacing:2}},"v1.0")));
+  }
 
-  // ─── Setup screen ──────────────────────────────────────────
+  // ─── SHOP Screen ──────────────────────────────────────────
+  if(appMode==="shop"){
+    var shCard={padding:"14px 16px",borderRadius:12,background:"var(--card)",border:"1px solid var(--card-border)",marginBottom:12,boxShadow:"0 2px 12px rgba(0,0,0,0.2)"};
+    var shKids=[];
+
+    // Header
+    shKids.push(e("div",{key:"hdr",style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}},
+      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 戻る"),
+      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},"🛍️ ショップ"),
+      e("div",{style:{width:50}})));
+
+    // Tab bar
+    var shTabs=[{id:"shop",label:"購入"},{id:"skins",label:"カード"},{id:"tables",label:"背景"},{id:"sounds",label:"音"}];
+    shKids.push(e("div",{key:"tabs",style:{display:"flex",gap:0,marginBottom:16,borderRadius:10,overflow:"hidden",border:"1px solid var(--card-border)"}},
+      shTabs.map(function(t){
+        var sel=shopTab===t.id;
+        return e("button",{key:t.id,onClick:function(){setShopTab(t.id);},style:{
+          flex:1,padding:"9px 0",fontSize:11,fontWeight:sel?800:400,cursor:"pointer",fontFamily:"inherit",border:"none",
+          background:sel?"rgba(212,175,55,0.15)":"rgba(0,0,0,0.2)",
+          color:sel?"#d4af37":"#6b8f6b",
+          borderBottom:sel?"2px solid #d4af37":"2px solid transparent"}},t.label);
+      })));
+
+    // ─── 購入 TAB ───
+    if(shopTab==="shop"){
+      SHOP_ITEMS.forEach(function(item){
+        var owned=purchased[item.id]||purchased.allpass;
+        shKids.push(e("div",{key:item.id,style:Object.assign({},shCard,item.highlight?{border:"1.5px solid var(--accent)",background:"var(--btn-bg)"}:{})},
+          e("div",{style:{display:"flex",alignItems:"center",gap:12}},
+            e("div",{style:{fontSize:28,width:40,textAlign:"center"}},item.icon),
+            e("div",{style:{flex:1}},
+              e("div",{style:{display:"flex",alignItems:"center",gap:6}},
+                e("span",{style:{fontSize:14,fontWeight:800,color:"var(--text)"}},item.name),
+                item.highlight?e("span",{style:{fontSize:8,fontWeight:700,color:"var(--accent)",background:"var(--tab-active)",padding:"1px 5px",borderRadius:3}},"お得"):null),
+              e("div",{style:{fontSize:10,color:"var(--text-muted)",marginTop:2}},item.desc)),
+            owned?
+              e("div",{style:{fontSize:11,fontWeight:700,color:"#27ae60",padding:"6px 12px"}},"✓ 購入済"):
+              e("button",{onClick:function(){doPurchase(item.id);if(soundOn)SFX.buttonClick();},style:{
+                padding:"8px 14px",borderRadius:8,fontSize:12,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+                background:item.highlight?"linear-gradient(135deg,#d4af37,#b8960c)":"rgba(212,175,55,0.1)",
+                color:item.highlight?"#0a1a0f":"#d4af37",
+                border:item.highlight?"none":"1px solid rgba(212,175,55,0.3)",
+                boxShadow:item.highlight?"0 2px 8px rgba(212,175,55,0.3)":"none"}},item.price))));
+      });
+      shKids.push(e("div",{key:"note",style:{fontSize:9,color:"var(--text-dim)",textAlign:"center",marginTop:8,lineHeight:1.6}},
+        "※ 現在はデモ版です。実際の課金はCapacitor移行後に実装されます。",e("br"),
+        "購入ボタンを押すとこのセッション中のみ解放されます。"));
+    }
+
+    // ─── カード TAB ───
+    if(shopTab==="skins"){
+      // Preview: current back + face side by side
+      shKids.push(e("div",{key:"skprev",style:Object.assign({},shCard,{textAlign:"center"})},
+        e("div",{style:{fontSize:10,color:"var(--accent)",fontWeight:700,marginBottom:8}},"現在のカードデザイン"),
+        e("div",{style:{display:"flex",justifyContent:"center",gap:8}},
+          e(CardBack,{w:48,h:72,skin:curSkin}),
+          e(CardFace,{card:{rank:"K",suit:"♠"},w:48,h:72,showRank:true,faceTheme:curFace}),
+          e(CardFace,{card:{rank:"7",suit:"♥"},w:48,h:72,showRank:true,faceTheme:curFace}))));
+
+      // Back designs
+      shKids.push(e("div",{key:"backlabel",style:{fontSize:11,fontWeight:700,color:"var(--accent)",marginBottom:6,marginTop:4}},"裏面デザイン"));
+      shKids.push(e("div",{key:"sklist",style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:14}},
+        CARD_SKINS.map(function(sk){
+          var sel=skinId===sk.id;
+          var unlocked=canUse("skins",sk.id);
+          return e("button",{key:sk.id,onClick:function(){if(unlocked){setSkinId(sk.id);if(soundOn)SFX.buttonClick();}},
+            style:{padding:8,borderRadius:10,cursor:unlocked?"pointer":"default",fontFamily:"inherit",textAlign:"center",
+              background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid #d4af37":"1px solid rgba(212,175,55,0.08)",
+              opacity:unlocked?1:0.5}},
+            e("div",{style:{display:"flex",justifyContent:"center",marginBottom:4}},
+              e(CardBack,{w:32,h:48,skin:sk})),
+            e("div",{style:{fontSize:9,fontWeight:sel?700:400,color:sel?"#d4af37":"#8faa8f"}},sk.name),
+            !unlocked?e("div",{style:{fontSize:7,color:"#c0392b",marginTop:1}},"🔒"):
+            sel?e("div",{style:{fontSize:7,color:"#27ae60",marginTop:1}},"✓"):null);
+        })));
+
+      // Face designs
+      shKids.push(e("div",{key:"facelabel",style:{fontSize:11,fontWeight:700,color:"var(--accent)",marginBottom:6}},"表面デザイン"));
+      shKids.push(e("div",{key:"facelist",style:{display:"grid",gap:8}},
+        CARD_FACES.map(function(fc){
+          var sel=faceId===fc.id;
+          var unlocked=canUse("faces",fc.id);
+          return e("button",{key:fc.id,onClick:function(){if(unlocked){setFaceId(fc.id);if(soundOn)SFX.buttonClick();}},
+            style:{padding:12,borderRadius:10,cursor:unlocked?"pointer":"default",fontFamily:"inherit",textAlign:"center",
+              background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid #d4af37":"1px solid rgba(212,175,55,0.08)",
+              opacity:unlocked?1:0.5}},
+            e("div",{style:{display:"flex",alignItems:"center",gap:10}},
+              e("div",{style:{display:"flex",gap:2,flexShrink:0}},
+                e(CardFace,{card:{rank:"K",suit:"♠"},w:28,h:42,showRank:true,faceTheme:fc}),
+                e(CardFace,{card:{rank:"7",suit:"♥"},w:28,h:42,showRank:true,faceTheme:fc}),
+                e(CardFace,{card:{rank:"A",suit:"♦"},w:28,h:42,showRank:true,faceTheme:fc})),
+              e("div",{style:{flex:1,textAlign:"left"}},
+                e("div",{style:{fontSize:11,fontWeight:sel?700:500,color:sel?"#d4af37":"#c5d8c5"}},fc.name),
+                e("div",{style:{fontSize:9,color:"var(--text-muted)",marginTop:2}},fc.desc)),
+              !unlocked?e("span",{style:{fontSize:9,color:"#c0392b"}},"🔒"):
+              sel?e("span",{style:{fontSize:9,color:"#27ae60"}},"✓"):null));
+        })));
+    }
+
+    // ─── 背景 TAB ───
+    if(shopTab==="tables"){
+      shKids.push(e("div",{key:"tblist",style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
+        TABLE_BGS.map(function(tb){
+          var sel=tableId===tb.id;
+          var unlocked=canUse("tables",tb.id);
+          return e("button",{key:tb.id,onClick:function(){if(unlocked){setTableId(tb.id);if(soundOn)SFX.buttonClick();}},
+            style:{padding:10,borderRadius:10,cursor:unlocked?"pointer":"default",fontFamily:"inherit",textAlign:"center",
+              background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid #d4af37":"1px solid rgba(212,175,55,0.08)",
+              opacity:unlocked?1:0.5}},
+            // Color preview swatch with accent
+            e("div",{style:{width:"100%",height:40,borderRadius:6,marginBottom:6,position:"relative",
+              background:"radial-gradient(ellipse at 50% 50%,"+tb.grad+","+tb.bg+")",
+              border:"1px solid rgba(255,255,255,0.05)"}},
+              e("div",{style:{position:"absolute",bottom:4,right:6,width:8,height:8,borderRadius:"50%",background:tb.accent}})),
+            e("div",{style:{fontSize:10,fontWeight:sel?700:400,color:sel?"var(--accent)":"var(--text-muted)"}},tb.name),
+            !unlocked?e("div",{style:{fontSize:8,color:"#c0392b",marginTop:2}},"🔒 要購入"):
+            sel?e("div",{style:{fontSize:8,color:"#27ae60",marginTop:2}},"✓ 使用中"):null);
+        })));
+    }
+
+    // ─── 音 TAB ───
+    if(shopTab==="sounds"){
+      shKids.push(e("div",{key:"sdlist",style:{display:"grid",gap:8}},
+        SOUND_PACKS.map(function(sp){
+          var sel=soundPackId===sp.id;
+          var unlocked=canUse("sounds",sp.id);
+          return e("div",{key:sp.id,style:{padding:"12px 16px",borderRadius:10,
+              display:"flex",alignItems:"center",gap:10,
+              background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid #d4af37":"1px solid rgba(212,175,55,0.08)"}},
+            e("span",{style:{fontSize:22}},sp.id==="default"?"🔊":sp.id==="real"?"🎰":sp.id==="retro"?"👾":"🎹"),
+            e("div",{style:{flex:1,textAlign:"left"}},
+              e("div",{style:{fontSize:12,fontWeight:sel?700:400,color:sel?"#d4af37":"#8faa8f"}},sp.name),
+              e("div",{style:{fontSize:9,color:"var(--text-dim)",marginTop:2}},sp.desc)),
+            // Preview button - always available
+            e("button",{onClick:function(){
+              var prev=activeSoundPack;activeSoundPack=sp.id;
+              SFX.deal();
+              setTimeout(function(){SFX.bullFound();},500);
+              setTimeout(function(){SFX.win();activeSoundPack=prev;},1000);
+            },style:{padding:"5px 10px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
+              background:"rgba(212,175,55,0.08)",border:"1px solid var(--card-border)",color:"var(--accent)"}},"♪ 試聴"),
+            // Select/lock
+            unlocked?e("button",{onClick:function(){setSoundPackId(sp.id);},style:{padding:"5px 10px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
+              background:sel?"#27ae60":"rgba(212,175,55,0.08)",border:sel?"none":"1px solid rgba(212,175,55,0.2)",
+              color:sel?"#fff":"#8faa8f"}},sel?"✓ 使用中":"選択"):
+            e("span",{style:{fontSize:9,color:"#c0392b",padding:"5px 6px"}},"🔒 要購入"));
+        })));
+      shKids.push(e("div",{key:"sdnote",style:{fontSize:9,color:"var(--text-dim)",textAlign:"center",marginTop:8}},
+        "全パック試聴可能。使用するには購入が必要です。"));
+    }
+
+    return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},shKids));
+  }
+
+  // ─── RULEBOOK Screen ──────────────────────────────────────
+  if(appMode==="rulebook"){
+    var rbCard={padding:"16px",borderRadius:12,background:"var(--card)",border:"1px solid var(--card-border)",marginBottom:14,boxShadow:"0 2px 12px rgba(0,0,0,0.2)"};
+    var rbTitle={fontSize:14,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1};
+    var rbText={fontSize:11,lineHeight:1.9,color:"#c5d8c5"};
+    var rbSub={fontSize:11,fontWeight:700,color:"var(--text)",marginTop:10,marginBottom:6};
+    var miniW=38,miniH=57;
+
+    function miniCards(arr){
+      return e("div",{style:{display:"flex",gap:3,justifyContent:"center",margin:"8px 0",flexWrap:"wrap"}},
+        arr.map(function(c2,i){return e(CardFace,{key:i,card:{rank:c2[0],suit:c2[1]},w:miniW,h:miniH,showRank:true});}));
+    }
+    function miniCardsHL(arr,hlIdx){
+      return e("div",{style:{display:"flex",gap:3,justifyContent:"center",margin:"8px 0",flexWrap:"wrap"}},
+        arr.map(function(c2,i){return e(CardFace,{key:i,card:{rank:c2[0],suit:c2[1]},w:miniW,h:miniH,showRank:true,highlight:hlIdx.indexOf(i)>=0});}));
+    }
+
+    var rbKids=[];
+
+    // Header + back
+    rbKids.push(e("div",{key:"hdr",style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}},
+      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 戻る"),
+      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},"📖 遊び方"),
+      e("div",{style:{width:50}})));
+
+    // Tab bar
+    var tabs=[{id:"rule",label:"ルール"},{id:"effect",label:"演出"},{id:"mode",label:"モード"}];
+    rbKids.push(e("div",{key:"tabs",style:{display:"flex",gap:0,marginBottom:16,borderRadius:10,overflow:"hidden",border:"1px solid var(--card-border)"}},
+      tabs.map(function(t){
+        var sel=rbTab===t.id;
+        return e("button",{key:t.id,onClick:function(){setRbTab(t.id);},style:{
+          flex:1,padding:"10px 0",fontSize:13,fontWeight:sel?800:400,cursor:"pointer",fontFamily:"inherit",border:"none",
+          background:sel?"rgba(212,175,55,0.15)":"rgba(0,0,0,0.2)",
+          color:sel?"#d4af37":"#6b8f6b",letterSpacing:1,
+          borderBottom:sel?"2px solid #d4af37":"2px solid transparent"}},t.label);
+      })));
+
+    // ─── ルール TAB ──────────────────────────────────
+    if(rbTab==="rule"){
+      rbKids.push(e("div",{key:"r1",style:rbCard},
+        e("div",{style:rbTitle},"基本ルール"),
+        e("div",{style:rbText},
+          "各プレイヤーに5枚のカードが配られます。",e("br"),
+          "5枚のうち3枚の合計が10の倍数になる組み合わせを探します。",e("br"),
+          "これが「牛（ニウ）」です。"),
+        e("div",{style:rbSub},"カードの数え方"),
+        e("div",{style:rbText},"A = 1点 ／ 2〜9 = そのまま ／ 10・J・Q・K = 10点"),
+        e("div",{style:{display:"flex",gap:3,justifyContent:"center",margin:"8px 0"}},
+          e(CardFace,{card:{rank:"A",suit:"♠"},w:miniW,h:miniH,showRank:true}),
+          e("div",{style:{display:"flex",alignItems:"center",fontSize:10,color:"var(--text-muted)"}},"= 1"),
+          e("div",{style:{width:10}}),
+          e(CardFace,{card:{rank:"7",suit:"♥"},w:miniW,h:miniH,showRank:true}),
+          e("div",{style:{display:"flex",alignItems:"center",fontSize:10,color:"var(--text-muted)"}},"= 7"),
+          e("div",{style:{width:10}}),
+          e(CardFace,{card:{rank:"K",suit:"♦"},w:miniW,h:miniH,showRank:true}),
+          e("div",{style:{display:"flex",alignItems:"center",fontSize:10,color:"var(--text-muted)"}},"= 10"))));
+
+      rbKids.push(e("div",{key:"r2",style:rbCard},
+        e("div",{style:rbTitle},"牛の作り方"),
+        e("div",{style:rbText},"3枚の合計が10の倍数 ＝ 牛！ 残り2枚の合計の下一桁が役の強さになります。"),
+        e("div",{style:rbSub},"例：牛7"),
+        miniCardsHL([["K","♠"],["7","♥"],["3","♦"],["5","♣"],["2","♠"]],[0,1,2]),
+        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},"K(10) + 7 + 3 = 20 → 牛！ 残り 5 + 2 = 7 → 牛7"),
+        e("div",{style:rbSub},"例：牛牛（最強の牛）"),
+        miniCardsHL([["10","♠"],["J","♥"],["Q","♦"],["5","♣"],["5","♠"]],[0,1,2]),
+        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},"10 + J(10) + Q(10) = 30 → 牛！ 残り 5 + 5 = 10 → 牛牛！"),
+        e("div",{style:rbSub},"例：无牛（牛なし）"),
+        miniCards([["2","♠"],["3","♥"],["4","♦"],["6","♣"],["8","♠"]]),
+        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},"どの3枚を選んでも10の倍数にならない → 无牛")));
+
+      rbKids.push(e("div",{key:"r3",style:rbCard},
+        e("div",{style:rbTitle},"役一覧（弱い順）"),
+        e("div",{style:Object.assign({},rbSub,{marginTop:4})},"无牛"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)"}},"牛が作れない。最弱。"),
+        e("div",{style:rbSub},"牛1 〜 牛9"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)"}},"残り2枚の下一桁。数字が大きいほど強い。"),
+        e("div",{style:rbSub},"牛牛！"),
+        miniCardsHL([["J","♠"],["Q","♥"],["K","♦"],["10","♣"],["10","♠"]],[0,1,2]),
+        e("div",{style:{fontSize:10,color:"var(--accent)"}},"残り2枚も10の倍数。倍率10倍。"),
+        e("div",{style:rbSub},"五小牛！"),
+        miniCards([["A","♠"],["A","♥"],["3","♦"],["5","♣"],["5","♠"]]),
+        e("div",{style:{fontSize:10,color:"var(--accent)"}},"全て5以下で牛が作れない。倍率15倍。"),
+        e("div",{style:rbSub},"五花牛！"),
+        miniCards([["J","♠"],["Q","♥"],["K","♦"],["J","♣"],["Q","♠"]]),
+        e("div",{style:{fontSize:10,color:"var(--accent)"}},"全てJ/Q/K。倍率15倍。"),
+        e("div",{style:rbSub},"炸弹牛！"),
+        miniCards([["7","♠"],["7","♥"],["7","♦"],["7","♣"],["K","♠"]]),
+        e("div",{style:{fontSize:10,color:"var(--accent)"}},"4枚が同じ数字。倍率20倍。"),
+        e("div",{style:rbSub},"SF牛！！"),
+        miniCards([["5","♥"],["6","♥"],["7","♥"],["8","♥"],["9","♥"]]),
+        e("div",{style:{fontSize:10,color:"#c0392b",fontWeight:700}},"5枚連番＋同じスート。倍率30倍。"),
+        e("div",{style:rbSub},"RF牛！！"),
+        miniCards([["10","♠"],["J","♠"],["Q","♠"],["K","♠"],["A","♠"]]),
+        e("div",{style:{fontSize:10,color:"#c0392b",fontWeight:700}},"10-J-Q-K-A 同スート。最強。倍率50倍。")));
+
+      rbKids.push(e("div",{key:"r4",style:rbCard},
+        e("div",{style:rbTitle},"同じ役の場合"),
+        e("div",{style:rbText},"同じ役同士はハイカード（最も強い1枚）で比較します。"),
+        e("div",{style:rbSub},"カードの強さ"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
+          "数字: K > Q > J > 10 > 9 > ... > 2 > A",e("br"),
+          "スート: ♠ > ♥ > ♦ > ♣",e("br"),
+          "例: K♠ が最強、A♣ が最弱")));
+    }
+
+    // ─── 演出 TAB ──────────────────────────────────
+    if(rbTab==="effect"){
+      // 絞り解説
+      rbKids.push(e("div",{key:"e1",style:rbCard},
+        e("div",{style:rbTitle},"絞り（スクイーズ）の楽しみ方"),
+        e("div",{style:rbText},
+          "3枚をオープンした後、残り2枚はドラッグして少しずつめくります。",e("br"),
+          "絞り中はスートマーク（♠♥♦♣）だけが見え、数字は隠されています。",e("br"),
+          "マークの本数や位置から数字を推理するのが醍醐味です！")));
+
+      // 縦絞り
+      rbKids.push(e("div",{key:"e2",style:rbCard},
+        e("div",{style:rbTitle},"縦絞り（上から少しめくる）"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},"カードの上端に見えるマークの本数で判別できます。"),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"絵柄あり → J〜K"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"J",suit:"♠"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"Q",suit:"♥"},w:32,h:48,showRank:false}))),
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"マークなし → A"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"A",suit:"♦"},w:32,h:48,showRank:false}))),
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"上に1本 → 2 or 3"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"2",suit:"♠"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"3",suit:"♥"},w:32,h:48,showRank:false}))),
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"上に2本 → 4〜10"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"4",suit:"♦"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"7",suit:"♣"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"10",suit:"♥"},w:32,h:48,showRank:false}))))));
+
+      // 横絞り
+      rbKids.push(e("div",{key:"e3",style:rbCard},
+        e("div",{style:rbTitle},"横絞り（横から少しめくる）"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},"左右に見えるマークの列数（サイド数）で更に絞り込めます。"),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"絵柄 → J〜K"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"K",suit:"♠"},w:32,h:48,showRank:false}))),
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"なし → A, 2, 3"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"A",suit:"♠"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"3",suit:"♥"},w:32,h:48,showRank:false}))),
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"2サイド → 4, 5"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"4",suit:"♦"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"5",suit:"♣"},w:32,h:48,showRank:false}))),
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"3サイド → 6, 7, 8"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"6",suit:"♠"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"7",suit:"♥"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"8",suit:"♦"},w:32,h:48,showRank:false}))),
+          e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)",gridColumn:"1 / -1"}},
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"4サイド → 9, 10"),
+            e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
+              e(CardFace,{card:{rank:"9",suit:"♣"},w:32,h:48,showRank:false}),
+              e(CardFace,{card:{rank:"10",suit:"♠"},w:32,h:48,showRank:false}))))));
+
+      // 絞り練習
+      rbKids.push(e("div",{key:"e4",style:rbCard},
+        e("div",{style:rbTitle},"絞り練習"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},"実際にカードを絞って練習してみましょう！"),
+        e(SqueezeTrainer)));
+
+      // 先告知演出
+      rbKids.push(e("div",{key:"e5",style:rbCard},
+        e("div",{style:rbTitle},"先告知演出"),
+        e("div",{style:rbText},"「先バレ」モードでは、絞りの前にヒントが出ることがあります。"),
+        e("div",{style:rbSub},"🔴 赤オーラ — 信頼度 約40%"),
+        e("div",{style:{display:"flex",alignItems:"center",gap:12,margin:"8px 0"}},
+          e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite",border:"2px solid rgba(180,30,30,0.5)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
+          e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite",border:"2px solid rgba(180,30,30,0.5)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
+          e("div",{style:{flex:1,fontSize:10,color:"var(--text-muted)",lineHeight:1.7}},"4・5枚目が赤く脈動。",e("br"),"出ても牛牛とは限らない。")),
+        e("div",{style:rbSub},"👻 違和感 — 信頼度 約70%"),
+        e("div",{style:{display:"flex",alignItems:"center",gap:12,margin:"8px 0"}},
+          e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite",border:"1px solid rgba(255,255,255,0.15)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
+          e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite",border:"1px solid rgba(255,255,255,0.15)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
+          e("div",{style:{flex:1,fontSize:10,color:"var(--text-muted)",lineHeight:1.7}},"微妙に振動・チラつく。",e("br"),"赤よりも期待度が高い。")),
+        e("div",{style:rbSub},"🌈✨ プレミア演出 — 信頼度 ???"),
+        e("div",{style:{display:"flex",alignItems:"center",gap:12,margin:"8px 0"}},
+          e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertRainbow 1.2s linear infinite,alertBorderRainbow 1.2s linear infinite",border:"2px solid #f00",padding:1}},e(CardBack,{w:miniW,h:miniH})),
+          e("div",{style:{fontSize:20,animation:"squeezePulse 1.5s ease-in-out infinite"}},"？"),
+          e("div",{style:{flex:1,fontSize:10,color:"var(--accent)",lineHeight:1.7}},"超激レア。",e("br"),"出たら...？ お楽しみに。"))));
+    }
+
+    // ─── モード TAB ──────────────────────────────────
+    if(rbTab==="mode"){
+      // フリップモード
+      rbKids.push(e("div",{key:"m1",style:rbCard},
+        e("div",{style:rbTitle},"🎴 フリップモード"),
+        e("div",{style:rbText},"気軽に遊べるモード。全プレイヤーが対等に勝負します。"),
+        e("div",{style:rbSub},"遊び方"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
+          "1. 人数・名前を設定してゲーム開始",e("br"),
+          "2. 全員に5枚ずつ配られる",e("br"),
+          "3. 各自「3枚オープン」→ 残り2枚を絞る",e("br"),
+          "4. 全員オープン後、最も強い役のプレイヤーが1点獲得",e("br"),
+          "5. 「次のラウンド」で繰り返し"),
+        e("div",{style:rbSub},"勝敗の決まり方"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
+          "役が強い人が勝ち。同じ役ならハイカード比較。",e("br"),
+          "チップ計算なし、シンプルに楽しめます。")));
+
+      // 対戦モード
+      rbKids.push(e("div",{key:"m2",style:rbCard},
+        e("div",{style:rbTitle},"⚔️ 対戦モード"),
+        e("div",{style:rbText},"親子対戦＋チップ計算で本格的に遊ぶモードです。"),
+        e("div",{style:rbSub},"基本の流れ"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
+          "1. 人数・名前・倍率ルール・演出モードを設定",e("br"),
+          "2. 毎ラウンド「親」を1人選ぶ",e("br"),
+          "3. 親がMAXベット額を決める",e("br"),
+          "4. 各子がベット額を決める（1〜MAX）",e("br"),
+          "5. カードを配り、全員絞りオープン",e("br"),
+          "6. 親 vs 各子で1対1の勝負 → チップ精算",e("br"),
+          "7. 次のラウンドへ（親を選び直す）",e("br"),
+          "8. いつでも「集計」ボタンで終了→結果発表")));
+
+      // チップの動き アニメーションデモ
+      rbKids.push(e("div",{key:"m2a",style:rbCard},
+        e("div",{style:rbTitle},"チップの動き"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},"親 vs 各子で1対1勝負。勝てば＋、負ければ−。"),
+        // Animated demo: dealer vs 2 children
+        e(ChipFlowDemo)));
+
+      // 倍率ルール
+      rbKids.push(e("div",{key:"m3",style:rbCard},
+        e("div",{style:rbTitle},"倍率ルール"),
+        e("div",{style:rbSub},"相殺あり — 堅実な勝負"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
+          "倍率 = 親と子の役の倍率の差。",e("br"),
+          "役が近いほど差が小さくなり、穏やかな勝負に。"),
+        e("div",{style:{padding:"8px 10px",borderRadius:8,background:"rgba(0,0,0,0.2)",margin:"8px 0",fontSize:10,color:"#c5d8c5",lineHeight:1.8}},
+          "差が0（同役ハイカード） → 1倍",e("br"),
+          "差が1（例: 牛5 vs 牛4） → 1.5倍",e("br"),
+          "差が2以上 → 差がそのまま倍率"),
+        e("div",{style:rbSub},"相殺なし — 激しい勝負"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
+          "倍率 = 勝った側の役の倍率がそのまま。",e("br"),
+          "強い役で勝つほど大きく得し、接戦でも荒れる。"),
+        e("div",{style:{padding:"8px 10px",borderRadius:8,background:"rgba(0,0,0,0.2)",margin:"8px 0",fontSize:10,color:"#c5d8c5",lineHeight:1.8}},
+          "例: 親 牛8(8倍) vs 子 牛7(7倍)",e("br"),
+          "　相殺あり → 1.5倍",e("br"),
+          "　相殺なし → 8倍（約5倍の差！）"),
+        e("div",{style:{fontSize:10,color:"var(--accent)",marginTop:6}},"相殺なしは相殺ありの約2〜3倍荒い体感です。")));
+
+      // 集計
+      rbKids.push(e("div",{key:"m4",style:rbCard},
+        e("div",{style:rbTitle},"集計"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
+          "いつでも「📊 集計して終了」を押せます。",e("br"),
+          "最終ランキング（チップ順）と全ラウンドの履歴が表示されます。",e("br"),
+          "各ラウンドの親・役・チップ増減を振り返れます。")));
+    }
+
+    return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},rbKids));
+  }
+
+  // ─── SETUP Screen ──────────────────────────────────────────
   if(phase==="setup"){
-    return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},
-      e("div",{style:{maxWidth:420,margin:"0 auto",padding:"26px 16px",textAlign:"center"}},
-        e("div",{style:{display:"flex",justifyContent:"center",gap:6,marginBottom:8,animation:"float 3s ease-in-out infinite"}},
-          e("span",{style:{fontSize:48,fontWeight:900,color:"#e6b422",textShadow:"0 0 18px rgba(230,180,34,0.35)"}},"牛"),
-          e("span",{style:{fontSize:48,fontWeight:900,color:"#c0392b",textShadow:"0 0 18px rgba(192,57,43,0.35)"}},"牛")),
-        e("h1",{style:{fontSize:22,fontWeight:900,margin:"4px 0 2px",letterSpacing:3,background:"linear-gradient(90deg,#e6b422,#f0d060)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}},"牛牛 — Niu Niu"),
-        e("p",{style:{color:"#555",fontSize:11,letterSpacing:2}},"中国式カードゲーム"),
-        e("div",{style:{margin:"22px 0 12px"}},
-          e("label",{style:{color:"#777",fontSize:10}},"プレイヤー人数"),
-          e("div",{style:{display:"flex",gap:7,justifyContent:"center",marginTop:7}},
-            [2,3,4,5,6].map(function(n){return e("button",{key:n,onClick:function(){setPc(n);if(soundOn)SFX.buttonClick();},style:{padding:"7px 12px",borderRadius:7,fontSize:12,cursor:"pointer",
-              background:pc===n?"#e6b422":"rgba(255,255,255,0.06)",color:pc===n?"#1a1a2e":"#aaa",fontWeight:pc===n?800:400,
-              border:pc===n?"2px solid #e6b422":"2px solid rgba(255,255,255,0.07)"}},n+"人");}))),
-        e("div",{style:{margin:"16px 0"}},
-          e("label",{style:{color:"#777",fontSize:10}},"プレイヤー名"),
-          e("div",{style:{display:"grid",gridTemplateColumns:"1fr",gap:6,marginTop:7}},
-            Array.from({length:pc}).map(function(_,i){return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:5}},
-              e("span",{style:{fontSize:17}},PEMOJI[i]),
-              e("input",{value:names[i],onChange:function(ev){var n=names.slice();n[i]=ev.target.value;setNames(n);},maxLength:10,
-                style:{flex:1,padding:"5px 7px",borderRadius:6,border:"1px solid rgba(255,255,255,0.07)",background:"rgba(255,255,255,0.03)",color:"#ccc",fontSize:11,fontFamily:"inherit",outline:"none"}}));}))),
-        e("button",{onClick:startGame,style:{padding:"11px 36px",fontSize:15,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
-          background:"linear-gradient(135deg,#e6b422,#d4a017)",color:"#1a1a2e",letterSpacing:2,marginTop:10,boxShadow:"0 3px 12px rgba(230,180,34,0.22)"}},"ゲーム開始"),
-        e("div",{style:{margin:"20px 0 12px"}},
-          e("label",{style:{color:"#777",fontSize:10}},"ゲームモード"),
-          e("div",{style:{display:"flex",gap:7,justifyContent:"center",marginTop:7}},
-            [
-              {id:"simple",icon:"🃏",name:"シンプル"},
-              {id:"sakibare",icon:"🔮",name:"先バレ"}
-            ].map(function(m){
-              var sel=gameMode===m.id;
-              return e("button",{key:m.id,onClick:function(){setGameMode(m.id);if(soundOn)SFX.buttonClick();},style:{
-                display:"flex",alignItems:"center",gap:5,padding:"8px 16px",borderRadius:8,cursor:"pointer",
-                background:sel?"rgba(230,180,34,0.12)":"rgba(255,255,255,0.04)",
-                border:sel?"2px solid #e6b422":"2px solid rgba(255,255,255,0.07)",
-                color:sel?"#e6b422":"#aaa",fontSize:13,fontWeight:sel?700:400,fontFamily:"inherit",
-                transition:"all 0.2s"}},
-                e("span",{style:{fontSize:16}},m.icon),m.name);
-            }))),
-        e("div",{style:{marginTop:18,padding:11,borderRadius:9,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.04)",textAlign:"left"}},
-          e("h3",{style:{margin:"0 0 5px",color:"#e6b422",fontSize:12}},"📖 遊び方"),
-          e("p",{style:{margin:0,fontSize:11,lineHeight:1.7,color:"#888"}},"5枚配られたカードのうち3枚をオープン。残り2枚はドラッグで絞ります。絞り中はマーク（♠♥♦♣）のみ見え、数字は確定後に表示されます。3枚の合計が10の倍数＝牛。残り2枚の下一桁が役の強さです。"))));
+    var setupKids=[];
+    // Back button
+    setupKids.push(e("div",{key:"back",style:{marginBottom:12}},
+      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← ホームへ")));
+    // Title
+    setupKids.push(e("div",{key:"title",style:{textAlign:"center",marginBottom:18}},
+      e("div",{style:{fontSize:18,fontWeight:800,color:"var(--text)",letterSpacing:2}},appMode==="flip"?"🎴 フリップモード":"⚔️ 対戦モード"),
+      e("div",{style:{width:30,height:1,background:"linear-gradient(90deg,transparent,#d4af37,transparent)",margin:"8px auto"}})));
+
+    // Settings card
+    var cardStyle={padding:"14px 16px",borderRadius:12,background:"var(--card)",border:"1px solid var(--card-border)",marginBottom:12,boxShadow:"0 2px 12px rgba(0,0,0,0.2)"};
+    var labelStyle={color:"var(--accent)",fontSize:10,fontWeight:700,letterSpacing:1,marginBottom:8,display:"block"};
+
+    // Player count
+    setupKids.push(e("div",{key:"pc",style:cardStyle},
+      e("label",{style:labelStyle},"プレイヤー人数"),
+      e("div",{style:{display:"flex",gap:6,justifyContent:"center"}},
+        [2,3,4,5,6].map(function(n){return e("button",{key:n,onClick:function(){setPc(n);if(soundOn)SFX.buttonClick();},style:{padding:"8px 14px",borderRadius:8,fontSize:13,cursor:"pointer",fontFamily:"inherit",
+          background:pc===n?"linear-gradient(135deg,#d4af37,#b8960c)":"rgba(212,175,55,0.06)",color:pc===n?"#0a1a0f":"#8faa8f",fontWeight:pc===n?800:400,
+          border:pc===n?"none":"1.5px solid rgba(212,175,55,0.12)",boxShadow:pc===n?"0 2px 8px rgba(212,175,55,0.3)":"none"}},n+"人");}))));
+
+    // Player names
+    setupKids.push(e("div",{key:"names",style:cardStyle},
+      e("label",{style:labelStyle},"プレイヤー名"),
+      e("div",{style:{display:"grid",gridTemplateColumns:"1fr",gap:6}},
+        Array.from({length:pc}).map(function(_,i){return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:6}},
+          e("span",{style:{fontSize:18,width:26,textAlign:"center"}},PEMOJI[i]),
+          e("input",{value:names[i],onChange:function(ev){var n=names.slice();n[i]=ev.target.value;setNames(n);},maxLength:10,
+            style:{flex:1,padding:"7px 10px",borderRadius:8,border:"1px solid var(--card-border)",background:"rgba(0,0,0,0.2)",color:"var(--text)",fontSize:12,fontFamily:"inherit",outline:"none"}}));}))));
+
+    // Alert mode
+    setupKids.push(e("div",{key:"alert",style:cardStyle},
+      e("label",{style:labelStyle},"演出モード"),
+      e("div",{style:{display:"flex",gap:8,justifyContent:"center"}},
+        [{id:"simple",icon:"🃏",name:"シンプル"},{id:"sakibare",icon:"🔮",name:"先バレ"}].map(function(m){
+          var sel=gameMode===m.id;
+          return e("button",{key:m.id,onClick:function(){setGameMode(m.id);if(soundOn)SFX.buttonClick();},style:{
+            display:"flex",alignItems:"center",gap:6,padding:"10px 18px",borderRadius:10,cursor:"pointer",fontFamily:"inherit",
+            background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
+            border:sel?"1.5px solid #d4af37":"1.5px solid rgba(212,175,55,0.08)",
+            color:sel?"#d4af37":"#8faa8f",fontSize:13,fontWeight:sel?700:400,
+            boxShadow:sel?"0 0 12px rgba(212,175,55,0.1)":"none"}},
+            e("span",{style:{fontSize:18}},m.icon),m.name);}))));
+
+    // Battle-specific settings
+    if(appMode==="battle"){
+      setupKids.push(e("div",{key:"rule",style:cardStyle},
+        e("label",{style:labelStyle},"倍率ルール"),
+        e("div",{style:{display:"flex",gap:8,justifyContent:"center"}},
+          [{id:"offset",name:"相殺あり",desc:"役差で計算"},{id:"nooffset",name:"相殺なし",desc:"勝者の倍率"}].map(function(r){
+            var sel=betRule===r.id;
+            return e("button",{key:r.id,onClick:function(){setBetRule(r.id);if(soundOn)SFX.buttonClick();},style:{
+              padding:"10px 16px",borderRadius:10,cursor:"pointer",fontFamily:"inherit",fontSize:13,fontWeight:sel?700:400,flex:1,
+              background:sel?"rgba(192,57,43,0.12)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid #c0392b":"1.5px solid rgba(212,175,55,0.08)",
+              color:sel?"#c0392b":"#8faa8f",textAlign:"center"}},
+              e("div",null,r.name),
+              e("div",{style:{fontSize:8,color:sel?"rgba(192,57,43,0.7)":"#5a7a5a",marginTop:2}},r.desc));}))));
+    }
+
+    // Start button
+    setupKids.push(e("div",{key:"start",style:{textAlign:"center",marginTop:20}},
+      e("button",{onClick:function(){
+        var sc={};for(var i=0;i<pc;i++)sc[i]=0;
+        setScores(sc);setRoundNum(0);setHistory([]);setRoundDeltas(null);
+        if(soundOn)SFX.buttonClick();
+        if(appMode==="battle"){setChips(sc);setPhase("pickDealer");}
+        else{dealRound(sc);}
+      },style:{padding:"14px 48px",fontSize:16,fontWeight:800,fontFamily:"inherit",borderRadius:12,border:"none",cursor:"pointer",
+        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:3,
+        boxShadow:"0 4px 20px rgba(212,175,55,0.3),inset 0 1px 0 rgba(255,255,255,0.2)"}},"ゲーム開始")));
+
+    return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:420,margin:"0 auto",padding:"12px 0"}},setupKids));
   }
 
-  // ─── Game screen ───────────────────────────────────────────
+  // ─── PICK DEALER Screen (Battle mode) ──────────────────────
+  if(phase==="pickDealer"){
+    return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:420,margin:"0 auto",padding:"20px 16px",textAlign:"center"}},
+        e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}},
+          e("button",{onClick:function(){if(roundNum===0){setPhase("setup");}else{setPhase("result");}},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 戻る"),
+          e("div",{style:{fontSize:16,fontWeight:800,color:"var(--accent)"}},"Round "+(roundNum+1)),
+          e("div",{style:{width:50}})),
+        e("div",{style:{fontSize:12,color:"var(--text-muted)",marginBottom:14}},"親を選択してください"),
+        e("div",{style:{display:"grid",gap:8}},
+          Array.from({length:pc}).map(function(_,i){
+            var cv=chips[i]||0;
+            return e("button",{key:i,onClick:function(){setDealer(i);if(soundOn)SFX.buttonClick();setPhase("betting");},
+              style:{padding:"14px 16px",borderRadius:12,border:"1.5px solid rgba(212,175,55,0.1)",
+                background:"linear-gradient(135deg,var(--card) 0%,rgba(15,35,20,0.92) 100%)",
+                cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:10,
+                boxShadow:"0 2px 8px rgba(0,0,0,0.2)"}},
+              e("span",{style:{fontSize:24}},PEMOJI[i]),
+              e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:14,flex:1,textAlign:"left"}},names[i]),
+              e("span",{style:{fontSize:13,fontWeight:800,color:cv>0?"#27ae60":cv<0?"#e74c3c":"#6b8f6b"}},cv>0?"+"+cv:cv));
+          })),
+        e("div",{style:{marginTop:16}},
+          e("button",{onClick:function(){setPhase("summary");},style:{padding:"8px 20px",borderRadius:7,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:11,cursor:"pointer",fontFamily:"inherit"}},"📊 集計して終了"))));
+  }
+
+  // ─── BETTING Screen (Battle mode) ──────────────────────────
+  if(phase==="betting"){
+    var betKids=[];
+    betKids.push(e("div",{key:"hdr",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}},
+      e("button",{onClick:function(){setPhase("pickDealer");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 親選択"),
+      e("div",{style:{fontSize:14,fontWeight:800,color:"var(--accent)"}},"Round "+(roundNum+1)),
+      e("div",{style:{width:50}})));
+    betKids.push(e("div",{key:"dealer",style:{textAlign:"center",marginBottom:8,fontSize:12,color:"var(--text)"}},
+      e("span",{style:{fontSize:16}},PEMOJI[dealer])," ",e("span",{style:{color:PCOLORS[dealer],fontWeight:700}},names[dealer]),
+      e("span",{style:{fontSize:9,color:"#c0392b",marginLeft:4,fontWeight:700,background:"rgba(192,57,43,0.1)",padding:"1px 5px",borderRadius:3}},"親")));
+
+    // MaxBet setting
+    var mbBtnS={width:30,height:30,borderRadius:6,border:"1px solid rgba(255,255,255,0.1)",background:"rgba(255,255,255,0.05)",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"};
+    betKids.push(e("div",{key:"maxbet",style:{padding:"8px 10px",borderRadius:8,background:"rgba(192,57,43,0.06)",border:"1px solid rgba(192,57,43,0.15)",marginBottom:14}},
+      e("div",{style:{display:"flex",alignItems:"center",justifyContent:"center",gap:4,marginBottom:6}},
+        e("span",{style:{fontSize:10,color:"#c0392b",fontWeight:700}},"MAX"),
+        e("button",{onClick:function(){setMaxBet(function(v){return Math.max(1,v-10);});if(soundOn)SFX.buttonClick();},style:mbBtnS},"-10"),
+        e("button",{onClick:function(){setMaxBet(function(v){return Math.max(1,v-1);});if(soundOn)SFX.buttonClick();},style:Object.assign({},mbBtnS,{width:26})},"-"),
+        e("span",{style:{fontSize:20,fontWeight:800,color:"var(--accent)",minWidth:44,textAlign:"center"}},maxBet),
+        e("button",{onClick:function(){setMaxBet(function(v){return Math.min(200,v+1);});if(soundOn)SFX.buttonClick();},style:Object.assign({},mbBtnS,{width:26})},"+"),
+        e("button",{onClick:function(){setMaxBet(function(v){return Math.min(200,v+10);});if(soundOn)SFX.buttonClick();},style:mbBtnS},"+10")),
+      e("div",{style:{display:"flex",gap:5,justifyContent:"center"}},
+        [10,20,50,100].map(function(v){
+          var sel=maxBet===v;
+          return e("button",{key:v,onClick:function(){setMaxBet(v);if(soundOn)SFX.buttonClick();},style:{padding:"4px 10px",borderRadius:5,fontSize:10,cursor:"pointer",fontFamily:"inherit",
+            background:sel?"#c0392b":"rgba(212,175,55,0.06)",color:sel?"#fff":"#888",fontWeight:sel?700:400,
+            border:sel?"1px solid #c0392b":"1px solid rgba(255,255,255,0.07)"}},v);}))
+    ));
+
+    // Child bets
+    var cbBtnS={width:26,height:26,borderRadius:6,border:"1px solid rgba(255,255,255,0.1)",background:"rgba(255,255,255,0.05)",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"};
+    var betInputs=[];
+    for(var bi=0;bi<pc;bi++){
+      if(bi===dealer)continue;
+      (function(idx){
+        var curBet=bets[idx]||1;
+        betInputs.push(e("div",{key:idx,style:{display:"flex",alignItems:"center",gap:4,marginBottom:8}},
+          e("span",{style:{fontSize:14}},PEMOJI[idx]),
+          e("span",{style:{color:PCOLORS[idx],fontWeight:700,fontSize:10,minWidth:32}},names[idx]),
+          e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.max(1,curBet-10);return n;});if(soundOn)SFX.buttonClick();},style:cbBtnS},"-10"),
+          e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.max(1,curBet-1);return n;});if(soundOn)SFX.buttonClick();},style:Object.assign({},cbBtnS,{width:22})},"-"),
+          e("span",{style:{fontSize:15,fontWeight:800,color:"var(--accent)",minWidth:30,textAlign:"center"}},curBet),
+          e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.min(maxBet,curBet+1);return n;});if(soundOn)SFX.buttonClick();},style:Object.assign({},cbBtnS,{width:22})},"+"),
+          e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.min(maxBet,curBet+10);return n;});if(soundOn)SFX.buttonClick();},style:cbBtnS},"+10"),
+          e("span",{style:{fontSize:8,color:"var(--text-dim)"}},"/"+maxBet)));
+      })(bi);
+    }
+    betKids.push(e("div",{key:"bets"},betInputs));
+    betKids.push(e("div",{key:"go",style:{textAlign:"center",marginTop:14}},
+      e("button",{onClick:function(){dealRound(chips);},style:{padding:"10px 32px",fontSize:14,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
+        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:2,boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},"配る")));
+
+    return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:420,margin:"0 auto",padding:"20px 16px"}},betKids));
+  }
+
+  // ─── SUMMARY Screen (Battle mode) ─────────────────────────
+  if(phase==="summary"){
+    var sumKids=[];
+    sumKids.push(e("div",{key:"title",style:{textAlign:"center",marginBottom:16}},
+      e("div",{style:{fontSize:20,fontWeight:800,color:"var(--accent)"}},"📊 集計"),
+      e("div",{style:{fontSize:11,color:"#7a9a7a",marginTop:4}},history.length+"ラウンド終了")));
+
+    // Final ranking
+    var ranking=Array.from({length:pc}).map(function(_,i){return{idx:i,total:chips[i]||0};});
+    ranking.sort(function(a,b){return b.total-a.total;});
+    sumKids.push(e("div",{key:"ranking",style:{marginBottom:16}},
+      e("div",{style:{fontSize:12,fontWeight:700,color:"#7a9a7a",marginBottom:8}},"最終ランキング"),
+      ranking.map(function(r,pos){
+        return e("div",{key:r.idx,style:{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",marginBottom:4,borderRadius:8,
+          background:pos===0?"rgba(212,175,55,0.08)":"rgba(212,175,55,0.03)",border:pos===0?"1px solid rgba(212,175,55,0.2)":"1px solid rgba(212,175,55,0.04)"}},
+          e("span",{style:{fontSize:14,fontWeight:800,color:pos===0?"#d4af37":"#666",minWidth:20}},pos+1),
+          e("span",{style:{fontSize:16}},PEMOJI[r.idx]),
+          e("span",{style:{color:PCOLORS[r.idx],fontWeight:700,fontSize:13,flex:1}},names[r.idx]),
+          e("span",{style:{fontSize:16,fontWeight:800,color:r.total>0?"#27ae60":r.total<0?"#e74c3c":"#888"}},r.total>0?"+"+r.total:r.total));
+      })));
+
+    // History
+    sumKids.push(e("div",{key:"hist",style:{marginBottom:16}},
+      e("div",{style:{fontSize:12,fontWeight:700,color:"#7a9a7a",marginBottom:8}},"ラウンド履歴"),
+      history.map(function(h,hi){
+        return e("div",{key:hi,style:{padding:"8px 10px",marginBottom:4,borderRadius:8,background:"rgba(212,175,55,0.03)",border:"1px solid rgba(212,175,55,0.04)",fontSize:10}},
+          e("div",{style:{fontWeight:700,color:"var(--accent)",marginBottom:4}},"R"+(hi+1)+" 親:"+PEMOJI[h.dealer]+names[h.dealer]),
+          e("div",{style:{display:"flex",flexWrap:"wrap",gap:6}},
+            Array.from({length:pc}).map(function(_,i){
+              var d=h.deltas[i];
+              return e("span",{key:i,style:{color:d>0?"#27ae60":d<0?"#e74c3c":"#888"}},
+                PEMOJI[i]+h.results[i].label+(d>0?"+"+d:d));
+            })));
+      })));
+
+    sumKids.push(e("div",{key:"actions",style:{textAlign:"center",display:"flex",gap:10,justifyContent:"center"}},
+      e("button",{onClick:function(){setAppMode("home");setPhase("setup");},style:{padding:"10px 24px",fontSize:13,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},"ホームへ"),
+      e("button",{onClick:function(){setPhase("setup");},style:{padding:"10px 24px",fontSize:13,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
+        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},"もう一度")));
+
+    return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:420,margin:"0 auto",padding:"20px 16px"}},sumKids));
+  }
+
+  // ─── GAME Screen (shared for flip & battle) ────────────────
   var gameChildren=[];
 
-  // Header with sound toggle
+  // Header
   var modeLabel=gameMode==="simple"?"🃏":"🔮";
-  gameChildren.push(e("div",{key:"hdr",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:7,padding:"4px 0",borderBottom:"1px solid rgba(255,255,255,0.04)"}},
+  var modeIcon=appMode==="flip"?"🎴":"⚔️";
+  gameChildren.push(e("div",{key:"hdr",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:7,padding:"4px 0",borderBottom:"1px solid var(--card-border)"}},
     e("div",{style:{display:"flex",alignItems:"center",gap:6}},
-      e("span",{style:{fontSize:22,fontWeight:800,color:"#e6b422",fontFamily:"serif"}},"牛牛"),
-      e("span",{style:{color:"#666",fontSize:11}},"R"+roundNum),
-      e("span",{style:{fontSize:11}},modeLabel)),
+      e("span",{style:{fontSize:22,fontWeight:800,color:"var(--accent)",fontFamily:"serif"}},"牛牛"),
+      e("span",{style:{color:"#5a8a5a",fontSize:11}},"R"+roundNum),
+      e("span",{style:{fontSize:11}},modeIcon+modeLabel)),
     e("div",{style:{display:"flex",alignItems:"center",gap:5}},
-      e("button",{onClick:function(){setSoundOn(!soundOn);},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:soundOn?"#e6b422":"#444",fontSize:14,cursor:"pointer"}},soundOn?"🔊":"🔇"),
-      (function(){
-        var types=[null,"cowPip","growBull","rainbow","cow","quake","glitch","red"];
-        var labels={"red":"🔴","glitch":"👻","rainbow":"🌈","cow":"🐮","quake":"🔥","growBull":"🐮grow","cowPip":"🐮pip"};
-        var curIdx=types.indexOf(forceAlert);
-        return e("button",{onClick:function(){var next=types[(curIdx+1)%types.length];setForceAlert(next);},
-          style:{padding:"2px 6px",borderRadius:5,border:"1px solid "+(forceAlert?"rgba(230,180,34,0.5)":"rgba(255,255,255,0.08)"),
-            background:forceAlert?"rgba(230,180,34,0.1)":"transparent",
-            color:forceAlert?"#e6b422":"#444",fontSize:9,cursor:"pointer",fontFamily:"inherit",minWidth:32,textAlign:"center"}},
-          forceAlert?(labels[forceAlert]||""):"🧪");
-      })(),
-      e("button",{onClick:function(){setPhase("setup");setHands([]);setResults([]);setRoundNum(0);setRevealedCards([]);setForceAlert(null);},
-        style:{padding:"3px 10px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#555",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"リセット"))));
+      e("button",{onClick:function(){setSoundOn(!soundOn);},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:soundOn?"#d4af37":"#444",fontSize:14,cursor:"pointer"}},soundOn?"🔊":"🔇"),
+      e("button",{onClick:function(){setAppMode("home");setPhase("setup");setHands([]);setResults([]);setRoundNum(0);setRevealedCards([]);},
+        style:{padding:"3px 10px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-dim)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"リセット"))));
 
   // Scores
-  gameChildren.push(e("div",{key:"scores",style:{display:"flex",justifyContent:"center",gap:12,flexWrap:"wrap",padding:"6px 0",marginBottom:7,borderBottom:"1px solid rgba(255,255,255,0.04)"}},
+  gameChildren.push(e("div",{key:"scores",style:{display:"flex",justifyContent:"center",gap:appMode==="battle"?8:12,flexWrap:"wrap",padding:"6px 0",marginBottom:7,borderBottom:"1px solid var(--card-border)"}},
     Array.from({length:pc}).map(function(_,i){
-      return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:4,fontSize:11}},
+      var chipVal=appMode==="battle"?(chips[i]||0):scores[i]||0;
+      return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:3,fontSize:11}},
         e("span",null,PEMOJI[i]),
-        e("span",{style:{color:PCOLORS[i],fontWeight:700}},names[i]),
-        e("span",{style:{color:"#e6b422",fontWeight:800,fontSize:13}},scores[i]||0));})));
+        e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:10}},names[i]),
+        i===dealer&&appMode==="battle"?e("span",{style:{fontSize:7,color:"#c0392b"}},"親"):null,
+        appMode==="battle"?
+          e("span",{style:{fontWeight:800,fontSize:12,color:chipVal>0?"#27ae60":chipVal<0?"#e74c3c":"#888"}},chipVal>0?"+"+chipVal:chipVal):
+          e("span",{style:{color:"var(--accent)",fontWeight:800,fontSize:12}},chipVal));
+    })));
 
   // Player cards
   var playerBoxes=Array.from({length:pc}).map(function(_,i){
-    var rc=revealedCards[i]||new Set(),res=results[i],isW=winner===i,vs=visSet(i),pi=partialInfo(i),full=rc.size===5;
-    // Determine if alert is active for this player's unrevealed cards
-    var alert=alerts[i];
-    var alertActive=false,alertType=null;
-    if(alert&&!full){
-      if(alert.timing==="three"&&rc.size>=3)alertActive=true;
-      if(alert.timing==="four"&&rc.size>=4)alertActive=true;
-      if(alertActive)alertType=alert.type;
-    }
-
-    var cardEls=hands[i]?hands[i].map(function(card,ci){
-      var vis=vs.has(ci),canSq=phase==="reveal"&&!vis&&rc.size>=3&&(ci===3||ci===4);
-      var partialGlow=!full&&pi&&pi.bullSet&&pi.bullSet.has(ci);
-      var finalGlow=full&&res&&res.hasBull&&res.threeIdx&&res.threeIdx.indexOf(ci)>=0;
-      if(canSq){
-        // Wrap squeeze card with alert glow if active
-        var sqCard=e(SqueezeCard,{key:roundNum+"-"+i+"-"+ci,card:card,small:sm,cw:cw,ch:ch,onRevealed:function(){revealCard(i,ci);}});
-        if(alertActive&&alertType!=="growBull"&&alertType!=="cowPip"){
-          var alertAnim,alertBorder,extraStyle={};
-          if(alertType==="rainbow"){
-            alertAnim="alertRainbow 1.2s linear infinite,alertBorderRainbow 1.2s linear infinite";
-            alertBorder="2px solid #f00";
-          }else if(alertType==="glitch"){
-            alertAnim="alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite";
-            alertBorder="1px solid rgba(255,255,255,0.15)";
-          }else if(alertType==="quake"){
-            alertAnim="alertQuakeCard 0.4s ease-in-out infinite";
-            alertBorder="2px solid rgba(255,100,0,0.5)";
-            extraStyle={boxShadow:"0 0 15px rgba(255,100,0,0.3)"};
-          }else if(alertType==="flash"||alertType==="blackout"){
-            // flash/blackout affect the player box, card just gets a subtle glow
-            alertAnim="bullGlow 1s ease-in-out infinite";
-            alertBorder="2px solid rgba(255,255,255,0.3)";
-          }else if(alertType==="cow"){
-            alertAnim="bullGlow 1.2s ease-in-out infinite";
-            alertBorder="2px solid #e6b422";
-          }else if(alertType==="special"){
-            alertAnim="alertSpecial 1s ease-in-out infinite,alertSpecialBorder 0.8s linear infinite";
-            alertBorder="2px solid #ffd700";
-            extraStyle={boxShadow:"0 0 20px rgba(255,215,0,0.4)"};
-          }else{
-            alertAnim="alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite";
-            alertBorder="2px solid rgba(255,0,0,0.5)";
-          }
-          // For cow type, replace the squeeze card hint with 🐮
-          if(alertType==="cow"){
-            return e("div",{key:roundNum+"-"+i+"-"+ci+"-wrap",style:Object.assign({
-              borderRadius:cw*0.09+4,animation:alertAnim,border:alertBorder,padding:1,position:"relative"
-            },extraStyle)},
-              sqCard,
-              e("div",{style:{position:"absolute",top:0,left:0,right:0,bottom:0,display:"flex",alignItems:"center",justifyContent:"center",
-                pointerEvents:"none",zIndex:10,fontSize:sm?24:32,animation:"squeezePulse 1s ease-in-out infinite"}},"🐮"));
-          }
-          return e("div",{key:roundNum+"-"+i+"-"+ci+"-wrap",style:Object.assign({
-            borderRadius:cw*0.09+4,animation:alertAnim,border:alertBorder,padding:1
-          },extraStyle)},sqCard);
-        }
-        return sqCard;
-      }
-      if(vis){
-        var useCowPip=alertActive&&alertType==="cowPip"&&alert&&ci===alert.cowPipIdx;
-        return e("div",{key:ci,style:{animation:partialGlow?"cardDeal .35s ease "+(ci*0.05)+"s both,bullGlow 1.2s ease-in-out infinite":"cardDeal .35s ease "+(ci*0.05)+"s both",borderRadius:cw*0.09+2}},
-        e(CardFace,{card:card,w:cw,h:ch,showRank:true,highlight:finalGlow||partialGlow,cowPip:useCowPip}));
-      }
-      return e("div",{key:ci,style:{animation:"cardDeal .35s ease "+(ci*0.05)+"s both"}},e(CardBack,{w:cw,h:ch}));}):[];
-
-    var pKids=[];
-    var compactMode=pc>=4;
-    pKids.push(e("div",{key:"ph",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:compactMode?4:7}},
-      e("div",{style:{display:"flex",alignItems:"center",gap:3}},
-        e("span",{style:{fontSize:compactMode?14:17}},PEMOJI[i]),
-        e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:compactMode?10:12}},names[i]),
-        rc.size>=3&&!full?e("span",{style:{fontSize:compactMode?7:9,fontWeight:600,color:"#c084fc",background:"rgba(192,132,252,0.07)",padding:"1px 4px",borderRadius:3}},rc.size===3?"絞り中":"ラスト！"):null),
-      isW?e("span",{style:{fontSize:compactMode?8:10,fontWeight:700,color:"#e6b422",background:"rgba(230,180,34,0.08)",padding:"1px 5px",borderRadius:4}},"👑 勝ち"):null));
-    pKids.push(e("div",{key:"cards"},
-      e("div",{style:{display:"flex",gap:compactMode?2:4,justifyContent:"center",marginBottom:compactMode?2:4}},cardEls.slice(0,3)),
-      e("div",{style:{display:"flex",gap:compactMode?2:4,justifyContent:"center"}},cardEls.slice(3))));
-    if(pi)pKids.push(e("div",{key:"info",style:{marginTop:4,textAlign:"center",fontSize:10,color:"#555",animation:"fadeUp .3s ease"}},
-      pi.text,pi.bullSet?e("span",{style:{color:"#e6b422",marginLeft:4,fontWeight:700,animation:"squeezePulse 1.5s ease-in-out infinite"}},"🐂 牛確定！"):null));
-
-    var actionContent=null;
-    if(full){var indResult=res||evaluateHand(hands[i]);
-      actionContent=e("div",{style:{fontSize:indResult.hasBull?(compactMode?14:19):(compactMode?10:13),fontWeight:800,color:indResult.hasBull?"#e6b422":"#555",fontFamily:"serif",animation:"fadeUp .4s ease"}},indResult.label);
-    }else if(phase==="reveal"&&rc.size===0){
-      actionContent=e("button",{onClick:function(){openThree(i);},style:{padding:compactMode?"3px 14px":"5px 20px",fontSize:compactMode?10:12,fontWeight:700,fontFamily:"inherit",borderRadius:7,border:"1.5px solid #e6b422",background:"transparent",color:"#e6b422",cursor:"pointer",letterSpacing:1}},"3枚オープン");
-    }else if(phase==="reveal"&&rc.size>=3){
-      actionContent=e("div",{style:{fontSize:compactMode?8:10,color:"#c084fc",animation:"squeezePulse 2s ease-in-out infinite",fontWeight:600}},"ドラッグして絞る");
-    }
-    pKids.push(e("div",{key:"action",style:{marginTop:compactMode?3:7,textAlign:"center",minHeight:compactMode?20:28}},actionContent));
-
-    // Determine player box animation
-    var boxAnim=isW?"winPulse 1.5s ease infinite":"none";
-    var boxBg=isW?"linear-gradient(135deg,rgba(230,180,34,0.07) 0%,rgba(10,10,20,0.95) 100%)":"rgba(14,14,28,0.92)";
-    if(alertActive&&alertType==="flash"){
-      boxAnim="alertFlash 1.5s ease-in-out 1";
-    }else if(alertActive&&alertType==="blackout"){
-      boxAnim="alertBlackout 2s ease-in-out 1";
-    }else if(alertActive&&alertType==="quake"){
-      boxAnim="alertQuake 0.5s ease-in-out infinite";
-    }
-
-    // GrowBull: add growing 🐮 emoji in background
-    if(alertActive&&alertType==="growBull"){
-      pKids.push(e("div",{key:"growbull",style:{
-        position:"absolute",top:0,left:0,right:0,bottom:0,
-        display:"flex",alignItems:"center",justifyContent:"center",
-        pointerEvents:"none",zIndex:0,overflow:"hidden",borderRadius:pc>=4?8:11
-      }},e("div",{style:{
-        animation:"growBull 15s ease-in forwards",
-        opacity:0,lineHeight:1
-      }},"🐮")));
-    }
-
-    return e("div",{key:i,style:{padding:pc>=4?7:11,borderRadius:pc>=4?8:11,transition:"all .3s ease",
-      position:"relative",overflow:"hidden",
-      border:isW?"2px solid #e6b422":"1.5px solid "+(rc.size>0?"rgba(255,255,255,0.08)":"rgba(255,255,255,0.03)"),
-      background:boxBg,
-      animation:boxAnim}},pKids);
+    return e(PlayerCards,{key:roundNum+"-"+i,idx:i,hands:hands,revealedCards:revealedCards,results:results,
+      winner:winner,phase:phase,pc:pc,alerts:alerts,roundNum:roundNum,names:names,
+      openThree:openThree,revealCard:revealCard,soundOn:soundOn,
+      isDealer:appMode==="battle"&&i===dealer,
+      chipDelta:roundDeltas?roundDeltas[i]:null,
+      battleMode:appMode==="battle",
+      betAmount:appMode==="battle"?bets[i]:null,
+      cardSkin:curSkin,
+      cardFace:curFace});
   });
 
   var gridCols=pc>=4?"repeat(2,1fr)":"1fr";
   gameChildren.push(e("div",{key:"grid",style:{display:"grid",gridTemplateColumns:gridCols,gap:pc>=5?5:8}},playerBoxes));
 
+  // Next round
   if(phase==="result"){
-    gameChildren.push(e("div",{key:"next",style:{textAlign:"center",marginTop:14,animation:"fadeUp .5s ease"}},
-      e("button",{onClick:function(){if(soundOn)SFX.buttonClick();dealRound(scores);},style:{padding:"9px 30px",fontSize:14,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
-        background:"linear-gradient(135deg,#e6b422,#d4a017)",color:"#1a1a2e",letterSpacing:2,boxShadow:"0 3px 12px rgba(230,180,34,0.22)"}},"次のラウンド →")));
+    gameChildren.push(e("div",{key:"next",style:{textAlign:"center",marginTop:14,animation:"fadeUp .5s ease",display:"flex",gap:10,justifyContent:"center"}},
+      appMode==="battle"?e("button",{onClick:function(){setPhase("summary");},style:{padding:"9px 20px",fontSize:12,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},"📊 集計"):null,
+      e("button",{onClick:function(){
+        if(soundOn)SFX.buttonClick();
+        // Ad check: every 5 rounds, show ad (unless purchased noads/allpass)
+        var nextCount=adCounter+1;
+        setAdCounter(nextCount);
+        if(nextCount%5===0&&!purchased.noads&&!purchased.allpass){
+          setShowAdPlaceholder(true);
+          setTimeout(function(){
+            setShowAdPlaceholder(false);
+            if(appMode==="battle"){setPhase("pickDealer");}
+            else{dealRound(scores);}
+          },3000);
+        }else{
+          if(appMode==="battle"){setPhase("pickDealer");}
+          else{dealRound(scores);}
+        }
+      },style:{padding:"9px 30px",fontSize:14,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
+        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:2,boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},"次のラウンド →")));
+  }
+
+  // Ad placeholder overlay
+  if(showAdPlaceholder){
+    gameChildren.push(e("div",{key:"adoverlay",style:{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:999,
+      background:"rgba(0,0,0,0.85)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
+      animation:"fadeUp 0.3s ease"}},
+      e("div",{style:{padding:"30px 40px",borderRadius:16,background:"rgba(10,26,15,0.95)",border:"1px solid var(--card-border)",textAlign:"center"}},
+        e("div",{style:{fontSize:12,color:"var(--text-muted)",marginBottom:10}},"広告"),
+        e("div",{style:{width:250,height:150,borderRadius:8,background:"rgba(0,0,0,0.3)",border:"1px dashed rgba(212,175,55,0.2)",
+          display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}},
+          e("div",{style:{color:"var(--text-dim)",fontSize:11}},"広告エリア（Capacitor移行後に実装）")),
+        e("div",{style:{fontSize:10,color:"var(--text-dim)"}},"3秒後に自動で閉じます..."),
+        e("div",{style:{marginTop:10}},
+          e("button",{onClick:function(){setAppMode("shop");setShopTab("shop");setShowAdPlaceholder(false);},style:{
+            padding:"5px 14px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
+            background:"transparent",border:"1px solid var(--card-border)",color:"var(--accent)"}},
+            "🚫 広告を消す → ショップ")))));
   }
 
   return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},gameChildren);
@@ -932,7 +2122,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(e(NiuNiu));
 </script>
 
 <div id="install-banner">
-  <span style="color:#e6b422">📲 ホーム画面に追加してアプリとして使えます</span>
+  <span style="color:#d4af37">📲 ホーム画面に追加してアプリとして使えます</span>
   <div style="display:flex;gap:6px">
     <button id="dismiss-btn" onclick="document.getElementById('install-banner').classList.remove('show')">閉じる</button>
     <button id="install-btn" onclick="installApp()">追加</button>

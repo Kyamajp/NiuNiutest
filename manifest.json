@@ -1,29 +1,16 @@
 {
-  "name": "牛牛 — Niu Niu",
+  "name": "牛牛 NiuNiu",
   "short_name": "牛牛",
-  "description": "中国式カードゲーム「牛牛」- ドラッグで絞るスクイーズ体験",
+  "description": "中国式カードゲーム「牛牛」。いつでも、どこでも。",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#060610",
-  "theme_color": "#0e0e24",
-  "lang": "ja",
+  "background_color": "#0a1a0f",
+  "theme_color": "#d4af37",
   "icons": [
-    {
-      "src": "icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-maskable-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    {"src": "icons/icon-192x192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icons/icon-512x512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icons/icon-180x180.png", "sizes": "180x180", "type": "image/png"},
+    {"src": "icons/icon-maskable-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
   ]
 }
