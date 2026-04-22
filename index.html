@@ -306,21 +306,21 @@ function createDeck(){
 function evaluateHand(cards){
   var hc=cardStrength(highestCard(cards));
   // bullValue = 倍率 (支払い計算用), bullRank = 強さ (勝敗判定用)
-  var best={hasBull:false,bullValue:0,bullRank:0,label:"无牛",highCard:hc};
+  var best={hasBull:false,bullValue:0,bullRank:0,label:t("hand.no_bull"),highCard:hc};
   for(var i=0;i<3;i++){for(var j=i+1;j<4;j++){for(var k=j+1;k<5;k++){
     var s3=rankPoints(cards[i].rank)+rankPoints(cards[j].rank)+rankPoints(cards[k].rank);
     if(s3%10===0){
       var rest=cards.filter(function(_,idx){return idx!==i&&idx!==j&&idx!==k;});
       var s2=rankPoints(rest[0].rank)+rankPoints(rest[1].rank);
       var v=s2%10===0?10:s2%10;
-      if(v>best.bullRank)best={hasBull:true,bullValue:v,bullRank:v,threeIdx:[i,j,k],label:v===10?"牛牛！":"牛"+v,highCard:hc};
+      if(v>best.bullRank)best={hasBull:true,bullValue:v,bullRank:v,threeIdx:[i,j,k],label:v===10?t("hand.niuniu"):t("hand.bull")+v,highCard:hc};
     }
   }}}
   var sameSuit=cards.every(function(c){return c.suit===cards[0].suit;});
   if(sameSuit){
     var rankSet={};cards.forEach(function(c){rankSet[c.rank]=true;});
     var isRF=rankSet["10"]&&rankSet["J"]&&rankSet["Q"]&&rankSet["K"]&&rankSet["A"];
-    if(isRF)return Object.assign({},best,{hasBull:true,bullValue:50,bullRank:20,label:"RF牛！！",highCard:hc});
+    if(isRF)return Object.assign({},best,{hasBull:true,bullValue:50,bullRank:20,label:t("hand.rf"),highCard:hc});
     var orders=cards.map(function(c){return RANK_ORDER[c.rank];}).sort(function(a,b){return a-b;});
     var isStraight=true;
     for(var si=1;si<5;si++){if(orders[si]!==orders[si-1]+1){isStraight=false;break;}}
@@ -328,11 +328,11 @@ function evaluateHand(cards){
       var lowAce=orders[0]===1&&orders[1]===2&&orders[2]===3&&orders[3]===4&&orders[4]===5;
       if(lowAce)isStraight=true;
     }
-    if(isStraight)return Object.assign({},best,{hasBull:true,bullValue:30,bullRank:19,label:"SF牛！！",highCard:hc});
+    if(isStraight)return Object.assign({},best,{hasBull:true,bullValue:30,bullRank:19,label:t("hand.sf"),highCard:hc});
   }
-  if(RANKS.some(function(r){return cards.filter(function(c){return c.rank===r;}).length===4;}))return Object.assign({},best,{hasBull:true,bullValue:20,bullRank:18,label:"炸弹牛！",highCard:hc});
-  if(cards.every(function(c){return["J","Q","K"].indexOf(c.rank)>=0;}))return Object.assign({},best,{hasBull:true,bullValue:15,bullRank:15,label:"五花牛！",highCard:hc});
-  if(!best.hasBull&&cards.every(function(c){return rankValue(c.rank)<=5;}))return Object.assign({},best,{hasBull:true,bullValue:15,bullRank:14,label:"五小牛！",highCard:hc});
+  if(RANKS.some(function(r){return cards.filter(function(c){return c.rank===r;}).length===4;}))return Object.assign({},best,{hasBull:true,bullValue:20,bullRank:18,label:t("hand.bomb"),highCard:hc});
+  if(cards.every(function(c){return["J","Q","K"].indexOf(c.rank)>=0;}))return Object.assign({},best,{hasBull:true,bullValue:15,bullRank:15,label:t("hand.five_flower"),highCard:hc});
+  if(!best.hasBull&&cards.every(function(c){return rankValue(c.rank)<=5;}))return Object.assign({},best,{hasBull:true,bullValue:15,bullRank:14,label:t("hand.five_small"),highCard:hc});
   return best;
 }
 
@@ -512,10 +512,11 @@ function CardBack(props){
   }
 
   // Center pattern
-  if(pt==="diamond"&&sk.id!=="default"){
-    // Diamond grid pattern (crimson, midnight)
+  if(pt==="diamond"){
+    // Diamond grid pattern (classic, crimson, midnight)
     var pw=w-m*2-8,ph=h-m*2-8;
-    layers.push(e("div",{key:"pat",style:{position:"absolute",top:m+4,left:m+4,width:pw,height:ph,overflow:"hidden",opacity:0.15,
+    var diamondOpacity=sk.id==="default"?0.12:0.15;
+    layers.push(e("div",{key:"pat",style:{position:"absolute",top:m+4,left:m+4,width:pw,height:ph,overflow:"hidden",opacity:diamondOpacity,
       backgroundImage:"repeating-linear-gradient(45deg,transparent,transparent 4px,"+a+" 4px,"+a+" 4.5px),repeating-linear-gradient(-45deg,transparent,transparent 4px,"+a+" 4px,"+a+" 4.5px)",
       backgroundSize:(w*0.12)+"px "+(w*0.12)+"px"}}));
   }else if(pt==="ornate"){
@@ -543,12 +544,8 @@ function CardBack(props){
       border:"1.5px solid "+a,opacity:0.3,
       background:"radial-gradient(ellipse,"+c[1]+" 0%,transparent 70%)"}}));
   }
-  // default: no pattern, just 牛 mark
-
-  // Center 牛 mark
-  layers.push(e("div",{key:"niu",style:{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",
-    fontSize:Math.max(10,w*0.22),color:a,fontWeight:900,opacity:sk.id==="default"?0.35:0.5,fontFamily:"'Noto Serif JP',serif",
-    textShadow:sk.id==="default"?"none":"0 0 6px "+a.replace(")",",0.2)").replace("rgb","rgba")}},"牛"));
+  // default: no pattern
+  // (Previously had a center 牛 mark - removed for i18n)
 
   return e("div",{style:{width:w,height:h,position:"relative",background:bg,
     borderRadius:r,border:squeeze?"1.5px solid rgba(180,100,255,0.35)":"1px solid rgba(255,255,255,0.08)",overflow:"hidden"}},layers);
@@ -620,7 +617,7 @@ function SqueezeCard(props){
       e("div",{style:{fontSize:10,color:"rgba(212,175,55,0.5)"}},"↑"),
       e("div",{style:{display:"flex",gap:6,alignItems:"center"}},
         e("span",{style:{fontSize:10,color:"rgba(212,175,55,0.5)"}},"←"),
-        e("span",{style:{fontSize:11,color:"rgba(212,175,55,0.7)",fontWeight:700,letterSpacing:1}},"絞"),
+        e("span",{style:{fontSize:11,color:"rgba(212,175,55,0.7)",fontWeight:700,letterSpacing:1}},t("squeeze.hint")),
         e("span",{style:{fontSize:10,color:"rgba(212,175,55,0.5)"}},"→")),
       e("div",{style:{fontSize:10,color:"rgba(212,175,55,0.5)"}},"↓"))));
 
@@ -639,24 +636,24 @@ function ChipFlowDemo(){
 
   // 親=牛8(8倍), 子A=牛6(6倍) bet5, 子B=牛牛(10倍) bet3
   var offsetSteps=[
-    {dealer:{d:0},a:{d:0},b:{d:0},msg:"親: 牛8  ／  子A: 牛6 (BET 5)  ／  子B: 牛牛 (BET 3)",phase:"deal"},
-    {dealer:{d:0},a:{d:0},b:{d:0},msg:"親 牛8 vs 子A 牛6 → 親の勝ち！",focus:"a",phase:"judge"},
-    {dealer:{d:0},a:{d:0},b:{d:0},msg:"倍率 = |8 - 6| = 2倍 ／ 支払い = BET 5 × 2倍 = 10",focus:"a",phase:"calc",calc:"5 × 2 = 10"},
-    {dealer:{d:10},a:{d:-10},b:{d:0},msg:"子A → 親 に 10 支払い",flow:"a-to-d",amount:10,phase:"pay"},
-    {dealer:{d:10},a:{d:-10},b:{d:0},msg:"親 牛8 vs 子B 牛牛 → 子Bの勝ち！",focus:"b",phase:"judge"},
-    {dealer:{d:10},a:{d:-10},b:{d:0},msg:"倍率 = |8 - 10| = 2倍 ／ 支払い = BET 3 × 2倍 = 6",focus:"b",phase:"calc",calc:"3 × 2 = 6"},
-    {dealer:{d:4},a:{d:-10},b:{d:6},msg:"親 → 子B に 6 支払い",flow:"d-to-b",amount:6,phase:"pay"},
-    {dealer:{d:4},a:{d:-10},b:{d:6},msg:"結果: 親 +4 ／ 子A -10 ／ 子B +6",phase:"result"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:t("demo.deal"),phase:"deal"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:t("demo.judge_a"),focus:"a",phase:"judge"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:t("demo.calc_a_offset"),focus:"a",phase:"calc",calc:"5 × 2 = 10"},
+    {dealer:{d:10},a:{d:-10},b:{d:0},msg:t("demo.pay_a_to_d_10"),flow:"a-to-d",amount:10,phase:"pay"},
+    {dealer:{d:10},a:{d:-10},b:{d:0},msg:t("demo.judge_b"),focus:"b",phase:"judge"},
+    {dealer:{d:10},a:{d:-10},b:{d:0},msg:t("demo.calc_b_offset"),focus:"b",phase:"calc",calc:"3 × 2 = 6"},
+    {dealer:{d:4},a:{d:-10},b:{d:6},msg:t("demo.pay_d_to_b_6"),flow:"d-to-b",amount:6,phase:"pay"},
+    {dealer:{d:4},a:{d:-10},b:{d:6},msg:t("demo.result_offset"),phase:"result"},
   ];
   var nooffsetSteps=[
-    {dealer:{d:0},a:{d:0},b:{d:0},msg:"親: 牛8  ／  子A: 牛6 (BET 5)  ／  子B: 牛牛 (BET 3)",phase:"deal"},
-    {dealer:{d:0},a:{d:0},b:{d:0},msg:"親 牛8 vs 子A 牛6 → 親の勝ち！",focus:"a",phase:"judge"},
-    {dealer:{d:0},a:{d:0},b:{d:0},msg:"倍率 = 勝者の倍率 = 8倍 ／ 支払い = BET 5 × 8倍 = 40",focus:"a",phase:"calc",calc:"5 × 8 = 40"},
-    {dealer:{d:40},a:{d:-40},b:{d:0},msg:"子A → 親 に 40 支払い",flow:"a-to-d",amount:40,phase:"pay"},
-    {dealer:{d:40},a:{d:-40},b:{d:0},msg:"親 牛8 vs 子B 牛牛 → 子Bの勝ち！",focus:"b",phase:"judge"},
-    {dealer:{d:40},a:{d:-40},b:{d:0},msg:"倍率 = 勝者の倍率 = 10倍 ／ 支払い = BET 3 × 10倍 = 30",focus:"b",phase:"calc",calc:"3 × 10 = 30"},
-    {dealer:{d:10},a:{d:-40},b:{d:30},msg:"親 → 子B に 30 支払い",flow:"d-to-b",amount:30,phase:"pay"},
-    {dealer:{d:10},a:{d:-40},b:{d:30},msg:"結果: 親 +10 ／ 子A -40 ／ 子B +30",phase:"result"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:t("demo.deal"),phase:"deal"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:t("demo.judge_a"),focus:"a",phase:"judge"},
+    {dealer:{d:0},a:{d:0},b:{d:0},msg:t("demo.calc_a_nooffset"),focus:"a",phase:"calc",calc:"5 × 8 = 40"},
+    {dealer:{d:40},a:{d:-40},b:{d:0},msg:t("demo.pay_a_to_d_40"),flow:"a-to-d",amount:40,phase:"pay"},
+    {dealer:{d:40},a:{d:-40},b:{d:0},msg:t("demo.judge_b"),focus:"b",phase:"judge"},
+    {dealer:{d:40},a:{d:-40},b:{d:0},msg:t("demo.calc_b_nooffset"),focus:"b",phase:"calc",calc:"3 × 10 = 30"},
+    {dealer:{d:10},a:{d:-40},b:{d:30},msg:t("demo.pay_d_to_b_30"),flow:"d-to-b",amount:30,phase:"pay"},
+    {dealer:{d:10},a:{d:-40},b:{d:30},msg:t("demo.result_nooffset"),phase:"result"},
   ];
 
   var steps=demoRule==="offset"?offsetSteps:nooffsetSteps;
@@ -724,19 +721,19 @@ function ChipFlowDemo(){
   return e("div",null,
     // Rule toggle
     e("div",{style:{display:"flex",gap:6,justifyContent:"center",marginBottom:10}},
-      [{id:"offset",label:"相殺あり"},{id:"nooffset",label:"相殺なし"}].map(function(r){
+      [{id:"offset",labelKey:"battle.offset"},{id:"nooffset",labelKey:"battle.no_offset"}].map(function(r){
         var sel=demoRule===r.id;
         return e("button",{key:r.id,onClick:function(){if(!running){setDemoRule(r.id);setStep(0);}},style:{
           padding:"4px 12px",borderRadius:6,fontSize:10,fontWeight:sel?700:400,cursor:running?"default":"pointer",fontFamily:"inherit",
           background:sel?"rgba(212,175,55,0.12)":"rgba(0,0,0,0.2)",
           border:sel?"1px solid #d4af37":"1px solid rgba(212,175,55,0.08)",
-          color:sel?"#d4af37":"#6b8f6b",opacity:running?0.5:1}},r.label);
+          color:sel?"#d4af37":"#6b8f6b",opacity:running?0.5:1}},t(r.labelKey));
       })),
     // Players
     e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:8,position:"relative"}},
-      pBox("親","🐉","牛8",null,s.dealer.d,s.focus==="dealer",true),
-      pBox("子A","🐅","牛6",5,s.a.d,s.focus==="a",false),
-      pBox("子B","🐍","牛牛",3,s.b.d,s.focus==="b",false),
+      pBox(t("demo.dealer"),"🐉",t("hand.bull")+"8",null,s.dealer.d,s.focus==="dealer",true),
+      pBox(t("demo.child_a"),"🐅",t("hand.bull")+"6",5,s.a.d,s.focus==="a",false),
+      pBox(t("demo.child_b"),"🐍",t("hand.niuniu"),3,s.b.d,s.focus==="b",false),
       chipTravel),
     // Calc formula
     calcEl?e("div",{style:{textAlign:"center"}},calcEl):null,
@@ -750,11 +747,11 @@ function ChipFlowDemo(){
         color:isDone?"#0a1a0f":"#d4af37",
         border:isDone?"none":"1px solid rgba(212,175,55,0.3)",
         boxShadow:isDone?"0 2px 8px rgba(212,175,55,0.3)":"none"}},
-        isDone?"もう一度 ↻":"▶ デモを再生"):
+        isDone?t("demo.again"):t("demo.play")):
       e("div",{style:{display:"flex",alignItems:"center",justifyContent:"center",gap:10}},
-        e("div",{style:{fontSize:9,color:"var(--text-dim)"}},"再生中... ("+(step+1)+"/"+steps.length+")"),
+        e("div",{style:{fontSize:9,color:"var(--text-dim)"}},t("demo.playing")+" ("+(step+1)+"/"+steps.length+")"),
         e("button",{onClick:stopDemo,style:{padding:"3px 10px",borderRadius:5,fontSize:9,cursor:"pointer",fontFamily:"inherit",
-          background:"transparent",border:"1px solid rgba(255,255,255,0.1)",color:"var(--text-muted)"}},"⏹ 停止"))));
+          background:"transparent",border:"1px solid rgba(255,255,255,0.1)",color:"var(--text-muted)"}},t("demo.stop")))));
 }
 
 // ─── Squeeze Trainer ─────────────────────────────────────────
@@ -785,8 +782,8 @@ function SqueezeTrainer(){
     revealed?
       e("button",{onClick:newCard,style:{padding:"8px 24px",borderRadius:8,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
         background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",border:"none",
-        boxShadow:"0 2px 8px rgba(212,175,55,0.3)"}},"次のカード →"):
-      e("div",{style:{fontSize:10,color:"#4ecdc4"}},"ドラッグして絞ってみよう"));
+        boxShadow:"0 2px 8px rgba(212,175,55,0.3)"}},t("trainer.next")):
+      e("div",{style:{fontSize:10,color:"#4ecdc4"}},t("trainer.hint")));
 }
 
 // ─── Shop & Customization Data ──────────────────────────────
@@ -847,11 +844,826 @@ var TABLE_BGS=[
     btnBg:"rgba(120,230,210,0.08)",tabActive:"rgba(120,230,210,0.2)",free:false},
 ];
 var SHOP_ITEMS=[
-  {id:"skins",name:"カードデザインパック",icon:"🎴",price:"¥160",desc:"裏面6種＋表面3種"},
-  {id:"tables",name:"テーブル背景パック",icon:"🎰",price:"¥160",desc:"テーブル背景6種"},
-  {id:"noads",name:"広告解除",icon:"🚫",price:"¥320",desc:"永久に広告を非表示"},
-  {id:"allpass",name:"全部入りパス",icon:"👑",price:"¥480",desc:"全コンテンツ解放（25%OFF）",highlight:true},
+  {id:"skins",icon:"🎴",price:"¥160"},
+  {id:"tables",icon:"🎰",price:"¥160"},
+  {id:"noads",icon:"🚫",price:"¥320"},
+  {id:"allpass",icon:"👑",price:"¥480",highlight:true},
 ];
+
+// ─── i18n Dictionary ──────────────────────────────────────────
+var LANGS=[
+  {id:"ja",name:"日本語",short:"日本語"},
+  {id:"en",name:"English",short:"English"},
+  {id:"zh",name:"中文",short:"中文"},
+];
+
+var I18N={
+  ja:{
+    // Home
+    "home.tagline":"",
+    "home.flip":"フリップ",
+    "home.flip_desc":"サクッと勝負",
+    "home.battle":"対戦",
+    "home.battle_desc":"親子＋チップ計算",
+    "home.rulebook":"遊び方",
+    "home.settings":"設定",
+    // Settings
+    "settings.title":"⚙️ 設定",
+    "settings.back":"← 戻る",
+    "settings.card_design":"🎴 カードデザイン",
+    "settings.back_design":"裏面",
+    "settings.face_design":"表面",
+    "settings.bg_design":"🎨 テーブル背景",
+    "settings.game_settings":"🎮 ゲーム設定",
+    "settings.sound":"🔊 サウンド",
+    "settings.sound_desc":"効果音の再生",
+    "settings.alert_style":"🎴 予告スタイル",
+    "settings.alert_style_desc":"牛が出る時の演出頻度",
+    "settings.mode_simple":"シンプル",
+    "settings.mode_simple_desc":"プレミアのみ",
+    "settings.mode_spoiler":"先バレ",
+    "settings.mode_spoiler_desc":"赤オーラ＋プレミア",
+    "settings.shop_link":"ショップで追加コンテンツを購入",
+    "settings.language":"🌐 言語",
+    "settings.shortcuts":"⚡ ベット額ショートカット",
+    "settings.shortcuts_desc":"ベット画面のクイック選択ボタン",
+    "settings.max_shortcuts":"親MAX用（4個）",
+    "settings.player_shortcuts":"子ベット用（4個）",
+    "settings.shortcut_reset":"初期値に戻す",
+    // Shop
+    "shop.title":"🛍️ ショップ",
+    "shop.intro":"カードデザイン・背景のカスタマイズを解放できます。",
+    "shop.intro2":"購入後は「設定」から自由に変更できます。",
+    "shop.sale":"お得",
+    "shop.owned":"✓ 購入済",
+    "shop.note":"※ 現在はデモ版です。実際の課金はCapacitor移行後に実装されます。",
+    "shop.note2":"購入ボタンを押すと即時解放されます（テスト用）。",
+    "shop.item.skins.name":"カードデザインパック",
+    "shop.item.skins.desc":"裏面6種＋表面3種",
+    "shop.item.tables.name":"テーブル背景パック",
+    "shop.item.tables.desc":"テーブル背景6種",
+    "shop.item.noads.name":"広告解除",
+    "shop.item.noads.desc":"永久に広告を非表示",
+    "shop.item.allpass.name":"全部入りパス",
+    "shop.item.allpass.desc":"全コンテンツ解放（25%OFF）",
+    // Card skins
+    "skin.default":"クラシック",
+    "skin.crimson":"エメラルド",
+    "skin.midnight":"ミッドナイト",
+    "skin.gold":"ゴールド",
+    "skin.navy":"ネイビー",
+    "skin.redback":"シルバー",
+    // Card faces
+    "face.default":"クラシック",
+    "face.default.desc":"定番デザイン",
+    "face.noir":"ノワール",
+    "face.noir.desc":"シックなモノトーンカード",
+    "face.fourcolor":"4色",
+    "face.fourcolor.desc":"スートごとに異なる色",
+    // Table bgs
+    "table.default":"カジノグリーン",
+    "table.ocean":"ディープオーシャン",
+    "table.wine":"ワインレッド",
+    "table.noir":"ノワール",
+    "table.gold":"ゴールドルーム",
+    "table.aurora":"オーロラ",
+    // Game setup
+    "setup.title":"ゲーム設定",
+    "setup.flip_title":"🎴 フリップモード",
+    "setup.battle_title":"⚔️ 対戦モード",
+    "setup.players":"プレイヤー人数",
+    "setup.names":"プレイヤー名",
+    "setup.name_placeholder":"プレイヤー{n}",
+    "setup.people":"人",
+    "setup.alert_mode":"演出モード",
+    "setup.bet_rule":"倍率ルール",
+    "setup.offset_desc":"役差で計算",
+    "setup.no_offset_desc":"勝者の倍率",
+    "setup.start":"ゲーム開始",
+    // Game screen
+    "game.reset":"リセット",
+    "game.round":"R",
+    "game.open_three":"3枚オープン",
+    "game.drag_squeeze":"ドラッグして絞る",
+    "game.next_round":"次のラウンド",
+    "game.final":"最終結果",
+    "game.home":"ホームへ",
+    "game.again":"もう一度",
+    "game.home_back":"← ホームへ",
+    "game.next_round_arrow":"次のラウンド →",
+    "game.rounds_done":"ラウンド終了",
+    "game.round_history":"ラウンド履歴",
+    "game.final_ranking":"最終ランキング",
+    "game.total":"合計",
+    "game.round_sum":"枚合計",
+    "game.you_score":"あなたの合計",
+    // Pick dealer (battle)
+    "battle.pick_dealer":"親を選んでください",
+    "battle.pick_dealer_back":"← 戻る",
+    "battle.summary_end":"📊 集計して終了",
+    "battle.bet_back":"← 親選択",
+    "battle.deal":"配る",
+    "ad.label":"広告",
+    "ad.area":"広告エリア（Capacitor移行後に実装）",
+    "ad.close":"3秒後に自動で閉じます...",
+    "ad.remove":"🚫 広告を消す → ショップ",
+    "battle.dealer_label":"親",
+    "battle.child_label":"子",
+    "battle.chips":"チップ",
+    "battle.bet_screen":"ベットを決めてください",
+    "battle.max_bet":"上限",
+    "battle.bet_confirm":"決定",
+    "battle.bet":"BET",
+    "battle.offset":"相殺あり",
+    "battle.no_offset":"相殺なし",
+    "battle.dealer_wins":"親の勝ち",
+    "battle.child_wins":"子の勝ち",
+    "battle.total_chips":"合計チップ",
+    "battle.your_bet":"ベット",
+    "battle.payout":"支払",
+    "battle.receive":"獲得",
+    "battle.multiplier":"倍率",
+    "battle.rank":"順位",
+    // Hand labels
+    "hand.no_bull":"无牛",
+    "hand.bull":"牛",
+    "hand.niuniu":"牛牛！",
+    "hand.five_small":"五小牛！",
+    "hand.five_flower":"五花牛！",
+    "hand.bomb":"炸弹牛！",
+    "hand.sf":"SF牛！！",
+    "hand.rf":"RF牛！！",
+    // Rulebook
+    "rb.title":"📖 遊び方",
+    "rb.tab.rules":"ルール",
+    "rb.tab.effects":"演出",
+    "rb.tab.modes":"モード",
+    // Rulebook - Rules tab
+    "rb.basic":"基本ルール",
+    "rb.basic.desc":"各プレイヤーに5枚のカードが配られます。5枚のうち3枚の合計が10の倍数になる組み合わせを探します。これが「牛（ニウ）」です。",
+    "rb.card_values":"カードの数え方",
+    "rb.card_values.desc":"A = 1点 ／ 2〜9 = そのまま ／ 10・J・Q・K = 10点",
+    "rb.how_to":"牛の作り方",
+    "rb.how_to.desc":"3枚の合計が10の倍数 ＝ 牛！ 残り2枚の合計の下一桁が役の強さになります。",
+    "rb.example_bull7":"例：牛7",
+    "rb.example_bull7.desc":"K(10) + 7 + 3 = 20 → 牛！ 残り 5 + 2 = 7 → 牛7",
+    "rb.example_niuniu":"例：牛牛（最強の牛）",
+    "rb.example_niuniu.desc":"10 + J(10) + Q(10) = 30 → 牛！ 残り 5 + 5 = 10 → 牛牛！",
+    "rb.example_no_bull":"例：无牛（牛なし）",
+    "rb.example_no_bull.desc":"どの3枚を選んでも10の倍数にならない → 无牛",
+    "rb.hand_list":"役一覧（弱い順）",
+    "rb.no_bull.desc":"牛が作れない。最弱。",
+    "rb.bull.desc":"残り2枚の下一桁。数字が大きいほど強い。",
+    "rb.niuniu.desc":"残り2枚も10の倍数。倍率10倍。",
+    "rb.five_small.desc":"全て5以下で牛が作れない。倍率15倍。",
+    "rb.five_flower.desc":"全てJ/Q/K。倍率15倍。",
+    "rb.bomb.desc":"4枚が同じ数字。倍率20倍。",
+    "rb.sf.desc":"5枚連番＋同じスート。倍率30倍。",
+    "rb.rf.desc":"10-J-Q-K-A 同スート。最強。倍率50倍。",
+    "rb.tiebreak":"同じ役の場合",
+    "rb.tiebreak.desc":"同じ役同士はハイカード（最も強い1枚）で比較します。",
+    "rb.card_strength":"カードの強さ",
+    "rb.card_strength.desc_1":"数字: K > Q > J > 10 > 9 > ... > 2 > A",
+    "rb.card_strength.desc_2":"スート: ♠ > ♥ > ♦ > ♣",
+    "rb.card_strength.desc_3":"例: K♠ が最強、A♣ が最弱",
+    // Rulebook - Effects tab
+    "rb.squeeze_intro":"絞り（スクイーズ）の楽しみ方",
+    "rb.squeeze_intro.desc":"3枚をオープンした後、残り2枚はドラッグして少しずつめくります。絞り中はスートマーク（♠♥♦♣）だけが見え、数字は隠されています。マークの本数や位置から数字を推理するのが醍醐味です！",
+    "rb.vert_squeeze":"縦絞り（上から少しめくる）",
+    "rb.vert_squeeze.desc":"カードの上端に見えるマークの本数で判別できます。",
+    "rb.vert.jk":"絵柄あり → J〜K",
+    "rb.vert.ace":"マークなし → A",
+    "rb.vert.23":"上に1本 → 2 or 3",
+    "rb.vert.410":"上に2本 → 4〜10",
+    "rb.horiz_squeeze":"横絞り（横から少しめくる）",
+    "rb.horiz_squeeze.desc":"左右に見えるマークの列数（サイド数）で更に絞り込めます。",
+    "rb.horiz.jk":"絵柄 → J〜K",
+    "rb.horiz.a23":"なし → A, 2, 3",
+    "rb.horiz.45":"2サイド → 4, 5",
+    "rb.horiz.678":"3サイド → 6, 7, 8",
+    "rb.horiz.910":"4サイド → 9, 10",
+    "rb.practice":"絞り練習",
+    "rb.practice.desc":"実際にカードを絞って練習してみましょう！",
+    "rb.alerts":"先告知演出",
+    "rb.alerts.desc":"「先バレ」モードでは、絞りの前にヒントが出ることがあります。",
+    "rb.red":"🔴 赤オーラ — 信頼度 約30%",
+    "rb.red.desc_1":"4・5枚目が赤く脈動。",
+    "rb.red.desc_2":"出ても牛牛とは限らない。",
+    "rb.glitch":"👻 違和感 — 信頼度 約60%",
+    "rb.glitch.desc_1":"微妙に振動・チラつく。",
+    "rb.glitch.desc_2":"赤よりも期待度が高い。",
+    "rb.premium":"🌈✨ プレミア演出 — 信頼度 ???",
+    "rb.premium.desc_1":"超激レア。",
+    "rb.premium.desc_2":"出たら...？ お楽しみに。",
+    // Rulebook - Modes tab
+    "rb.flip_mode":"🎴 フリップモード",
+    "rb.flip_mode.desc":"気軽に遊べるモード。全プレイヤーが対等に勝負します。",
+    "rb.flip_howto":"遊び方",
+    "rb.flip_howto.step1":"1. 人数・名前を設定してゲーム開始",
+    "rb.flip_howto.step2":"2. 全員に5枚ずつ配られる",
+    "rb.flip_howto.step3":"3. 各自「3枚オープン」→ 残り2枚を絞る",
+    "rb.flip_howto.step4":"4. 全員オープン後、最も強い役のプレイヤーが1点獲得",
+    "rb.flip_howto.step5":"5. 「次のラウンド」で繰り返し",
+    "rb.flip_judge":"勝敗の決まり方",
+    "rb.flip_judge.desc_1":"役が強い人が勝ち。同じ役ならハイカード比較。",
+    "rb.flip_judge.desc_2":"チップ計算なし、シンプルに楽しめます。",
+    "rb.battle_mode":"⚔️ 対戦モード",
+    "rb.battle_mode.desc":"親子対戦＋チップ計算で本格的に遊ぶモードです。",
+    "rb.battle_flow":"基本の流れ",
+    "rb.battle_flow.step1":"1. 人数・名前・倍率ルール・演出モードを設定",
+    "rb.battle_flow.step2":"2. 毎ラウンド「親」を1人選ぶ",
+    "rb.battle_flow.step3":"3. 親がMAXベット額を決める",
+    "rb.battle_flow.step4":"4. 各子がベット額を決める（1〜MAX）",
+    "rb.battle_flow.step5":"5. カードを配り、全員絞りオープン",
+    "rb.battle_flow.step6":"6. 親 vs 各子で1対1の勝負 → チップ精算",
+    "rb.battle_flow.step7":"7. 次のラウンドへ（親を選び直す）",
+    "rb.battle_flow.step8":"8. いつでも「集計」ボタンで終了→結果発表",
+    "rb.chip_flow":"チップの動き",
+    "rb.chip_flow.desc":"親 vs 各子で1対1勝負。勝てば＋、負ければ−。",
+    "rb.multiplier":"倍率ルール",
+    "rb.offset_rule":"相殺あり — 堅実な勝負",
+    "rb.offset_rule.desc_1":"倍率 = 親と子の役の倍率の差。",
+    "rb.offset_rule.desc_2":"役が近いほど差が小さくなり、穏やかな勝負に。",
+    "rb.offset_rule.calc_1":"差が0（同役ハイカード） → 1倍",
+    "rb.offset_rule.calc_2":"差が1（例: 牛5 vs 牛4） → 1.5倍",
+    "rb.offset_rule.calc_3":"差が2以上 → 差がそのまま倍率",
+    "rb.no_offset_rule":"相殺なし — 激しい勝負",
+    "rb.no_offset_rule.desc_1":"倍率 = 勝った側の役の倍率がそのまま。",
+    "rb.no_offset_rule.desc_2":"強い役で勝つほど大きく得し、接戦でも荒れる。",
+    "rb.no_offset_rule.ex_1":"例: 親 牛8(8倍) vs 子 牛7(7倍)",
+    "rb.no_offset_rule.ex_2":"　相殺あり → 1.5倍",
+    "rb.no_offset_rule.ex_3":"　相殺なし → 8倍（約5倍の差！）",
+    "rb.no_offset_rule.note":"相殺なしは相殺ありの約2〜3倍荒い体感です。",
+    "rb.summary":"集計",
+    "rb.summary.desc_1":"いつでも「📊 集計して終了」を押せます。",
+    "rb.summary.desc_2":"最終ランキング（チップ順）と全ラウンドの履歴が表示されます。",
+    "rb.summary.desc_3":"各ラウンドの親・役・チップ増減を振り返れます。",
+    // ChipFlowDemo
+    "demo.dealer":"親",
+    "demo.child_a":"子A",
+    "demo.child_b":"子B",
+    "demo.play":"▶ デモを再生",
+    "demo.again":"もう一度 ↻",
+    "demo.stop":"⏹ 停止",
+    "demo.playing":"再生中...",
+    "demo.deal":"親: 牛8  ／  子A: 牛6 (BET 5)  ／  子B: 牛牛 (BET 3)",
+    "demo.judge_a":"親 牛8 vs 子A 牛6 → 親の勝ち！",
+    "demo.judge_b":"親 牛8 vs 子B 牛牛 → 子Bの勝ち！",
+    "demo.calc_a_offset":"倍率 = |8 - 6| = 2倍 ／ 支払い = BET 5 × 2倍 = 10",
+    "demo.calc_b_offset":"倍率 = |8 - 10| = 2倍 ／ 支払い = BET 3 × 2倍 = 6",
+    "demo.calc_a_nooffset":"倍率 = 勝者の倍率 = 8倍 ／ 支払い = BET 5 × 8倍 = 40",
+    "demo.calc_b_nooffset":"倍率 = 勝者の倍率 = 10倍 ／ 支払い = BET 3 × 10倍 = 30",
+    "demo.pay_a_to_d_10":"子A → 親 に 10 支払い",
+    "demo.pay_d_to_b_6":"親 → 子B に 6 支払い",
+    "demo.pay_a_to_d_40":"子A → 親 に 40 支払い",
+    "demo.pay_d_to_b_30":"親 → 子B に 30 支払い",
+    "demo.result_offset":"結果: 親 +4 ／ 子A -10 ／ 子B +6",
+    "demo.result_nooffset":"結果: 親 +10 ／ 子A -40 ／ 子B +30",
+    // Squeeze trainer
+    "trainer.next":"次のカード →",
+    "trainer.hint":"ドラッグして絞ってみよう",
+    "squeeze.hint":"絞",
+    // Common
+    "common.back":"← 戻る",
+    "common.selected":"✓ 使用中",
+    "common.locked":"🔒 要購入",
+    "common.yes":"はい",
+    "common.no":"いいえ",
+  },
+  en:{
+    "home.tagline":"",
+    "home.flip":"Flip",
+    "home.flip_desc":"Quick play",
+    "home.battle":"Battle",
+    "home.battle_desc":"Dealer + chips",
+    "home.rulebook":"How to Play",
+    "home.settings":"Settings",
+    "settings.title":"⚙️ Settings",
+    "settings.back":"← Back",
+    "settings.card_design":"🎴 Card Design",
+    "settings.back_design":"Card Back",
+    "settings.face_design":"Card Face",
+    "settings.bg_design":"🎨 Table Background",
+    "settings.game_settings":"🎮 Game Settings",
+    "settings.sound":"🔊 Sound",
+    "settings.sound_desc":"Play sound effects",
+    "settings.alert_style":"🎴 Alert Style",
+    "settings.alert_style_desc":"Spoiler frequency",
+    "settings.mode_simple":"Simple",
+    "settings.mode_simple_desc":"Premium only",
+    "settings.mode_spoiler":"Spoiler",
+    "settings.mode_spoiler_desc":"Red aura + Premium",
+    "settings.shop_link":"Shop for more content",
+    "settings.language":"🌐 Language",
+    "settings.shortcuts":"⚡ Bet Shortcuts",
+    "settings.shortcuts_desc":"Quick-select buttons on the bet screen",
+    "settings.max_shortcuts":"Dealer MAX (4)",
+    "settings.player_shortcuts":"Player bet (4)",
+    "settings.shortcut_reset":"Reset to defaults",
+    "shop.title":"🛍️ Shop",
+    "shop.intro":"Unlock card & background customizations.",
+    "shop.intro2":"Change anytime from Settings after purchase.",
+    "shop.sale":"Sale",
+    "shop.owned":"✓ Owned",
+    "shop.note":"* Demo version. Real IAP after Capacitor migration.",
+    "shop.note2":"Purchase button unlocks immediately (test mode).",
+    "shop.item.skins.name":"Card Design Pack",
+    "shop.item.skins.desc":"6 backs + 3 faces",
+    "shop.item.tables.name":"Table Background Pack",
+    "shop.item.tables.desc":"6 table backgrounds",
+    "shop.item.noads.name":"Remove Ads",
+    "shop.item.noads.desc":"Hide ads forever",
+    "shop.item.allpass.name":"All-In-One Pass",
+    "shop.item.allpass.desc":"Unlock everything (25% OFF)",
+    "skin.default":"Classic",
+    "skin.crimson":"Emerald",
+    "skin.midnight":"Midnight",
+    "skin.gold":"Gold",
+    "skin.navy":"Navy",
+    "skin.redback":"Silver",
+    "face.default":"Classic",
+    "face.default.desc":"Standard design",
+    "face.noir":"Noir",
+    "face.noir.desc":"Chic monotone card",
+    "face.fourcolor":"4-Color",
+    "face.fourcolor.desc":"Different color per suit",
+    "table.default":"Casino Green",
+    "table.ocean":"Deep Ocean",
+    "table.wine":"Wine Red",
+    "table.noir":"Noir",
+    "table.gold":"Gold Room",
+    "table.aurora":"Aurora",
+    "setup.title":"Game Setup",
+    "setup.flip_title":"🎴 Flip Mode",
+    "setup.battle_title":"⚔️ Battle Mode",
+    "setup.players":"Players",
+    "setup.names":"Player Names",
+    "setup.name_placeholder":"Player {n}",
+    "setup.people":"",
+    "setup.alert_mode":"Alert Mode",
+    "setup.bet_rule":"Multiplier Rule",
+    "setup.offset_desc":"By rank difference",
+    "setup.no_offset_desc":"Winner's multiplier",
+    "setup.start":"Start Game",
+    "game.reset":"Reset",
+    "game.round":"R",
+    "game.open_three":"Open 3",
+    "game.drag_squeeze":"Drag to squeeze",
+    "game.next_round":"Next Round",
+    "game.final":"Final Results",
+    "game.home":"Home",
+    "game.again":"Play Again",
+    "game.home_back":"← Home",
+    "game.next_round_arrow":"Next Round →",
+    "game.rounds_done":" rounds done",
+    "game.round_history":"Round History",
+    "game.final_ranking":"Final Ranking",
+    "game.total":"Total",
+    "game.round_sum":" sum",
+    "game.you_score":"Your total",
+    "battle.pick_dealer":"Pick the dealer",
+    "battle.pick_dealer_back":"← Back",
+    "battle.summary_end":"📊 End & Tally",
+    "battle.bet_back":"← Pick Dealer",
+    "battle.deal":"Deal",
+    "ad.label":"Ad",
+    "ad.area":"Ad area (real ads after Capacitor)",
+    "ad.close":"Closing in 3 seconds...",
+    "ad.remove":"🚫 Remove ads → Shop",
+    "battle.dealer_label":"Dealer",
+    "battle.child_label":"Player",
+    "battle.chips":"Chips",
+    "battle.bet_screen":"Place your bet",
+    "battle.max_bet":"Max",
+    "battle.bet_confirm":"OK",
+    "battle.bet":"BET",
+    "battle.offset":"Offset On",
+    "battle.no_offset":"Offset Off",
+    "battle.dealer_wins":"Dealer wins",
+    "battle.child_wins":"Player wins",
+    "battle.total_chips":"Total chips",
+    "battle.your_bet":"Bet",
+    "battle.payout":"Pay",
+    "battle.receive":"Win",
+    "battle.multiplier":"Mult",
+    "battle.rank":"Rank",
+    "hand.no_bull":"No Bull",
+    "hand.bull":"Bull ",
+    "hand.niuniu":"NiuNiu!",
+    "hand.five_small":"Five Small!",
+    "hand.five_flower":"Five Flowers!",
+    "hand.bomb":"Bomb Bull!",
+    "hand.sf":"Straight Flush!!",
+    "hand.rf":"Royal Flush!!",
+    "rb.title":"📖 How to Play",
+    "rb.tab.rules":"Rules",
+    "rb.tab.effects":"Effects",
+    "rb.tab.modes":"Modes",
+    "rb.basic":"Basic Rules",
+    "rb.basic.desc":"Each player is dealt 5 cards. Find a combination of 3 cards whose sum is a multiple of 10. That's called a \"Bull\" (Niu).",
+    "rb.card_values":"Card Values",
+    "rb.card_values.desc":"A = 1 point / 2–9 = face value / 10, J, Q, K = 10 points",
+    "rb.how_to":"How to Make a Bull",
+    "rb.how_to.desc":"If 3 cards sum to a multiple of 10, you have a Bull! The last digit of the remaining 2 cards' sum determines the strength.",
+    "rb.example_bull7":"Example: Bull 7",
+    "rb.example_bull7.desc":"K(10) + 7 + 3 = 20 → Bull! Remaining 5 + 2 = 7 → Bull 7",
+    "rb.example_niuniu":"Example: NiuNiu (strongest Bull)",
+    "rb.example_niuniu.desc":"10 + J(10) + Q(10) = 30 → Bull! Remaining 5 + 5 = 10 → NiuNiu!",
+    "rb.example_no_bull":"Example: No Bull",
+    "rb.example_no_bull.desc":"No combination of 3 cards sums to a multiple of 10 → No Bull",
+    "rb.hand_list":"Hand Rankings (weakest to strongest)",
+    "rb.no_bull.desc":"Cannot make a bull. Weakest.",
+    "rb.bull.desc":"Last digit of remaining 2 cards. Higher = stronger.",
+    "rb.niuniu.desc":"Remaining 2 cards also sum to a multiple of 10. 10× multiplier.",
+    "rb.five_small.desc":"All cards ≤ 5 with no bull. 15× multiplier.",
+    "rb.five_flower.desc":"All cards are J/Q/K. 15× multiplier.",
+    "rb.bomb.desc":"Four of a kind. 20× multiplier.",
+    "rb.sf.desc":"5 consecutive cards, same suit. 30× multiplier.",
+    "rb.rf.desc":"10-J-Q-K-A same suit. Strongest. 50× multiplier.",
+    "rb.tiebreak":"Tiebreaker",
+    "rb.tiebreak.desc":"Same-rank hands are compared by the high card (strongest single).",
+    "rb.card_strength":"Card Strength",
+    "rb.card_strength.desc_1":"Rank: K > Q > J > 10 > 9 > ... > 2 > A",
+    "rb.card_strength.desc_2":"Suit: ♠ > ♥ > ♦ > ♣",
+    "rb.card_strength.desc_3":"E.g., K♠ is strongest, A♣ is weakest",
+    "rb.squeeze_intro":"How to Enjoy the Squeeze",
+    "rb.squeeze_intro.desc":"After opening 3 cards, you drag the remaining 2 to reveal them slowly. While squeezing, only the suit symbols (♠♥♦♣) are visible — the rank is hidden. Guessing the rank from the count and positions of the symbols is the real thrill!",
+    "rb.vert_squeeze":"Vertical Squeeze (peek from the top)",
+    "rb.vert_squeeze.desc":"You can identify the card by counting the symbols at the top edge.",
+    "rb.vert.jk":"Face card → J–K",
+    "rb.vert.ace":"No symbol → A",
+    "rb.vert.23":"1 symbol at top → 2 or 3",
+    "rb.vert.410":"2 symbols at top → 4–10",
+    "rb.horiz_squeeze":"Horizontal Squeeze (peek from the side)",
+    "rb.horiz_squeeze.desc":"You can narrow it further by counting the columns (\"sides\") visible on the left/right.",
+    "rb.horiz.jk":"Face card → J–K",
+    "rb.horiz.a23":"None → A, 2, 3",
+    "rb.horiz.45":"2 sides → 4, 5",
+    "rb.horiz.678":"3 sides → 6, 7, 8",
+    "rb.horiz.910":"4 sides → 9, 10",
+    "rb.practice":"Squeeze Practice",
+    "rb.practice.desc":"Try squeezing cards for real practice!",
+    "rb.alerts":"Pre-reveal Alerts",
+    "rb.alerts.desc":"In \"Spoiler\" mode, hints may appear before the squeeze.",
+    "rb.red":"🔴 Red Aura — about 30% reliability",
+    "rb.red.desc_1":"Cards 4 and 5 pulse red.",
+    "rb.red.desc_2":"Doesn't necessarily mean NiuNiu.",
+    "rb.glitch":"👻 Glitch — about 60% reliability",
+    "rb.glitch.desc_1":"Subtle shake / flicker.",
+    "rb.glitch.desc_2":"Higher hope than red.",
+    "rb.premium":"🌈✨ Premium Alerts — reliability ???",
+    "rb.premium.desc_1":"Super rare.",
+    "rb.premium.desc_2":"If it appears...? See for yourself.",
+    "rb.flip_mode":"🎴 Flip Mode",
+    "rb.flip_mode.desc":"A casual mode where all players compete equally.",
+    "rb.flip_howto":"How to Play",
+    "rb.flip_howto.step1":"1. Set player count and names, then start",
+    "rb.flip_howto.step2":"2. Everyone gets 5 cards",
+    "rb.flip_howto.step3":"3. Each player opens 3 cards and squeezes the last 2",
+    "rb.flip_howto.step4":"4. After everyone opens, the strongest hand wins 1 point",
+    "rb.flip_howto.step5":"5. Continue with \"Next Round\"",
+    "rb.flip_judge":"How Winners Are Decided",
+    "rb.flip_judge.desc_1":"Strongest hand wins. Same hand → compare by high card.",
+    "rb.flip_judge.desc_2":"No chip calculations — simply enjoy the game.",
+    "rb.battle_mode":"⚔️ Battle Mode",
+    "rb.battle_mode.desc":"Dealer vs players with chip calculations — for a real gambling feel.",
+    "rb.battle_flow":"Flow",
+    "rb.battle_flow.step1":"1. Set players, names, multiplier rule, and alert mode",
+    "rb.battle_flow.step2":"2. Each round, pick one \"Dealer\"",
+    "rb.battle_flow.step3":"3. Dealer sets the MAX bet",
+    "rb.battle_flow.step4":"4. Each player sets their bet (1–MAX)",
+    "rb.battle_flow.step5":"5. Deal cards; everyone opens and squeezes",
+    "rb.battle_flow.step6":"6. Dealer vs each player 1-on-1 → settle chips",
+    "rb.battle_flow.step7":"7. Next round (pick a new dealer)",
+    "rb.battle_flow.step8":"8. Tap \"Tally\" any time to end & see results",
+    "rb.chip_flow":"Chip Flow",
+    "rb.chip_flow.desc":"Dealer vs each player, one-on-one. Win to gain, lose to pay.",
+    "rb.multiplier":"Multiplier Rule",
+    "rb.offset_rule":"Offset On — steady play",
+    "rb.offset_rule.desc_1":"Multiplier = difference between dealer's and player's hand multiplier.",
+    "rb.offset_rule.desc_2":"Closer hands → smaller difference → calmer matches.",
+    "rb.offset_rule.calc_1":"Diff 0 (same hand, by high card) → 1×",
+    "rb.offset_rule.calc_2":"Diff 1 (e.g. Bull 5 vs Bull 4) → 1.5×",
+    "rb.offset_rule.calc_3":"Diff 2+ → use the difference directly",
+    "rb.no_offset_rule":"Offset Off — wild play",
+    "rb.no_offset_rule.desc_1":"Multiplier = winner's hand multiplier directly.",
+    "rb.no_offset_rule.desc_2":"Strong wins pay big; even close calls can swing wildly.",
+    "rb.no_offset_rule.ex_1":"E.g. Dealer Bull 8 (8×) vs Player Bull 7 (7×)",
+    "rb.no_offset_rule.ex_2":"  Offset On → 1.5×",
+    "rb.no_offset_rule.ex_3":"  Offset Off → 8× (~5× swing!)",
+    "rb.no_offset_rule.note":"Offset Off feels about 2–3× wilder than Offset On.",
+    "rb.summary":"Tally",
+    "rb.summary.desc_1":"Tap \"📊 End & Tally\" anytime.",
+    "rb.summary.desc_2":"Shows final ranking (by chip count) and full round history.",
+    "rb.summary.desc_3":"Review each round's dealer, hands, and chip changes.",
+    "demo.dealer":"Dealer",
+    "demo.child_a":"P. A",
+    "demo.child_b":"P. B",
+    "demo.play":"▶ Play Demo",
+    "demo.again":"Play Again ↻",
+    "demo.stop":"⏹ Stop",
+    "demo.playing":"Playing...",
+    "demo.deal":"Dealer: Bull 8 / P.A: Bull 6 (BET 5) / P.B: NiuNiu (BET 3)",
+    "demo.judge_a":"Dealer Bull 8 vs P.A Bull 6 → Dealer wins!",
+    "demo.judge_b":"Dealer Bull 8 vs P.B NiuNiu → P.B wins!",
+    "demo.calc_a_offset":"Mult = |8 - 6| = 2× / Pay = BET 5 × 2× = 10",
+    "demo.calc_b_offset":"Mult = |8 - 10| = 2× / Pay = BET 3 × 2× = 6",
+    "demo.calc_a_nooffset":"Mult = winner's = 8× / Pay = BET 5 × 8× = 40",
+    "demo.calc_b_nooffset":"Mult = winner's = 10× / Pay = BET 3 × 10× = 30",
+    "demo.pay_a_to_d_10":"P.A pays 10 to Dealer",
+    "demo.pay_d_to_b_6":"Dealer pays 6 to P.B",
+    "demo.pay_a_to_d_40":"P.A pays 40 to Dealer",
+    "demo.pay_d_to_b_30":"Dealer pays 30 to P.B",
+    "demo.result_offset":"Result: Dealer +4 / P.A -10 / P.B +6",
+    "demo.result_nooffset":"Result: Dealer +10 / P.A -40 / P.B +30",
+    "trainer.next":"Next Card →",
+    "trainer.hint":"Drag to squeeze",
+    "squeeze.hint":"DRAG",
+    "common.back":"← Back",
+    "common.selected":"✓ Selected",
+    "common.locked":"🔒 Locked",
+    "common.yes":"Yes",
+    "common.no":"No",
+  },
+  zh:{
+    "home.tagline":"",
+    "home.flip":"翻牌",
+    "home.flip_desc":"快速对战",
+    "home.battle":"对战",
+    "home.battle_desc":"庄家+筹码",
+    "home.rulebook":"玩法",
+    "home.settings":"设置",
+    "settings.title":"⚙️ 设置",
+    "settings.back":"← 返回",
+    "settings.card_design":"🎴 扑克牌设计",
+    "settings.back_design":"牌背",
+    "settings.face_design":"牌面",
+    "settings.bg_design":"🎨 牌桌背景",
+    "settings.game_settings":"🎮 游戏设置",
+    "settings.sound":"🔊 音效",
+    "settings.sound_desc":"播放音效",
+    "settings.alert_style":"🎴 预告样式",
+    "settings.alert_style_desc":"预告演出频率",
+    "settings.mode_simple":"简单",
+    "settings.mode_simple_desc":"仅高级预告",
+    "settings.mode_spoiler":"剧透",
+    "settings.mode_spoiler_desc":"红光+高级预告",
+    "settings.shop_link":"商店购买更多内容",
+    "settings.language":"🌐 语言",
+    "settings.shortcuts":"⚡ 下注快捷",
+    "settings.shortcuts_desc":"下注画面的快选按钮",
+    "settings.max_shortcuts":"庄MAX用（4个）",
+    "settings.player_shortcuts":"闲下注用（4个）",
+    "settings.shortcut_reset":"恢复默认",
+    "shop.title":"🛍️ 商店",
+    "shop.intro":"解锁扑克牌和背景的自定义。",
+    "shop.intro2":"购买后可在「设置」中自由更改。",
+    "shop.sale":"优惠",
+    "shop.owned":"✓ 已购买",
+    "shop.note":"※ 现为演示版。正式付费将在 Capacitor 迁移后实装。",
+    "shop.note2":"按下购买按钮即时解锁（测试用）。",
+    "shop.item.skins.name":"扑克牌设计包",
+    "shop.item.skins.desc":"牌背6种+牌面3种",
+    "shop.item.tables.name":"牌桌背景包",
+    "shop.item.tables.desc":"牌桌背景6种",
+    "shop.item.noads.name":"去除广告",
+    "shop.item.noads.desc":"永久隐藏广告",
+    "shop.item.allpass.name":"全部解锁通行证",
+    "shop.item.allpass.desc":"全内容解锁（25%OFF）",
+    "skin.default":"经典",
+    "skin.crimson":"翡翠",
+    "skin.midnight":"午夜",
+    "skin.gold":"金色",
+    "skin.navy":"海军蓝",
+    "skin.redback":"银色",
+    "face.default":"经典",
+    "face.default.desc":"标准设计",
+    "face.noir":"黑色",
+    "face.noir.desc":"时尚单色牌",
+    "face.fourcolor":"4色",
+    "face.fourcolor.desc":"每种花色不同颜色",
+    "table.default":"赌场绿",
+    "table.ocean":"深海",
+    "table.wine":"酒红",
+    "table.noir":"黑色",
+    "table.gold":"黄金室",
+    "table.aurora":"极光",
+    "setup.title":"游戏设置",
+    "setup.flip_title":"🎴 翻牌模式",
+    "setup.battle_title":"⚔️ 对战模式",
+    "setup.players":"玩家人数",
+    "setup.names":"玩家名",
+    "setup.name_placeholder":"玩家 {n}",
+    "setup.people":"人",
+    "setup.alert_mode":"演出模式",
+    "setup.bet_rule":"倍率规则",
+    "setup.offset_desc":"按牌型差计算",
+    "setup.no_offset_desc":"胜者的倍率",
+    "setup.start":"开始游戏",
+    "game.reset":"重置",
+    "game.round":"R",
+    "game.open_three":"开3张",
+    "game.drag_squeeze":"拖动挤牌",
+    "game.next_round":"下一轮",
+    "game.final":"最终结果",
+    "game.home":"回主页",
+    "game.again":"再来一局",
+    "game.home_back":"← 回主页",
+    "game.next_round_arrow":"下一轮 →",
+    "game.rounds_done":"轮结束",
+    "game.round_history":"轮次历史",
+    "game.final_ranking":"最终排名",
+    "game.total":"合计",
+    "game.round_sum":"张合计",
+    "game.you_score":"你的总分",
+    "battle.pick_dealer":"请选择庄家",
+    "battle.pick_dealer_back":"← 返回",
+    "battle.summary_end":"📊 结算",
+    "battle.bet_back":"← 选庄家",
+    "battle.deal":"发牌",
+    "ad.label":"广告",
+    "ad.area":"广告区域（Capacitor 迁移后实装）",
+    "ad.close":"3 秒后自动关闭...",
+    "ad.remove":"🚫 去除广告 → 商店",
+    "battle.dealer_label":"庄",
+    "battle.child_label":"闲",
+    "battle.chips":"筹码",
+    "battle.bet_screen":"请下注",
+    "battle.max_bet":"上限",
+    "battle.bet_confirm":"确定",
+    "battle.bet":"下注",
+    "battle.offset":"带相抵",
+    "battle.no_offset":"不相抵",
+    "battle.dealer_wins":"庄家胜",
+    "battle.child_wins":"闲家胜",
+    "battle.total_chips":"总筹码",
+    "battle.your_bet":"下注",
+    "battle.payout":"支付",
+    "battle.receive":"获得",
+    "battle.multiplier":"倍率",
+    "battle.rank":"排名",
+    "hand.no_bull":"无牛",
+    "hand.bull":"牛",
+    "hand.niuniu":"牛牛！",
+    "hand.five_small":"五小牛！",
+    "hand.five_flower":"五花牛！",
+    "hand.bomb":"炸弹牛！",
+    "hand.sf":"同花顺牛！！",
+    "hand.rf":"皇家同花顺！！",
+    "rb.title":"📖 玩法",
+    "rb.tab.rules":"规则",
+    "rb.tab.effects":"演出",
+    "rb.tab.modes":"模式",
+    "rb.basic":"基本规则",
+    "rb.basic.desc":"每位玩家发5张牌。从5张牌中选出3张，使其总和为10的倍数，这就是「牛」。",
+    "rb.card_values":"牌值",
+    "rb.card_values.desc":"A = 1点 ／ 2〜9 = 按面值 ／ 10·J·Q·K = 10点",
+    "rb.how_to":"牛的构成",
+    "rb.how_to.desc":"3张牌总和为10的倍数即为牛！剩余2张的总和个位数决定牌型强度。",
+    "rb.example_bull7":"例：牛7",
+    "rb.example_bull7.desc":"K(10) + 7 + 3 = 20 → 牛！剩余 5 + 2 = 7 → 牛7",
+    "rb.example_niuniu":"例：牛牛（最强的牛）",
+    "rb.example_niuniu.desc":"10 + J(10) + Q(10) = 30 → 牛！剩余 5 + 5 = 10 → 牛牛！",
+    "rb.example_no_bull":"例：无牛",
+    "rb.example_no_bull.desc":"任何3张组合都不是10的倍数 → 无牛",
+    "rb.hand_list":"牌型一览（从弱到强）",
+    "rb.no_bull.desc":"无法凑牛。最弱。",
+    "rb.bull.desc":"剩余2张的个位数。数字越大越强。",
+    "rb.niuniu.desc":"剩余2张也是10的倍数。10倍。",
+    "rb.five_small.desc":"全部≤5且无牛。15倍。",
+    "rb.five_flower.desc":"全部为J/Q/K。15倍。",
+    "rb.bomb.desc":"4张相同数字。20倍。",
+    "rb.sf.desc":"5张连号＋同花色。30倍。",
+    "rb.rf.desc":"10-J-Q-K-A 同花色。最强。50倍。",
+    "rb.tiebreak":"同牌型时",
+    "rb.tiebreak.desc":"同牌型之间比较高牌（最强单张）。",
+    "rb.card_strength":"牌面强度",
+    "rb.card_strength.desc_1":"数字: K > Q > J > 10 > 9 > ... > 2 > A",
+    "rb.card_strength.desc_2":"花色: ♠ > ♥ > ♦ > ♣",
+    "rb.card_strength.desc_3":"例: K♠ 最强，A♣ 最弱",
+    "rb.squeeze_intro":"挤牌的乐趣",
+    "rb.squeeze_intro.desc":"开3张后，剩余2张通过拖动慢慢翻开。挤牌时只能看到花色符号（♠♥♦♣），数字被遮挡。通过符号的数量和位置推理数字才是真正的乐趣！",
+    "rb.vert_squeeze":"纵向挤牌（从上方翻开）",
+    "rb.vert_squeeze.desc":"通过牌顶部可见的符号数量来判断。",
+    "rb.vert.jk":"有花样 → J〜K",
+    "rb.vert.ace":"无符号 → A",
+    "rb.vert.23":"上方1个 → 2 或 3",
+    "rb.vert.410":"上方2个 → 4〜10",
+    "rb.horiz_squeeze":"横向挤牌（从侧边翻开）",
+    "rb.horiz_squeeze.desc":"通过左右可见的符号列数（边数）进一步缩小范围。",
+    "rb.horiz.jk":"花样 → J〜K",
+    "rb.horiz.a23":"无 → A, 2, 3",
+    "rb.horiz.45":"2边 → 4, 5",
+    "rb.horiz.678":"3边 → 6, 7, 8",
+    "rb.horiz.910":"4边 → 9, 10",
+    "rb.practice":"挤牌练习",
+    "rb.practice.desc":"实际挤牌来练习吧！",
+    "rb.alerts":"预告演出",
+    "rb.alerts.desc":"在「剧透」模式下，挤牌前会出现提示。",
+    "rb.red":"🔴 红光 — 信赖度 约30%",
+    "rb.red.desc_1":"4、5张牌闪红光。",
+    "rb.red.desc_2":"出现不一定是牛牛。",
+    "rb.glitch":"👻 违和感 — 信赖度 约60%",
+    "rb.glitch.desc_1":"微微抖动·闪烁。",
+    "rb.glitch.desc_2":"期待度比红光高。",
+    "rb.premium":"🌈✨ 高级预告 — 信赖度 ???",
+    "rb.premium.desc_1":"超稀有。",
+    "rb.premium.desc_2":"出现会...？敬请期待。",
+    "rb.flip_mode":"🎴 翻牌模式",
+    "rb.flip_mode.desc":"轻松玩乐的模式。全员平等对战。",
+    "rb.flip_howto":"玩法",
+    "rb.flip_howto.step1":"1. 设置人数·名字后开始",
+    "rb.flip_howto.step2":"2. 每人发5张牌",
+    "rb.flip_howto.step3":"3. 各自「开3张」→ 挤剩余2张",
+    "rb.flip_howto.step4":"4. 全员开牌后，最强牌型获1分",
+    "rb.flip_howto.step5":"5. 「下一轮」继续",
+    "rb.flip_judge":"胜负判定",
+    "rb.flip_judge.desc_1":"牌型强者胜。同牌型比较高牌。",
+    "rb.flip_judge.desc_2":"无筹码计算，简单好玩。",
+    "rb.battle_mode":"⚔️ 对战模式",
+    "rb.battle_mode.desc":"庄闲对战＋筹码计算的正式模式。",
+    "rb.battle_flow":"基本流程",
+    "rb.battle_flow.step1":"1. 设置人数·名字·倍率规则·演出模式",
+    "rb.battle_flow.step2":"2. 每轮选1位「庄家」",
+    "rb.battle_flow.step3":"3. 庄家决定MAX下注额",
+    "rb.battle_flow.step4":"4. 各闲家决定下注额（1〜MAX）",
+    "rb.battle_flow.step5":"5. 发牌，全员挤牌开牌",
+    "rb.battle_flow.step6":"6. 庄 vs 各闲 1对1对决 → 筹码结算",
+    "rb.battle_flow.step7":"7. 进入下一轮（重新选庄）",
+    "rb.battle_flow.step8":"8. 随时可按「结算」结束→显示结果",
+    "rb.chip_flow":"筹码流动",
+    "rb.chip_flow.desc":"庄家 vs 各闲家 1对1。赢则＋，输则−。",
+    "rb.multiplier":"倍率规则",
+    "rb.offset_rule":"带相抵 — 稳定对战",
+    "rb.offset_rule.desc_1":"倍率 = 庄家和闲家牌型倍率之差。",
+    "rb.offset_rule.desc_2":"牌型越接近差越小，对战越平稳。",
+    "rb.offset_rule.calc_1":"差0（同牌型比高牌） → 1倍",
+    "rb.offset_rule.calc_2":"差1（例: 牛5 vs 牛4） → 1.5倍",
+    "rb.offset_rule.calc_3":"差2以上 → 差值即为倍率",
+    "rb.no_offset_rule":"不相抵 — 激烈对战",
+    "rb.no_offset_rule.desc_1":"倍率 = 胜方牌型倍率。",
+    "rb.no_offset_rule.desc_2":"强牌获胜获利大，近胜负也会大起大落。",
+    "rb.no_offset_rule.ex_1":"例: 庄家 牛8(8倍) vs 闲家 牛7(7倍)",
+    "rb.no_offset_rule.ex_2":"　带相抵 → 1.5倍",
+    "rb.no_offset_rule.ex_3":"　不相抵 → 8倍（约5倍差！）",
+    "rb.no_offset_rule.note":"不相抵比带相抵激烈约2〜3倍。",
+    "rb.summary":"结算",
+    "rb.summary.desc_1":"随时可按「📊 结算」。",
+    "rb.summary.desc_2":"显示最终排名（筹码顺）和全轮次历史。",
+    "rb.summary.desc_3":"可回顾每轮的庄家·牌型·筹码增减。",
+    "demo.dealer":"庄",
+    "demo.child_a":"闲A",
+    "demo.child_b":"闲B",
+    "demo.play":"▶ 播放演示",
+    "demo.again":"再次播放 ↻",
+    "demo.stop":"⏹ 停止",
+    "demo.playing":"播放中...",
+    "demo.deal":"庄: 牛8  ／  闲A: 牛6 (下注 5)  ／  闲B: 牛牛 (下注 3)",
+    "demo.judge_a":"庄 牛8 vs 闲A 牛6 → 庄胜！",
+    "demo.judge_b":"庄 牛8 vs 闲B 牛牛 → 闲B胜！",
+    "demo.calc_a_offset":"倍率 = |8 - 6| = 2倍 ／ 支付 = 下注 5 × 2倍 = 10",
+    "demo.calc_b_offset":"倍率 = |8 - 10| = 2倍 ／ 支付 = 下注 3 × 2倍 = 6",
+    "demo.calc_a_nooffset":"倍率 = 胜者倍率 = 8倍 ／ 支付 = 下注 5 × 8倍 = 40",
+    "demo.calc_b_nooffset":"倍率 = 胜者倍率 = 10倍 ／ 支付 = 下注 3 × 10倍 = 30",
+    "demo.pay_a_to_d_10":"闲A → 庄 支付 10",
+    "demo.pay_d_to_b_6":"庄 → 闲B 支付 6",
+    "demo.pay_a_to_d_40":"闲A → 庄 支付 40",
+    "demo.pay_d_to_b_30":"庄 → 闲B 支付 30",
+    "demo.result_offset":"结果: 庄 +4 ／ 闲A -10 ／ 闲B +6",
+    "demo.result_nooffset":"结果: 庄 +10 ／ 闲A -40 ／ 闲B +30",
+    "trainer.next":"下一张 →",
+    "trainer.hint":"拖动挤牌",
+    "squeeze.hint":"挤",
+    "common.back":"← 返回",
+    "common.selected":"✓ 使用中",
+    "common.locked":"🔒 需购买",
+    "common.yes":"是",
+    "common.no":"否",
+  }
+};
+
+// Current language (global state, synced with React state)
+var currentLang="ja";
+function getLangFromStorage(){
+  try{var v=localStorage.getItem("niuniu_lang");if(v&&I18N[v])return v;}catch(e){}
+  // Auto-detect from browser
+  var bl=(navigator.language||"").toLowerCase();
+  if(bl.indexOf("ja")===0)return "ja";
+  if(bl.indexOf("zh")===0)return "zh";
+  if(bl.indexOf("en")===0)return "en";
+  return "ja";
+}
+function saveLangToStorage(lang){try{localStorage.setItem("niuniu_lang",lang);}catch(e){}}
+function t(key){
+  var dict=I18N[currentLang]||I18N.ja;
+  return dict[key]!==undefined?dict[key]:(I18N.ja[key]!==undefined?I18N.ja[key]:key);
+}
+// Display name: return user input if non-empty, else fallback "Player N"
+function displayName(nameArr,idx){
+  var n=nameArr&&nameArr[idx];
+  if(n&&String(n).trim())return n;
+  return t("setup.name_placeholder").replace("{n}",idx+1);
+}
 
 // ─── Main App ────────────────────────────────────────────────────
 var PCOLORS=["#e74c3c","#2980b9","#27ae60","#f39c12","#8e44ad","#1abc9c"];
@@ -893,7 +1705,7 @@ function PlayerCards(props){
     for(var a2=0;a2<idx2.length;a2++)for(var b2=a2+1;b2<idx2.length;b2++)for(var d2=b2+1;d2<idx2.length;d2++){
       if((rankPoints(hands[i][idx2[a2]].rank)+rankPoints(hands[i][idx2[b2]].rank)+rankPoints(hands[i][idx2[d2]].rank))%10===0)bullSet2=new Set([idx2[a2],idx2[b2],idx2[d2]]);
     }
-    pi2={text:idx2.length+"枚合計: "+sum2,bullSet:bullSet2};
+    pi2={text:idx2.length+t("game.round_sum")+": "+sum2,bullSet:bullSet2};
   }
 
   var alert=alerts[i];
@@ -971,7 +1783,7 @@ function PlayerCards(props){
   pKids.push(e("div",{key:"ph",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:compactMode?4:7}},
     e("div",{style:{display:"flex",alignItems:"center",gap:3}},
       e("span",{style:{fontSize:compactMode?14:17}},PEMOJI[i]),
-      e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:compactMode?10:12}},names[i]),
+      e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:compactMode?10:12}},displayName(names,i)),
       isDealer?e("span",{style:{fontSize:compactMode?7:9,fontWeight:800,color:"#fff",background:"linear-gradient(135deg,#c0392b,#962d22)",padding:"1px 6px",borderRadius:4,letterSpacing:1,boxShadow:"0 1px 4px rgba(192,57,43,0.3)"}},"親"):null,
       !isDealer&&betAmount?e("span",{style:{fontSize:compactMode?7:9,fontWeight:600,color:"#f39c12",background:"rgba(243,156,18,0.1)",padding:"1px 5px",borderRadius:3}},"BET "+betAmount):null,
       rc.size>=3&&!full?e("span",{style:{fontSize:compactMode?7:9,fontWeight:600,color:"#4ecdc4",background:"rgba(78,205,196,0.07)",padding:"1px 4px",borderRadius:3}},rc.size===3?"絞り中":"ラスト！"):null),
@@ -1011,9 +1823,9 @@ function PlayerCards(props){
   if(full){var indResult=res||evaluateHand(hands[i]);
     actionContent=e("div",{style:{fontSize:indResult.hasBull?(compactMode?14:19):(compactMode?10:13),fontWeight:800,color:indResult.hasBull?"#d4af37":"#555",fontFamily:"serif",animation:"fadeUp .4s ease"}},indResult.label);
   }else if(phase==="reveal"&&rc.size===0){
-    actionContent=e("button",{onClick:function(){openThree(i);},style:{padding:compactMode?"3px 14px":"5px 20px",fontSize:compactMode?10:12,fontWeight:700,fontFamily:"inherit",borderRadius:7,border:"1.5px solid var(--accent)",background:"transparent",color:"var(--accent)",cursor:"pointer",letterSpacing:1}},"3枚オープン");
+    actionContent=e("button",{onClick:function(){openThree(i);},style:{padding:compactMode?"3px 14px":"5px 20px",fontSize:compactMode?10:12,fontWeight:700,fontFamily:"inherit",borderRadius:7,border:"1.5px solid var(--accent)",background:"transparent",color:"var(--accent)",cursor:"pointer",letterSpacing:1}},t("game.open_three"));
   }else if(phase==="reveal"&&rc.size>=3){
-    actionContent=e("div",{style:{fontSize:compactMode?8:10,color:"#4ecdc4",animation:"squeezePulse 2s ease-in-out infinite",fontWeight:600}},"ドラッグして絞る");
+    actionContent=e("div",{style:{fontSize:compactMode?8:10,color:"#4ecdc4",animation:"squeezePulse 2s ease-in-out infinite",fontWeight:600}},t("game.drag_squeeze"));
   }
   pKids.push(e("div",{key:"action",style:{marginTop:compactMode?3:7,textAlign:"center",minHeight:compactMode?20:28}},actionContent));
 
@@ -1049,7 +1861,7 @@ function NiuNiu(){
   },[appMode]);
   var s1=useState("setup"),phase=s1[0],setPhase=s1[1];
   var s2=useState(4),pc=s2[0],setPc=s2[1];
-  var s3=useState(["プレイヤー1","プレイヤー2","プレイヤー3","プレイヤー4","プレイヤー5","プレイヤー6"]),names=s3[0],setNames=s3[1];
+  var s3=useState(["","","","","",""]),names=s3[0],setNames=s3[1];
   var s4=useState([]),hands=s4[0],setHands=s4[1];
   var s5=useState([]),revealedCards=s5[0],setRevealedCards=s5[1];
   var s6=useState([]),results=s6[0],setResults=s6[1];
@@ -1070,6 +1882,23 @@ function NiuNiu(){
   var b6=useState(10),maxBet=b6[0],setMaxBet=b6[1];
   var b7=useState(null),roundDeltas=b7[0],setRoundDeltas=b7[1];
   var b8=useState("rule"),rbTab=b8[0],setRbTab=b8[1];
+  // Shortcut presets for bet screens (4 values each)
+  var defaultMaxShortcuts=[10,20,50,100];
+  var defaultPlayerShortcuts=[1,5,10,20];
+  function loadShortcut(key,fallback){
+    try{var v=localStorage.getItem(key);if(v){var arr=JSON.parse(v);if(Array.isArray(arr)&&arr.length===4)return arr;}}catch(e){}
+    return fallback;
+  }
+  var sc1=useState(loadShortcut("niuniu_max_shortcuts",defaultMaxShortcuts)),maxShortcuts=sc1[0],setMaxShortcutsState=sc1[1];
+  var sc2=useState(loadShortcut("niuniu_player_shortcuts",defaultPlayerShortcuts)),playerShortcuts=sc2[0],setPlayerShortcutsState=sc2[1];
+  function setMaxShortcuts(arr){
+    setMaxShortcutsState(arr);
+    try{localStorage.setItem("niuniu_max_shortcuts",JSON.stringify(arr));}catch(e){}
+  }
+  function setPlayerShortcuts(arr){
+    setPlayerShortcutsState(arr);
+    try{localStorage.setItem("niuniu_player_shortcuts",JSON.stringify(arr));}catch(e){}
+  }
 
   // Shop & customization
   var c1=useState("default"),skinId=c1[0],setSkinId=c1[1];
@@ -1080,6 +1909,30 @@ function NiuNiu(){
   var c5=useState(null),settingsFrom=c5[0],setSettingsFrom=c5[1]; // track where settings was opened from
   var c6=useState(0),adCounter=c6[0],setAdCounter=c6[1]; // count rounds for ad timing
   var c7=useState(false),showAdPlaceholder=c7[0],setShowAdPlaceholder=c7[1];
+  var c8=useState(getLangFromStorage()),lang=c8[0],setLangState=c8[1];
+  // Wrapper: updating lang also updates global and localStorage
+  function setLang(newLang){
+    currentLang=newLang;
+    saveLangToStorage(newLang);
+    setLangState(newLang);
+  }
+  // Sync global on mount
+  useEffect(function(){currentLang=lang;},[lang]);
+
+  // Clamp all bets to current maxBet when maxBet changes or when entering betting phase.
+  // Fixes: stale bets from a previous round can exceed new maxBet and silently get used.
+  useEffect(function(){
+    if(appMode!=="battle")return;
+    setBets(function(prev){
+      var changed=false;
+      var next=Object.assign({},prev);
+      Object.keys(next).forEach(function(k){
+        if(next[k]>maxBet){next[k]=maxBet;changed=true;}
+        if(next[k]<1){next[k]=1;changed=true;}
+      });
+      return changed?next:prev;
+    });
+  },[maxBet,phase,appMode]);
 
   // Get current skin/table
   var curSkin=CARD_SKINS.find(function(s){return s.id===skinId;})||CARD_SKINS[0];
@@ -1306,7 +2159,17 @@ function NiuNiu(){
 
   // ─── HOME Screen ───────────────────────────────────────────
   if(appMode==="home"){
-    return e("div",{style:{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",padding:20,maxWidth:860,margin:"0 auto"}},
+    return e("div",{style:{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",padding:20,maxWidth:860,margin:"0 auto",position:"relative"}},
+      // Language switcher (top-right)
+      e("div",{style:{position:"absolute",top:16,right:16,display:"flex",gap:4,zIndex:10}},
+        LANGS.map(function(l){
+          var sel=lang===l.id;
+          return e("button",{key:l.id,onClick:function(){setLang(l.id);if(soundOn)SFX.buttonClick();},
+            style:{padding:"5px 10px",fontSize:11,fontWeight:sel?800:500,cursor:"pointer",fontFamily:"inherit",
+              background:sel?"var(--tab-active)":"rgba(0,0,0,0.3)",
+              border:sel?"1px solid var(--accent)":"1px solid var(--card-border)",
+              borderRadius:6,color:sel?"var(--accent)":"var(--text-muted)"}},l.short);
+        })),
       e("div",{style:{maxWidth:500,margin:"0 auto",textAlign:"center",width:"100%"}},
         // Logo area with decorative line
         e("div",{style:{marginBottom:28}},
@@ -1327,8 +2190,8 @@ function NiuNiu(){
               boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(212,175,55,0.1)"}},
             e("div",{style:{width:88,height:88,borderRadius:22,background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,boxShadow:"0 6px 20px rgba(212,175,55,0.4)"}},"🎴"),
             e("div",null,
-              e("div",{style:{fontSize:20,fontWeight:800,color:"var(--text)",letterSpacing:1.5,marginBottom:6}},"フリップ"),
-              e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.5}},"サクッと勝負"))),
+              e("div",{style:{fontSize:20,fontWeight:800,color:"var(--text)",letterSpacing:1.5,marginBottom:6}},t("home.flip")),
+              e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.5}},t("home.flip_desc")))),
           // Battle mode
           e("button",{onClick:function(){setAppMode("battle");setPhase("setup");if(soundOn)SFX.buttonClick();},
             style:{padding:"36px 16px",borderRadius:16,border:"1px solid rgba(192,57,43,0.2)",
@@ -1338,8 +2201,8 @@ function NiuNiu(){
               boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(192,57,43,0.1)"}},
             e("div",{style:{width:88,height:88,borderRadius:22,background:"linear-gradient(135deg,#c0392b,#962d22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,boxShadow:"0 6px 20px rgba(192,57,43,0.4)"}},"⚔️"),
             e("div",null,
-              e("div",{style:{fontSize:20,fontWeight:800,color:"var(--text)",letterSpacing:1.5,marginBottom:6}},"対戦"),
-              e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.5}},"親子＋チップ計算")))),
+              e("div",{style:{fontSize:20,fontWeight:800,color:"var(--text)",letterSpacing:1.5,marginBottom:6}},t("home.battle")),
+              e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.5}},t("home.battle_desc"))))),
         // Sub buttons - 2 column
         e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}},
           e("button",{onClick:function(){setAppMode("rulebook");if(soundOn)SFX.buttonClick();},
@@ -1347,13 +2210,13 @@ function NiuNiu(){
               background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
               display:"flex",alignItems:"center",justifyContent:"center",gap:8}},
             e("span",{style:{fontSize:18}},"📖"),
-            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"遊び方")),
+            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},t("home.rulebook"))),
           e("button",{onClick:function(){setSettingsFrom("home");setAppMode("settings");if(soundOn)SFX.buttonClick();},
             style:{padding:"14px 16px",borderRadius:12,border:"1px solid var(--card-border)",
               background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
               display:"flex",alignItems:"center",justifyContent:"center",gap:8}},
             e("span",{style:{fontSize:18}},"⚙️"),
-            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"設定"))),
+            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},t("home.settings")))),
         // Footer
         e("div",{style:{marginTop:20,opacity:0.3,fontSize:9,color:"var(--text-muted)",letterSpacing:2,textAlign:"center"}},"v1.0")));
   }
@@ -1365,14 +2228,14 @@ function NiuNiu(){
 
     // Header
     shKids.push(e("div",{key:"hdr",style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}},
-      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 戻る"),
-      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},"🛍️ ショップ"),
+      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("common.back")),
+      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},t("shop.title")),
       e("div",{style:{width:50}})));
 
     // Intro note
     shKids.push(e("div",{key:"intro",style:{fontSize:11,color:"var(--text-muted)",textAlign:"center",marginBottom:16,lineHeight:1.6}},
-      "カードデザイン・背景のカスタマイズを解放できます。",e("br"),
-      "購入後は「設定」から自由に変更できます。"));
+      t("shop.intro"),e("br"),
+      t("shop.intro2")));
 
     // Purchase items
     SHOP_ITEMS.forEach(function(item){
@@ -1382,11 +2245,11 @@ function NiuNiu(){
           e("div",{style:{fontSize:28,width:40,textAlign:"center"}},item.icon),
           e("div",{style:{flex:1}},
             e("div",{style:{display:"flex",alignItems:"center",gap:6}},
-              e("span",{style:{fontSize:14,fontWeight:800,color:"var(--text)"}},item.name),
-              item.highlight?e("span",{style:{fontSize:8,fontWeight:700,color:"var(--accent)",background:"var(--tab-active)",padding:"1px 5px",borderRadius:3}},"お得"):null),
-            e("div",{style:{fontSize:10,color:"var(--text-muted)",marginTop:2}},item.desc)),
+              e("span",{style:{fontSize:14,fontWeight:800,color:"var(--text)"}},t("shop.item."+item.id+".name")),
+              item.highlight?e("span",{style:{fontSize:8,fontWeight:700,color:"var(--accent)",background:"var(--tab-active)",padding:"1px 5px",borderRadius:3}},t("shop.sale")):null),
+            e("div",{style:{fontSize:10,color:"var(--text-muted)",marginTop:2}},t("shop.item."+item.id+".desc"))),
           owned?
-            e("div",{style:{fontSize:11,fontWeight:700,color:"#27ae60",padding:"6px 12px"}},"✓ 購入済"):
+            e("div",{style:{fontSize:11,fontWeight:700,color:"#27ae60",padding:"6px 12px"}},t("shop.owned")):
             e("button",{onClick:function(){doPurchase(item.id);if(soundOn)SFX.buttonClick();},style:{
               padding:"8px 14px",borderRadius:8,fontSize:12,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
               background:item.highlight?"linear-gradient(135deg,var(--accent),var(--accent-dark))":"var(--btn-bg)",
@@ -1395,8 +2258,8 @@ function NiuNiu(){
               boxShadow:item.highlight?"0 2px 8px rgba(212,175,55,0.3)":"none"}},item.price))));
     });
     shKids.push(e("div",{key:"note",style:{fontSize:9,color:"var(--text-dim)",textAlign:"center",marginTop:8,lineHeight:1.6}},
-      "※ 現在はデモ版です。実際の課金はCapacitor移行後に実装されます。",e("br"),
-      "購入ボタンを押すと即時解放されます（テスト用）。"));
+      t("shop.note"),e("br"),
+      t("shop.note2")));
 
     return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},shKids));
@@ -1410,20 +2273,20 @@ function NiuNiu(){
 
     // Header
     setKids.push(e("div",{key:"hdr",style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}},
-      e("button",{onClick:function(){setAppMode(backTo);setSettingsFrom(null);},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 戻る"),
-      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},"⚙️ 設定"),
+      e("button",{onClick:function(){setAppMode(backTo);setSettingsFrom(null);},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("common.back")),
+      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},t("settings.title")),
       e("div",{style:{width:50}})));
 
     // ─── カードデザイン ─────
     setKids.push(e("div",{key:"cardsec",style:setCard},
-      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},"🎴 カードデザイン"),
+      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},t("settings.card_design")),
       // Preview
       e("div",{style:{display:"flex",justifyContent:"center",gap:8,marginBottom:14,padding:"10px 0",background:"rgba(0,0,0,0.15)",borderRadius:8}},
         e(CardBack,{w:48,h:72,skin:curSkin}),
         e(CardFace,{card:{rank:"K",suit:"♠"},w:48,h:72,showRank:true,faceTheme:curFace}),
         e(CardFace,{card:{rank:"7",suit:"♥"},w:48,h:72,showRank:true,faceTheme:curFace})),
       // Back label
-      e("div",{style:{fontSize:10,fontWeight:700,color:"var(--text-muted)",marginBottom:6}},"裏面"),
+      e("div",{style:{fontSize:10,fontWeight:700,color:"var(--text-muted)",marginBottom:6}},t("settings.back_design")),
       e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:14}},
         CARD_SKINS.map(function(sk){
           var sel=skinId===sk.id;
@@ -1435,12 +2298,12 @@ function NiuNiu(){
               opacity:unlocked?1:0.45}},
             e("div",{style:{display:"flex",justifyContent:"center",marginBottom:4}},
               e(CardBack,{w:32,h:48,skin:sk})),
-            e("div",{style:{fontSize:9,fontWeight:sel?700:400,color:sel?"var(--accent)":"var(--text-muted)"}},sk.name),
+            e("div",{style:{fontSize:9,fontWeight:sel?700:400,color:sel?"var(--accent)":"var(--text-muted)"}},t("skin."+sk.id)),
             !unlocked?e("div",{style:{fontSize:7,color:"#c0392b",marginTop:1}},"🔒"):
             sel?e("div",{style:{fontSize:7,color:"#27ae60",marginTop:1}},"✓"):null);
         })),
       // Face label
-      e("div",{style:{fontSize:10,fontWeight:700,color:"var(--text-muted)",marginBottom:6}},"表面"),
+      e("div",{style:{fontSize:10,fontWeight:700,color:"var(--text-muted)",marginBottom:6}},t("settings.face_design")),
       e("div",{style:{display:"grid",gap:6}},
         CARD_FACES.map(function(fc){
           var sel=faceId===fc.id;
@@ -1456,15 +2319,15 @@ function NiuNiu(){
                 e(CardFace,{card:{rank:"7",suit:"♥"},w:26,h:38,showRank:true,faceTheme:fc}),
                 e(CardFace,{card:{rank:"A",suit:"♦"},w:26,h:38,showRank:true,faceTheme:fc})),
               e("div",{style:{flex:1,textAlign:"left"}},
-                e("div",{style:{fontSize:11,fontWeight:sel?700:500,color:sel?"var(--accent)":"var(--text)"}},fc.name),
-                e("div",{style:{fontSize:9,color:"var(--text-muted)",marginTop:2}},fc.desc)),
+                e("div",{style:{fontSize:11,fontWeight:sel?700:500,color:sel?"var(--accent)":"var(--text)"}},t("face."+fc.id)),
+                e("div",{style:{fontSize:9,color:"var(--text-muted)",marginTop:2}},t("face."+fc.id+".desc"))),
               !unlocked?e("span",{style:{fontSize:9,color:"#c0392b"}},"🔒"):
               sel?e("span",{style:{fontSize:9,color:"#27ae60"}},"✓"):null));
         }))));
 
     // ─── 背景 ─────
     setKids.push(e("div",{key:"bgsec",style:setCard},
-      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},"🎨 テーブル背景"),
+      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},t("settings.bg_design")),
       e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
         TABLE_BGS.map(function(tb){
           var sel=tableId===tb.id;
@@ -1478,43 +2341,84 @@ function NiuNiu(){
               background:"radial-gradient(ellipse at 50% 50%,"+tb.grad+","+tb.bg+")",
               border:"1px solid rgba(255,255,255,0.05)"}},
               e("div",{style:{position:"absolute",bottom:4,right:6,width:8,height:8,borderRadius:"50%",background:tb.accent}})),
-            e("div",{style:{fontSize:10,fontWeight:sel?700:400,color:sel?"var(--accent)":"var(--text-muted)"}},tb.name),
-            !unlocked?e("div",{style:{fontSize:8,color:"#c0392b",marginTop:2}},"🔒 要購入"):
-            sel?e("div",{style:{fontSize:8,color:"#27ae60",marginTop:2}},"✓ 使用中"):null);
+            e("div",{style:{fontSize:10,fontWeight:sel?700:400,color:sel?"var(--accent)":"var(--text-muted)"}},t("table."+tb.id)),
+            !unlocked?e("div",{style:{fontSize:8,color:"#c0392b",marginTop:2}},t("common.locked")):
+            sel?e("div",{style:{fontSize:8,color:"#27ae60",marginTop:2}},t("common.selected")):null);
         }))));
 
     // ─── ゲーム設定 ─────
     setKids.push(e("div",{key:"gamesec",style:setCard},
-      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},"🎮 ゲーム設定"),
+      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},t("settings.game_settings")),
       // Sound toggle
       e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid var(--card-border)"}},
         e("div",null,
-          e("div",{style:{fontSize:12,color:"var(--text)",fontWeight:600}},"🔊 サウンド"),
-          e("div",{style:{fontSize:9,color:"var(--text-muted)",marginTop:2}},"効果音の再生")),
+          e("div",{style:{fontSize:12,color:"var(--text)",fontWeight:600}},t("settings.sound")),
+          e("div",{style:{fontSize:9,color:"var(--text-muted)",marginTop:2}},t("settings.sound_desc"))),
         e("button",{onClick:function(){setSoundOn(!soundOn);},style:{
           padding:"6px 14px",borderRadius:20,fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
           background:soundOn?"linear-gradient(135deg,var(--accent),var(--accent-dark))":"rgba(0,0,0,0.3)",
           color:soundOn?"var(--bg)":"var(--text-muted)",
           border:soundOn?"none":"1px solid var(--card-border)"}},soundOn?"ON":"OFF")),
       // Game mode (alert style)
-      e("div",{style:{padding:"12px 0 4px"}},
-        e("div",{style:{fontSize:12,color:"var(--text)",fontWeight:600,marginBottom:4}},"🎴 予告スタイル"),
-        e("div",{style:{fontSize:9,color:"var(--text-muted)",marginBottom:10}},"牛が出る時の演出頻度"),
-        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
+      e("div",{style:{padding:"12px 0 4px",borderBottom:"1px solid var(--card-border)"}},
+        e("div",{style:{fontSize:12,color:"var(--text)",fontWeight:600,marginBottom:4}},t("settings.alert_style")),
+        e("div",{style:{fontSize:9,color:"var(--text-muted)",marginBottom:10}},t("settings.alert_style_desc")),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}},
           e("button",{onClick:function(){setGameMode("simple");if(soundOn)SFX.buttonClick();},style:{
             padding:"10px 8px",borderRadius:10,fontSize:11,fontWeight:gameMode==="simple"?800:400,cursor:"pointer",fontFamily:"inherit",
             background:gameMode==="simple"?"var(--tab-active)":"rgba(0,0,0,0.2)",
             border:gameMode==="simple"?"1.5px solid var(--accent)":"1px solid var(--card-border)",
             color:gameMode==="simple"?"var(--accent)":"var(--text-muted)"}},
-            e("div",{style:{fontSize:16,marginBottom:2}},"🃏"),"シンプル",
-            e("div",{style:{fontSize:8,marginTop:2,opacity:0.7}},"プレミアのみ")),
+            e("div",{style:{fontSize:16,marginBottom:2}},"🃏"),t("settings.mode_simple"),
+            e("div",{style:{fontSize:8,marginTop:2,opacity:0.7}},t("settings.mode_simple_desc"))),
           e("button",{onClick:function(){setGameMode("spoiler");if(soundOn)SFX.buttonClick();},style:{
             padding:"10px 8px",borderRadius:10,fontSize:11,fontWeight:gameMode==="spoiler"?800:400,cursor:"pointer",fontFamily:"inherit",
             background:gameMode==="spoiler"?"var(--tab-active)":"rgba(0,0,0,0.2)",
             border:gameMode==="spoiler"?"1.5px solid var(--accent)":"1px solid var(--card-border)",
             color:gameMode==="spoiler"?"var(--accent)":"var(--text-muted)"}},
-            e("div",{style:{fontSize:16,marginBottom:2}},"🔮"),"先バレ",
-            e("div",{style:{fontSize:8,marginTop:2,opacity:0.7}},"赤オーラ＋プレミア"))))));
+            e("div",{style:{fontSize:16,marginBottom:2}},"🔮"),t("settings.mode_spoiler"),
+            e("div",{style:{fontSize:8,marginTop:2,opacity:0.7}},t("settings.mode_spoiler_desc"))))),
+      // Language switcher
+      e("div",{style:{padding:"12px 0 4px"}},
+        e("div",{style:{fontSize:12,color:"var(--text)",fontWeight:600,marginBottom:10}},t("settings.language")),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}},
+          LANGS.map(function(l){
+            var sel=lang===l.id;
+            return e("button",{key:l.id,onClick:function(){setLang(l.id);if(soundOn)SFX.buttonClick();},style:{
+              padding:"10px 8px",borderRadius:10,fontSize:11,fontWeight:sel?800:400,cursor:"pointer",fontFamily:"inherit",
+              background:sel?"var(--tab-active)":"rgba(0,0,0,0.2)",
+              border:sel?"1.5px solid var(--accent)":"1px solid var(--card-border)",
+              color:sel?"var(--accent)":"var(--text-muted)"}},l.short);
+          })))));
+
+    // ─── Bet shortcuts editor ─────
+    function shortcutEditor(arr,setFn,labelKey){
+      return e("div",{style:{marginBottom:12}},
+        e("div",{style:{fontSize:10,fontWeight:700,color:"var(--text-muted)",marginBottom:6}},t(labelKey)),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6}},
+          arr.map(function(v,idx){
+            return e("input",{key:idx,type:"number",min:1,max:999,value:v,
+              onChange:function(ev){
+                var n=parseInt(ev.target.value,10);
+                if(isNaN(n)||n<1)n=1;
+                if(n>999)n=999;
+                var next=arr.slice();next[idx]=n;setFn(next);
+              },
+              style:{padding:"7px 4px",borderRadius:6,border:"1px solid var(--card-border)",background:"rgba(0,0,0,0.2)",color:"var(--accent)",fontSize:13,fontWeight:700,fontFamily:"inherit",outline:"none",textAlign:"center",width:"100%",boxSizing:"border-box"}});
+          })));
+    }
+    setKids.push(e("div",{key:"shortcutsec",style:setCard},
+      e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:4,letterSpacing:1}},t("settings.shortcuts")),
+      e("div",{style:{fontSize:9,color:"var(--text-muted)",marginBottom:12}},t("settings.shortcuts_desc")),
+      shortcutEditor(maxShortcuts,setMaxShortcuts,"settings.max_shortcuts"),
+      shortcutEditor(playerShortcuts,setPlayerShortcuts,"settings.player_shortcuts"),
+      e("div",{style:{textAlign:"center",marginTop:6}},
+        e("button",{onClick:function(){
+          setMaxShortcuts(defaultMaxShortcuts);
+          setPlayerShortcuts(defaultPlayerShortcuts);
+          if(soundOn)SFX.buttonClick();
+        },style:{padding:"6px 16px",borderRadius:6,fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",
+          background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-muted)"}},t("settings.shortcut_reset")))));
 
     // Shop link
     setKids.push(e("button",{key:"shoplink",onClick:function(){setAppMode("shop");if(soundOn)SFX.buttonClick();},
@@ -1522,7 +2426,7 @@ function NiuNiu(){
         background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
         display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginTop:6}},
       e("span",{style:{fontSize:16}},"🛍️"),
-      e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},"ショップで追加コンテンツを購入")));
+      e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},t("settings.shop_link"))));
 
     return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},setKids));
@@ -1549,32 +2453,29 @@ function NiuNiu(){
 
     // Header + back
     rbKids.push(e("div",{key:"hdr",style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}},
-      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 戻る"),
-      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},"📖 遊び方"),
+      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("common.back")),
+      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},t("rb.title")),
       e("div",{style:{width:50}})));
 
     // Tab bar
-    var tabs=[{id:"rule",label:"ルール"},{id:"effect",label:"演出"},{id:"mode",label:"モード"}];
+    var tabs=[{id:"rule",labelKey:"rb.tab.rules"},{id:"effect",labelKey:"rb.tab.effects"},{id:"mode",labelKey:"rb.tab.modes"}];
     rbKids.push(e("div",{key:"tabs",style:{display:"flex",gap:0,marginBottom:16,borderRadius:10,overflow:"hidden",border:"1px solid var(--card-border)"}},
-      tabs.map(function(t){
-        var sel=rbTab===t.id;
-        return e("button",{key:t.id,onClick:function(){setRbTab(t.id);},style:{
+      tabs.map(function(tb){
+        var sel=rbTab===tb.id;
+        return e("button",{key:tb.id,onClick:function(){setRbTab(tb.id);},style:{
           flex:1,padding:"10px 0",fontSize:13,fontWeight:sel?800:400,cursor:"pointer",fontFamily:"inherit",border:"none",
           background:sel?"rgba(212,175,55,0.15)":"rgba(0,0,0,0.2)",
           color:sel?"#d4af37":"#6b8f6b",letterSpacing:1,
-          borderBottom:sel?"2px solid #d4af37":"2px solid transparent"}},t.label);
+          borderBottom:sel?"2px solid #d4af37":"2px solid transparent"}},t(tb.labelKey));
       })));
 
     // ─── ルール TAB ──────────────────────────────────
     if(rbTab==="rule"){
       rbKids.push(e("div",{key:"r1",style:rbCard},
-        e("div",{style:rbTitle},"基本ルール"),
-        e("div",{style:rbText},
-          "各プレイヤーに5枚のカードが配られます。",e("br"),
-          "5枚のうち3枚の合計が10の倍数になる組み合わせを探します。",e("br"),
-          "これが「牛（ニウ）」です。"),
-        e("div",{style:rbSub},"カードの数え方"),
-        e("div",{style:rbText},"A = 1点 ／ 2〜9 = そのまま ／ 10・J・Q・K = 10点"),
+        e("div",{style:rbTitle},t("rb.basic")),
+        e("div",{style:rbText},t("rb.basic.desc")),
+        e("div",{style:rbSub},t("rb.card_values")),
+        e("div",{style:rbText},t("rb.card_values.desc")),
         e("div",{style:{display:"flex",gap:3,justifyContent:"center",margin:"8px 0"}},
           e(CardFace,{card:{rank:"A",suit:"♠"},w:miniW,h:miniH,showRank:true}),
           e("div",{style:{display:"flex",alignItems:"center",fontSize:10,color:"var(--text-muted)"}},"= 1"),
@@ -1586,84 +2487,81 @@ function NiuNiu(){
           e("div",{style:{display:"flex",alignItems:"center",fontSize:10,color:"var(--text-muted)"}},"= 10"))));
 
       rbKids.push(e("div",{key:"r2",style:rbCard},
-        e("div",{style:rbTitle},"牛の作り方"),
-        e("div",{style:rbText},"3枚の合計が10の倍数 ＝ 牛！ 残り2枚の合計の下一桁が役の強さになります。"),
-        e("div",{style:rbSub},"例：牛7"),
+        e("div",{style:rbTitle},t("rb.how_to")),
+        e("div",{style:rbText},t("rb.how_to.desc")),
+        e("div",{style:rbSub},t("rb.example_bull7")),
         miniCardsHL([["K","♠"],["7","♥"],["3","♦"],["5","♣"],["2","♠"]],[0,1,2]),
-        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},"K(10) + 7 + 3 = 20 → 牛！ 残り 5 + 2 = 7 → 牛7"),
-        e("div",{style:rbSub},"例：牛牛（最強の牛）"),
+        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},t("rb.example_bull7.desc")),
+        e("div",{style:rbSub},t("rb.example_niuniu")),
         miniCardsHL([["10","♠"],["J","♥"],["Q","♦"],["5","♣"],["5","♠"]],[0,1,2]),
-        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},"10 + J(10) + Q(10) = 30 → 牛！ 残り 5 + 5 = 10 → 牛牛！"),
-        e("div",{style:rbSub},"例：无牛（牛なし）"),
+        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},t("rb.example_niuniu.desc")),
+        e("div",{style:rbSub},t("rb.example_no_bull")),
         miniCards([["2","♠"],["3","♥"],["4","♦"],["6","♣"],["8","♠"]]),
-        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},"どの3枚を選んでも10の倍数にならない → 无牛")));
+        e("div",{style:{textAlign:"center",fontSize:10,color:"var(--text-muted)"}},t("rb.example_no_bull.desc"))));
 
       rbKids.push(e("div",{key:"r3",style:rbCard},
-        e("div",{style:rbTitle},"役一覧（弱い順）"),
-        e("div",{style:Object.assign({},rbSub,{marginTop:4})},"无牛"),
-        e("div",{style:{fontSize:10,color:"var(--text-muted)"}},"牛が作れない。最弱。"),
-        e("div",{style:rbSub},"牛1 〜 牛9"),
-        e("div",{style:{fontSize:10,color:"var(--text-muted)"}},"残り2枚の下一桁。数字が大きいほど強い。"),
-        e("div",{style:rbSub},"牛牛！"),
+        e("div",{style:rbTitle},t("rb.hand_list")),
+        e("div",{style:Object.assign({},rbSub,{marginTop:4})},t("hand.no_bull")),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)"}},t("rb.no_bull.desc")),
+        e("div",{style:rbSub},t("hand.bull")+"1 〜 "+t("hand.bull")+"9"),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)"}},t("rb.bull.desc")),
+        e("div",{style:rbSub},t("hand.niuniu")),
         miniCardsHL([["J","♠"],["Q","♥"],["K","♦"],["10","♣"],["10","♠"]],[0,1,2]),
-        e("div",{style:{fontSize:10,color:"var(--accent)"}},"残り2枚も10の倍数。倍率10倍。"),
-        e("div",{style:rbSub},"五小牛！"),
+        e("div",{style:{fontSize:10,color:"var(--accent)"}},t("rb.niuniu.desc")),
+        e("div",{style:rbSub},t("hand.five_small")),
         miniCards([["A","♠"],["A","♥"],["3","♦"],["5","♣"],["5","♠"]]),
-        e("div",{style:{fontSize:10,color:"var(--accent)"}},"全て5以下で牛が作れない。倍率15倍。"),
-        e("div",{style:rbSub},"五花牛！"),
+        e("div",{style:{fontSize:10,color:"var(--accent)"}},t("rb.five_small.desc")),
+        e("div",{style:rbSub},t("hand.five_flower")),
         miniCards([["J","♠"],["Q","♥"],["K","♦"],["J","♣"],["Q","♠"]]),
-        e("div",{style:{fontSize:10,color:"var(--accent)"}},"全てJ/Q/K。倍率15倍。"),
-        e("div",{style:rbSub},"炸弹牛！"),
+        e("div",{style:{fontSize:10,color:"var(--accent)"}},t("rb.five_flower.desc")),
+        e("div",{style:rbSub},t("hand.bomb")),
         miniCards([["7","♠"],["7","♥"],["7","♦"],["7","♣"],["K","♠"]]),
-        e("div",{style:{fontSize:10,color:"var(--accent)"}},"4枚が同じ数字。倍率20倍。"),
-        e("div",{style:rbSub},"SF牛！！"),
+        e("div",{style:{fontSize:10,color:"var(--accent)"}},t("rb.bomb.desc")),
+        e("div",{style:rbSub},t("hand.sf")),
         miniCards([["5","♥"],["6","♥"],["7","♥"],["8","♥"],["9","♥"]]),
-        e("div",{style:{fontSize:10,color:"#c0392b",fontWeight:700}},"5枚連番＋同じスート。倍率30倍。"),
-        e("div",{style:rbSub},"RF牛！！"),
+        e("div",{style:{fontSize:10,color:"#c0392b",fontWeight:700}},t("rb.sf.desc")),
+        e("div",{style:rbSub},t("hand.rf")),
         miniCards([["10","♠"],["J","♠"],["Q","♠"],["K","♠"],["A","♠"]]),
-        e("div",{style:{fontSize:10,color:"#c0392b",fontWeight:700}},"10-J-Q-K-A 同スート。最強。倍率50倍。")));
+        e("div",{style:{fontSize:10,color:"#c0392b",fontWeight:700}},t("rb.rf.desc"))));
 
       rbKids.push(e("div",{key:"r4",style:rbCard},
-        e("div",{style:rbTitle},"同じ役の場合"),
-        e("div",{style:rbText},"同じ役同士はハイカード（最も強い1枚）で比較します。"),
-        e("div",{style:rbSub},"カードの強さ"),
+        e("div",{style:rbTitle},t("rb.tiebreak")),
+        e("div",{style:rbText},t("rb.tiebreak.desc")),
+        e("div",{style:rbSub},t("rb.card_strength")),
         e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
-          "数字: K > Q > J > 10 > 9 > ... > 2 > A",e("br"),
-          "スート: ♠ > ♥ > ♦ > ♣",e("br"),
-          "例: K♠ が最強、A♣ が最弱")));
+          t("rb.card_strength.desc_1"),e("br"),
+          t("rb.card_strength.desc_2"),e("br"),
+          t("rb.card_strength.desc_3"))));
     }
 
     // ─── 演出 TAB ──────────────────────────────────
     if(rbTab==="effect"){
       // 絞り解説
       rbKids.push(e("div",{key:"e1",style:rbCard},
-        e("div",{style:rbTitle},"絞り（スクイーズ）の楽しみ方"),
-        e("div",{style:rbText},
-          "3枚をオープンした後、残り2枚はドラッグして少しずつめくります。",e("br"),
-          "絞り中はスートマーク（♠♥♦♣）だけが見え、数字は隠されています。",e("br"),
-          "マークの本数や位置から数字を推理するのが醍醐味です！")));
+        e("div",{style:rbTitle},t("rb.squeeze_intro")),
+        e("div",{style:rbText},t("rb.squeeze_intro.desc"))));
 
       // 縦絞り
       rbKids.push(e("div",{key:"e2",style:rbCard},
-        e("div",{style:rbTitle},"縦絞り（上から少しめくる）"),
-        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},"カードの上端に見えるマークの本数で判別できます。"),
+        e("div",{style:rbTitle},t("rb.vert_squeeze")),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},t("rb.vert_squeeze.desc")),
         e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"絵柄あり → J〜K"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.vert.jk")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"J",suit:"♠"},w:32,h:48,showRank:false}),
               e(CardFace,{card:{rank:"Q",suit:"♥"},w:32,h:48,showRank:false}))),
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"マークなし → A"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.vert.ace")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"A",suit:"♦"},w:32,h:48,showRank:false}))),
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"上に1本 → 2 or 3"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.vert.23")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"2",suit:"♠"},w:32,h:48,showRank:false}),
               e(CardFace,{card:{rank:"3",suit:"♥"},w:32,h:48,showRank:false}))),
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"上に2本 → 4〜10"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.vert.410")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"4",suit:"♦"},w:32,h:48,showRank:false}),
               e(CardFace,{card:{rank:"7",suit:"♣"},w:32,h:48,showRank:false}),
@@ -1671,130 +2569,129 @@ function NiuNiu(){
 
       // 横絞り
       rbKids.push(e("div",{key:"e3",style:rbCard},
-        e("div",{style:rbTitle},"横絞り（横から少しめくる）"),
-        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},"左右に見えるマークの列数（サイド数）で更に絞り込めます。"),
+        e("div",{style:rbTitle},t("rb.horiz_squeeze")),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},t("rb.horiz_squeeze.desc")),
         e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"絵柄 → J〜K"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.horiz.jk")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"K",suit:"♠"},w:32,h:48,showRank:false}))),
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"なし → A, 2, 3"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.horiz.a23")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"A",suit:"♠"},w:32,h:48,showRank:false}),
               e(CardFace,{card:{rank:"3",suit:"♥"},w:32,h:48,showRank:false}))),
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"2サイド → 4, 5"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.horiz.45")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"4",suit:"♦"},w:32,h:48,showRank:false}),
               e(CardFace,{card:{rank:"5",suit:"♣"},w:32,h:48,showRank:false}))),
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"3サイド → 6, 7, 8"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.horiz.678")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"6",suit:"♠"},w:32,h:48,showRank:false}),
               e(CardFace,{card:{rank:"7",suit:"♥"},w:32,h:48,showRank:false}),
               e(CardFace,{card:{rank:"8",suit:"♦"},w:32,h:48,showRank:false}))),
           e("div",{style:{textAlign:"center",padding:8,borderRadius:8,background:"rgba(0,0,0,0.2)",gridColumn:"1 / -1"}},
-            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},"4サイド → 9, 10"),
+            e("div",{style:{fontSize:9,color:"var(--accent)",fontWeight:700,marginBottom:6}},t("rb.horiz.910")),
             e("div",{style:{display:"flex",gap:3,justifyContent:"center"}},
               e(CardFace,{card:{rank:"9",suit:"♣"},w:32,h:48,showRank:false}),
               e(CardFace,{card:{rank:"10",suit:"♠"},w:32,h:48,showRank:false}))))));
 
       // 絞り練習
       rbKids.push(e("div",{key:"e4",style:rbCard},
-        e("div",{style:rbTitle},"絞り練習"),
-        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},"実際にカードを絞って練習してみましょう！"),
+        e("div",{style:rbTitle},t("rb.practice")),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},t("rb.practice.desc")),
         e(SqueezeTrainer)));
 
       // 先告知演出
       rbKids.push(e("div",{key:"e5",style:rbCard},
-        e("div",{style:rbTitle},"先告知演出"),
-        e("div",{style:rbText},"「先バレ」モードでは、絞りの前にヒントが出ることがあります。"),
-        e("div",{style:rbSub},"🔴 赤オーラ — 信頼度 約30%"),
+        e("div",{style:rbTitle},t("rb.alerts")),
+        e("div",{style:rbText},t("rb.alerts.desc")),
+        e("div",{style:rbSub},t("rb.red")),
         e("div",{style:{display:"flex",alignItems:"center",gap:12,margin:"8px 0"}},
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite",border:"2px solid rgba(180,30,30,0.5)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite",border:"2px solid rgba(180,30,30,0.5)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
-          e("div",{style:{flex:1,fontSize:10,color:"var(--text-muted)",lineHeight:1.7}},"4・5枚目が赤く脈動。",e("br"),"出ても牛牛とは限らない。")),
-        e("div",{style:rbSub},"👻 違和感 — 信頼度 約60%"),
+          e("div",{style:{flex:1,fontSize:10,color:"var(--text-muted)",lineHeight:1.7}},t("rb.red.desc_1"),e("br"),t("rb.red.desc_2"))),
+        e("div",{style:rbSub},t("rb.glitch")),
         e("div",{style:{display:"flex",alignItems:"center",gap:12,margin:"8px 0"}},
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite",border:"1px solid rgba(255,255,255,0.15)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite",border:"1px solid rgba(255,255,255,0.15)",padding:1}},e(CardBack,{w:miniW,h:miniH})),
-          e("div",{style:{flex:1,fontSize:10,color:"var(--text-muted)",lineHeight:1.7}},"微妙に振動・チラつく。",e("br"),"赤よりも期待度が高い。")),
-        e("div",{style:rbSub},"🌈✨ プレミア演出 — 信頼度 ???"),
+          e("div",{style:{flex:1,fontSize:10,color:"var(--text-muted)",lineHeight:1.7}},t("rb.glitch.desc_1"),e("br"),t("rb.glitch.desc_2"))),
+        e("div",{style:rbSub},t("rb.premium")),
         e("div",{style:{display:"flex",alignItems:"center",gap:12,margin:"8px 0"}},
           e("div",{style:{borderRadius:miniW*0.09+4,animation:"alertRainbow 1.2s linear infinite,alertBorderRainbow 1.2s linear infinite",border:"2px solid #f00",padding:1}},e(CardBack,{w:miniW,h:miniH})),
           e("div",{style:{fontSize:20,animation:"squeezePulse 1.5s ease-in-out infinite"}},"？"),
-          e("div",{style:{flex:1,fontSize:10,color:"var(--accent)",lineHeight:1.7}},"超激レア。",e("br"),"出たら...？ お楽しみに。"))));
+          e("div",{style:{flex:1,fontSize:10,color:"var(--accent)",lineHeight:1.7}},t("rb.premium.desc_1"),e("br"),t("rb.premium.desc_2")))));
     }
 
     // ─── モード TAB ──────────────────────────────────
     if(rbTab==="mode"){
       // フリップモード
       rbKids.push(e("div",{key:"m1",style:rbCard},
-        e("div",{style:rbTitle},"🎴 フリップモード"),
-        e("div",{style:rbText},"気軽に遊べるモード。全プレイヤーが対等に勝負します。"),
-        e("div",{style:rbSub},"遊び方"),
+        e("div",{style:rbTitle},t("rb.flip_mode")),
+        e("div",{style:rbText},t("rb.flip_mode.desc")),
+        e("div",{style:rbSub},t("rb.flip_howto")),
         e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
-          "1. 人数・名前を設定してゲーム開始",e("br"),
-          "2. 全員に5枚ずつ配られる",e("br"),
-          "3. 各自「3枚オープン」→ 残り2枚を絞る",e("br"),
-          "4. 全員オープン後、最も強い役のプレイヤーが1点獲得",e("br"),
-          "5. 「次のラウンド」で繰り返し"),
-        e("div",{style:rbSub},"勝敗の決まり方"),
+          t("rb.flip_howto.step1"),e("br"),
+          t("rb.flip_howto.step2"),e("br"),
+          t("rb.flip_howto.step3"),e("br"),
+          t("rb.flip_howto.step4"),e("br"),
+          t("rb.flip_howto.step5")),
+        e("div",{style:rbSub},t("rb.flip_judge")),
         e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
-          "役が強い人が勝ち。同じ役ならハイカード比較。",e("br"),
-          "チップ計算なし、シンプルに楽しめます。")));
+          t("rb.flip_judge.desc_1"),e("br"),
+          t("rb.flip_judge.desc_2"))));
 
       // 対戦モード
       rbKids.push(e("div",{key:"m2",style:rbCard},
-        e("div",{style:rbTitle},"⚔️ 対戦モード"),
-        e("div",{style:rbText},"親子対戦＋チップ計算で本格的に遊ぶモードです。"),
-        e("div",{style:rbSub},"基本の流れ"),
+        e("div",{style:rbTitle},t("rb.battle_mode")),
+        e("div",{style:rbText},t("rb.battle_mode.desc")),
+        e("div",{style:rbSub},t("rb.battle_flow")),
         e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
-          "1. 人数・名前・倍率ルール・演出モードを設定",e("br"),
-          "2. 毎ラウンド「親」を1人選ぶ",e("br"),
-          "3. 親がMAXベット額を決める",e("br"),
-          "4. 各子がベット額を決める（1〜MAX）",e("br"),
-          "5. カードを配り、全員絞りオープン",e("br"),
-          "6. 親 vs 各子で1対1の勝負 → チップ精算",e("br"),
-          "7. 次のラウンドへ（親を選び直す）",e("br"),
-          "8. いつでも「集計」ボタンで終了→結果発表")));
+          t("rb.battle_flow.step1"),e("br"),
+          t("rb.battle_flow.step2"),e("br"),
+          t("rb.battle_flow.step3"),e("br"),
+          t("rb.battle_flow.step4"),e("br"),
+          t("rb.battle_flow.step5"),e("br"),
+          t("rb.battle_flow.step6"),e("br"),
+          t("rb.battle_flow.step7"),e("br"),
+          t("rb.battle_flow.step8"))));
 
       // チップの動き アニメーションデモ
       rbKids.push(e("div",{key:"m2a",style:rbCard},
-        e("div",{style:rbTitle},"チップの動き"),
-        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},"親 vs 各子で1対1勝負。勝てば＋、負ければ−。"),
-        // Animated demo: dealer vs 2 children
+        e("div",{style:rbTitle},t("rb.chip_flow")),
+        e("div",{style:{fontSize:10,color:"var(--text-muted)",marginBottom:10}},t("rb.chip_flow.desc")),
         e(ChipFlowDemo)));
 
       // 倍率ルール
       rbKids.push(e("div",{key:"m3",style:rbCard},
-        e("div",{style:rbTitle},"倍率ルール"),
-        e("div",{style:rbSub},"相殺あり — 堅実な勝負"),
+        e("div",{style:rbTitle},t("rb.multiplier")),
+        e("div",{style:rbSub},t("rb.offset_rule")),
         e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
-          "倍率 = 親と子の役の倍率の差。",e("br"),
-          "役が近いほど差が小さくなり、穏やかな勝負に。"),
+          t("rb.offset_rule.desc_1"),e("br"),
+          t("rb.offset_rule.desc_2")),
         e("div",{style:{padding:"8px 10px",borderRadius:8,background:"rgba(0,0,0,0.2)",margin:"8px 0",fontSize:10,color:"#c5d8c5",lineHeight:1.8}},
-          "差が0（同役ハイカード） → 1倍",e("br"),
-          "差が1（例: 牛5 vs 牛4） → 1.5倍",e("br"),
-          "差が2以上 → 差がそのまま倍率"),
-        e("div",{style:rbSub},"相殺なし — 激しい勝負"),
+          t("rb.offset_rule.calc_1"),e("br"),
+          t("rb.offset_rule.calc_2"),e("br"),
+          t("rb.offset_rule.calc_3")),
+        e("div",{style:rbSub},t("rb.no_offset_rule")),
         e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
-          "倍率 = 勝った側の役の倍率がそのまま。",e("br"),
-          "強い役で勝つほど大きく得し、接戦でも荒れる。"),
+          t("rb.no_offset_rule.desc_1"),e("br"),
+          t("rb.no_offset_rule.desc_2")),
         e("div",{style:{padding:"8px 10px",borderRadius:8,background:"rgba(0,0,0,0.2)",margin:"8px 0",fontSize:10,color:"#c5d8c5",lineHeight:1.8}},
-          "例: 親 牛8(8倍) vs 子 牛7(7倍)",e("br"),
-          "　相殺あり → 1.5倍",e("br"),
-          "　相殺なし → 8倍（約5倍の差！）"),
-        e("div",{style:{fontSize:10,color:"var(--accent)",marginTop:6}},"相殺なしは相殺ありの約2〜3倍荒い体感です。")));
+          t("rb.no_offset_rule.ex_1"),e("br"),
+          t("rb.no_offset_rule.ex_2"),e("br"),
+          t("rb.no_offset_rule.ex_3")),
+        e("div",{style:{fontSize:10,color:"var(--accent)",marginTop:6}},t("rb.no_offset_rule.note"))));
 
       // 集計
       rbKids.push(e("div",{key:"m4",style:rbCard},
-        e("div",{style:rbTitle},"集計"),
+        e("div",{style:rbTitle},t("rb.summary")),
         e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.8}},
-          "いつでも「📊 集計して終了」を押せます。",e("br"),
-          "最終ランキング（チップ順）と全ラウンドの履歴が表示されます。",e("br"),
-          "各ラウンドの親・役・チップ増減を振り返れます。")));
+          t("rb.summary.desc_1"),e("br"),
+          t("rb.summary.desc_2"),e("br"),
+          t("rb.summary.desc_3"))));
     }
 
     return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
@@ -1806,10 +2703,10 @@ function NiuNiu(){
     var setupKids=[];
     // Back button
     setupKids.push(e("div",{key:"back",style:{marginBottom:12}},
-      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← ホームへ")));
+      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("game.home_back"))));
     // Title
     setupKids.push(e("div",{key:"title",style:{textAlign:"center",marginBottom:18}},
-      e("div",{style:{fontSize:18,fontWeight:800,color:"var(--text)",letterSpacing:2}},appMode==="flip"?"🎴 フリップモード":"⚔️ 対戦モード"),
+      e("div",{style:{fontSize:18,fontWeight:800,color:"var(--text)",letterSpacing:2}},appMode==="flip"?t("setup.flip_title"):t("setup.battle_title")),
       e("div",{style:{width:30,height:1,background:"linear-gradient(90deg,transparent,#d4af37,transparent)",margin:"8px auto"}})));
 
     // Settings card
@@ -1818,26 +2715,26 @@ function NiuNiu(){
 
     // Player count
     setupKids.push(e("div",{key:"pc",style:cardStyle},
-      e("label",{style:labelStyle},"プレイヤー人数"),
+      e("label",{style:labelStyle},t("setup.players")),
       e("div",{style:{display:"flex",gap:6,justifyContent:"center"}},
         [2,3,4,5,6].map(function(n){return e("button",{key:n,onClick:function(){setPc(n);if(soundOn)SFX.buttonClick();},style:{padding:"8px 14px",borderRadius:8,fontSize:13,cursor:"pointer",fontFamily:"inherit",
           background:pc===n?"linear-gradient(135deg,#d4af37,#b8960c)":"rgba(212,175,55,0.06)",color:pc===n?"#0a1a0f":"#8faa8f",fontWeight:pc===n?800:400,
-          border:pc===n?"none":"1.5px solid rgba(212,175,55,0.12)",boxShadow:pc===n?"0 2px 8px rgba(212,175,55,0.3)":"none"}},n+"人");}))));
+          border:pc===n?"none":"1.5px solid rgba(212,175,55,0.12)",boxShadow:pc===n?"0 2px 8px rgba(212,175,55,0.3)":"none"}},n+t("setup.people"));}))));
 
     // Player names
     setupKids.push(e("div",{key:"names",style:cardStyle},
-      e("label",{style:labelStyle},"プレイヤー名"),
+      e("label",{style:labelStyle},t("setup.names")),
       e("div",{style:{display:"grid",gridTemplateColumns:"1fr",gap:6}},
         Array.from({length:pc}).map(function(_,i){return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:6}},
           e("span",{style:{fontSize:18,width:26,textAlign:"center"}},PEMOJI[i]),
-          e("input",{value:names[i],onChange:function(ev){var n=names.slice();n[i]=ev.target.value;setNames(n);},maxLength:10,
+          e("input",{value:names[i],placeholder:t("setup.name_placeholder").replace("{n}",i+1),onChange:function(ev){var n=names.slice();n[i]=ev.target.value;setNames(n);},maxLength:10,
             style:{flex:1,padding:"7px 10px",borderRadius:8,border:"1px solid var(--card-border)",background:"rgba(0,0,0,0.2)",color:"var(--text)",fontSize:12,fontFamily:"inherit",outline:"none"}}));}))));
 
     // Alert mode
     setupKids.push(e("div",{key:"alert",style:cardStyle},
-      e("label",{style:labelStyle},"演出モード"),
+      e("label",{style:labelStyle},t("setup.alert_mode")),
       e("div",{style:{display:"flex",gap:8,justifyContent:"center"}},
-        [{id:"simple",icon:"🃏",name:"シンプル"},{id:"sakibare",icon:"🔮",name:"先バレ"}].map(function(m){
+        [{id:"simple",icon:"🃏",nameKey:"settings.mode_simple"},{id:"sakibare",icon:"🔮",nameKey:"settings.mode_spoiler"}].map(function(m){
           var sel=gameMode===m.id;
           return e("button",{key:m.id,onClick:function(){setGameMode(m.id);if(soundOn)SFX.buttonClick();},style:{
             display:"flex",alignItems:"center",gap:6,padding:"10px 18px",borderRadius:10,cursor:"pointer",fontFamily:"inherit",
@@ -1845,22 +2742,22 @@ function NiuNiu(){
             border:sel?"1.5px solid #d4af37":"1.5px solid rgba(212,175,55,0.08)",
             color:sel?"#d4af37":"#8faa8f",fontSize:13,fontWeight:sel?700:400,
             boxShadow:sel?"0 0 12px rgba(212,175,55,0.1)":"none"}},
-            e("span",{style:{fontSize:18}},m.icon),m.name);}))));
+            e("span",{style:{fontSize:18}},m.icon),t(m.nameKey));}))));
 
     // Battle-specific settings
     if(appMode==="battle"){
       setupKids.push(e("div",{key:"rule",style:cardStyle},
-        e("label",{style:labelStyle},"倍率ルール"),
+        e("label",{style:labelStyle},t("setup.bet_rule")),
         e("div",{style:{display:"flex",gap:8,justifyContent:"center"}},
-          [{id:"offset",name:"相殺あり",desc:"役差で計算"},{id:"nooffset",name:"相殺なし",desc:"勝者の倍率"}].map(function(r){
+          [{id:"offset",nameKey:"battle.offset",descKey:"setup.offset_desc"},{id:"nooffset",nameKey:"battle.no_offset",descKey:"setup.no_offset_desc"}].map(function(r){
             var sel=betRule===r.id;
             return e("button",{key:r.id,onClick:function(){setBetRule(r.id);if(soundOn)SFX.buttonClick();},style:{
               padding:"10px 16px",borderRadius:10,cursor:"pointer",fontFamily:"inherit",fontSize:13,fontWeight:sel?700:400,flex:1,
               background:sel?"rgba(192,57,43,0.12)":"rgba(0,0,0,0.2)",
               border:sel?"1.5px solid #c0392b":"1.5px solid rgba(212,175,55,0.08)",
               color:sel?"#c0392b":"#8faa8f",textAlign:"center"}},
-              e("div",null,r.name),
-              e("div",{style:{fontSize:8,color:sel?"rgba(192,57,43,0.7)":"#5a7a5a",marginTop:2}},r.desc));}))));
+              e("div",null,t(r.nameKey)),
+              e("div",{style:{fontSize:8,color:sel?"rgba(192,57,43,0.7)":"#5a7a5a",marginTop:2}},t(r.descKey)));}))));
     }
 
     // Start button
@@ -1873,7 +2770,7 @@ function NiuNiu(){
         else{dealRound(sc);}
       },style:{padding:"14px 48px",fontSize:16,fontWeight:800,fontFamily:"inherit",borderRadius:12,border:"none",cursor:"pointer",
         background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:3,
-        boxShadow:"0 4px 20px rgba(212,175,55,0.3),inset 0 1px 0 rgba(255,255,255,0.2)"}},"ゲーム開始")));
+        boxShadow:"0 4px 20px rgba(212,175,55,0.3),inset 0 1px 0 rgba(255,255,255,0.2)"}},t("setup.start"))));
 
     return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:420,margin:"0 auto",padding:"12px 0"}},setupKids));
@@ -1884,10 +2781,10 @@ function NiuNiu(){
     return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:420,margin:"0 auto",padding:"20px 16px",textAlign:"center"}},
         e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}},
-          e("button",{onClick:function(){if(roundNum===0){setPhase("setup");}else{setPhase("result");}},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 戻る"),
+          e("button",{onClick:function(){if(roundNum===0){setPhase("setup");}else{setPhase("result");}},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("common.back")),
           e("div",{style:{fontSize:16,fontWeight:800,color:"var(--accent)"}},"Round "+(roundNum+1)),
           e("div",{style:{width:50}})),
-        e("div",{style:{fontSize:12,color:"var(--text-muted)",marginBottom:14}},"親を選択してください"),
+        e("div",{style:{fontSize:12,color:"var(--text-muted)",marginBottom:14}},t("battle.pick_dealer")),
         e("div",{style:{display:"grid",gap:8}},
           Array.from({length:pc}).map(function(_,i){
             var cv=chips[i]||0;
@@ -1897,23 +2794,26 @@ function NiuNiu(){
                 cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:10,
                 boxShadow:"0 2px 8px rgba(0,0,0,0.2)"}},
               e("span",{style:{fontSize:24}},PEMOJI[i]),
-              e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:14,flex:1,textAlign:"left"}},names[i]),
+              e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:14,flex:1,textAlign:"left"}},displayName(names,i)),
               e("span",{style:{fontSize:13,fontWeight:800,color:cv>0?"#27ae60":cv<0?"#e74c3c":"#6b8f6b"}},cv>0?"+"+cv:cv));
           })),
         e("div",{style:{marginTop:16}},
-          e("button",{onClick:function(){setPhase("summary");},style:{padding:"8px 20px",borderRadius:7,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:11,cursor:"pointer",fontFamily:"inherit"}},"📊 集計して終了"))));
+          e("button",{onClick:function(){setPhase("summary");},style:{padding:"8px 20px",borderRadius:7,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:11,cursor:"pointer",fontFamily:"inherit"}},t("battle.summary_end")))));
   }
 
   // ─── BETTING Screen (Battle mode) ──────────────────────────
   if(phase==="betting"){
     var betKids=[];
     betKids.push(e("div",{key:"hdr",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}},
-      e("button",{onClick:function(){setPhase("pickDealer");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"← 親選択"),
+      e("button",{onClick:function(){setPhase("pickDealer");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("battle.bet_back")),
       e("div",{style:{fontSize:14,fontWeight:800,color:"var(--accent)"}},"Round "+(roundNum+1)),
       e("div",{style:{width:50}})));
+    // Dealer header with chip balance
+    var dealerChips=chips[dealer]||0;
     betKids.push(e("div",{key:"dealer",style:{textAlign:"center",marginBottom:8,fontSize:12,color:"var(--text)"}},
-      e("span",{style:{fontSize:16}},PEMOJI[dealer])," ",e("span",{style:{color:PCOLORS[dealer],fontWeight:700}},names[dealer]),
-      e("span",{style:{fontSize:9,color:"#c0392b",marginLeft:4,fontWeight:700,background:"rgba(192,57,43,0.1)",padding:"1px 5px",borderRadius:3}},"親")));
+      e("span",{style:{fontSize:16}},PEMOJI[dealer])," ",e("span",{style:{color:PCOLORS[dealer],fontWeight:700}},displayName(names,dealer)),
+      e("span",{style:{fontSize:9,color:"#c0392b",marginLeft:4,fontWeight:700,background:"rgba(192,57,43,0.1)",padding:"1px 5px",borderRadius:3}},t("battle.dealer_label")),
+      e("span",{style:{fontSize:11,fontWeight:800,marginLeft:8,color:dealerChips>0?"#27ae60":dealerChips<0?"#e74c3c":"#888"}},dealerChips>0?"+"+dealerChips:dealerChips)));
 
     // MaxBet setting
     var mbBtnS={width:30,height:30,borderRadius:6,border:"1px solid rgba(255,255,255,0.1)",background:"rgba(255,255,255,0.05)",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"};
@@ -1926,7 +2826,7 @@ function NiuNiu(){
         e("button",{onClick:function(){setMaxBet(function(v){return Math.min(200,v+1);});if(soundOn)SFX.buttonClick();},style:Object.assign({},mbBtnS,{width:26})},"+"),
         e("button",{onClick:function(){setMaxBet(function(v){return Math.min(200,v+10);});if(soundOn)SFX.buttonClick();},style:mbBtnS},"+10")),
       e("div",{style:{display:"flex",gap:5,justifyContent:"center"}},
-        [10,20,50,100].map(function(v){
+        maxShortcuts.map(function(v){
           var sel=maxBet===v;
           return e("button",{key:v,onClick:function(){setMaxBet(v);if(soundOn)SFX.buttonClick();},style:{padding:"4px 10px",borderRadius:5,fontSize:10,cursor:"pointer",fontFamily:"inherit",
             background:sel?"#c0392b":"rgba(212,175,55,0.06)",color:sel?"#fff":"#888",fontWeight:sel?700:400,
@@ -1934,27 +2834,42 @@ function NiuNiu(){
     ));
 
     // Child bets
-    var cbBtnS={width:26,height:26,borderRadius:6,border:"1px solid rgba(255,255,255,0.1)",background:"rgba(255,255,255,0.05)",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"};
+    var cbBtnS={width:24,height:24,borderRadius:6,border:"1px solid rgba(255,255,255,0.1)",background:"rgba(255,255,255,0.05)",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"};
     var betInputs=[];
     for(var bi=0;bi<pc;bi++){
       if(bi===dealer)continue;
       (function(idx){
         var curBet=bets[idx]||1;
-        betInputs.push(e("div",{key:idx,style:{display:"flex",alignItems:"center",gap:4,marginBottom:8}},
-          e("span",{style:{fontSize:14}},PEMOJI[idx]),
-          e("span",{style:{color:PCOLORS[idx],fontWeight:700,fontSize:10,minWidth:32}},names[idx]),
-          e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.max(1,curBet-10);return n;});if(soundOn)SFX.buttonClick();},style:cbBtnS},"-10"),
-          e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.max(1,curBet-1);return n;});if(soundOn)SFX.buttonClick();},style:Object.assign({},cbBtnS,{width:22})},"-"),
-          e("span",{style:{fontSize:15,fontWeight:800,color:"var(--accent)",minWidth:30,textAlign:"center"}},curBet),
-          e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.min(maxBet,curBet+1);return n;});if(soundOn)SFX.buttonClick();},style:Object.assign({},cbBtnS,{width:22})},"+"),
-          e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.min(maxBet,curBet+10);return n;});if(soundOn)SFX.buttonClick();},style:cbBtnS},"+10"),
-          e("span",{style:{fontSize:8,color:"var(--text-dim)"}},"/"+maxBet)));
+        var playerChips=chips[idx]||0;
+        betInputs.push(e("div",{key:idx,style:{padding:"8px 10px",marginBottom:6,borderRadius:8,background:"rgba(0,0,0,0.15)",border:"1px solid var(--card-border)"}},
+          // Row 1: name + chips
+          e("div",{style:{display:"flex",alignItems:"center",gap:6,marginBottom:6}},
+            e("span",{style:{fontSize:14}},PEMOJI[idx]),
+            e("span",{style:{color:PCOLORS[idx],fontWeight:700,fontSize:11,flex:1}},displayName(names,idx)),
+            e("span",{style:{fontSize:11,fontWeight:800,color:playerChips>0?"#27ae60":playerChips<0?"#e74c3c":"#888"}},playerChips>0?"+"+playerChips:playerChips)),
+          // Row 2: bet controls
+          e("div",{style:{display:"flex",alignItems:"center",gap:3,justifyContent:"center"}},
+            e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.max(1,curBet-10);return n;});if(soundOn)SFX.buttonClick();},style:cbBtnS},"-10"),
+            e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.max(1,curBet-1);return n;});if(soundOn)SFX.buttonClick();},style:Object.assign({},cbBtnS,{width:20})},"-"),
+            e("span",{style:{fontSize:15,fontWeight:800,color:"var(--accent)",minWidth:28,textAlign:"center"}},curBet),
+            e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.min(maxBet,curBet+1);return n;});if(soundOn)SFX.buttonClick();},style:Object.assign({},cbBtnS,{width:20})},"+"),
+            e("button",{onClick:function(){setBets(function(p){var n=Object.assign({},p);n[idx]=Math.min(maxBet,curBet+10);return n;});if(soundOn)SFX.buttonClick();},style:cbBtnS},"+10"),
+            e("span",{style:{fontSize:8,color:"var(--text-dim)",marginLeft:3}},"/"+maxBet)),
+          // Row 3: player shortcut buttons
+          e("div",{style:{display:"flex",gap:4,justifyContent:"center",marginTop:5}},
+            playerShortcuts.map(function(v){
+              var sel=curBet===v;
+              var disabled=v>maxBet;
+              return e("button",{key:v,onClick:function(){if(disabled)return;setBets(function(p){var n=Object.assign({},p);n[idx]=v;return n;});if(soundOn)SFX.buttonClick();},disabled:disabled,style:{padding:"3px 10px",borderRadius:5,fontSize:10,cursor:disabled?"default":"pointer",fontFamily:"inherit",
+                background:sel?"var(--accent)":"rgba(212,175,55,0.06)",color:sel?"var(--bg)":"#888",fontWeight:sel?700:400,
+                border:sel?"1px solid var(--accent)":"1px solid rgba(255,255,255,0.07)",opacity:disabled?0.3:1}},v);
+            }))));
       })(bi);
     }
     betKids.push(e("div",{key:"bets"},betInputs));
     betKids.push(e("div",{key:"go",style:{textAlign:"center",marginTop:14}},
       e("button",{onClick:function(){dealRound(chips);},style:{padding:"10px 32px",fontSize:14,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
-        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:2,boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},"配る")));
+        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:2,boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},t("battle.deal"))));
 
     return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:420,margin:"0 auto",padding:"20px 16px"}},betKids));
@@ -1964,29 +2879,29 @@ function NiuNiu(){
   if(phase==="summary"){
     var sumKids=[];
     sumKids.push(e("div",{key:"title",style:{textAlign:"center",marginBottom:16}},
-      e("div",{style:{fontSize:20,fontWeight:800,color:"var(--accent)"}},"📊 集計"),
-      e("div",{style:{fontSize:11,color:"#7a9a7a",marginTop:4}},history.length+"ラウンド終了")));
+      e("div",{style:{fontSize:20,fontWeight:800,color:"var(--accent)"}},"📊 "+t("game.final")),
+      e("div",{style:{fontSize:11,color:"#7a9a7a",marginTop:4}},history.length+t("game.rounds_done"))));
 
     // Final ranking
     var ranking=Array.from({length:pc}).map(function(_,i){return{idx:i,total:chips[i]||0};});
     ranking.sort(function(a,b){return b.total-a.total;});
     sumKids.push(e("div",{key:"ranking",style:{marginBottom:16}},
-      e("div",{style:{fontSize:12,fontWeight:700,color:"#7a9a7a",marginBottom:8}},"最終ランキング"),
+      e("div",{style:{fontSize:12,fontWeight:700,color:"#7a9a7a",marginBottom:8}},t("game.final_ranking")),
       ranking.map(function(r,pos){
         return e("div",{key:r.idx,style:{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",marginBottom:4,borderRadius:8,
           background:pos===0?"rgba(212,175,55,0.08)":"rgba(212,175,55,0.03)",border:pos===0?"1px solid rgba(212,175,55,0.2)":"1px solid rgba(212,175,55,0.04)"}},
           e("span",{style:{fontSize:14,fontWeight:800,color:pos===0?"#d4af37":"#666",minWidth:20}},pos+1),
           e("span",{style:{fontSize:16}},PEMOJI[r.idx]),
-          e("span",{style:{color:PCOLORS[r.idx],fontWeight:700,fontSize:13,flex:1}},names[r.idx]),
+          e("span",{style:{color:PCOLORS[r.idx],fontWeight:700,fontSize:13,flex:1}},displayName(names,r.idx)),
           e("span",{style:{fontSize:16,fontWeight:800,color:r.total>0?"#27ae60":r.total<0?"#e74c3c":"#888"}},r.total>0?"+"+r.total:r.total));
       })));
 
     // History
     sumKids.push(e("div",{key:"hist",style:{marginBottom:16}},
-      e("div",{style:{fontSize:12,fontWeight:700,color:"#7a9a7a",marginBottom:8}},"ラウンド履歴"),
+      e("div",{style:{fontSize:12,fontWeight:700,color:"#7a9a7a",marginBottom:8}},t("game.round_history")),
       history.map(function(h,hi){
         return e("div",{key:hi,style:{padding:"8px 10px",marginBottom:4,borderRadius:8,background:"rgba(212,175,55,0.03)",border:"1px solid rgba(212,175,55,0.04)",fontSize:10}},
-          e("div",{style:{fontWeight:700,color:"var(--accent)",marginBottom:4}},"R"+(hi+1)+" 親:"+PEMOJI[h.dealer]+names[h.dealer]),
+          e("div",{style:{fontWeight:700,color:"var(--accent)",marginBottom:4}},"R"+(hi+1)+" "+t("battle.dealer_label")+":"+PEMOJI[h.dealer]+displayName(names,h.dealer)),
           e("div",{style:{display:"flex",flexWrap:"wrap",gap:6}},
             Array.from({length:pc}).map(function(_,i){
               var d=h.deltas[i];
@@ -1996,9 +2911,9 @@ function NiuNiu(){
       })));
 
     sumKids.push(e("div",{key:"actions",style:{textAlign:"center",display:"flex",gap:10,justifyContent:"center"}},
-      e("button",{onClick:function(){setAppMode("home");setPhase("setup");},style:{padding:"10px 24px",fontSize:13,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},"ホームへ"),
+      e("button",{onClick:function(){setAppMode("home");setPhase("setup");},style:{padding:"10px 24px",fontSize:13,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},t("game.home")),
       e("button",{onClick:function(){setPhase("setup");},style:{padding:"10px 24px",fontSize:13,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
-        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},"もう一度")));
+        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},t("game.again"))));
 
     return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:420,margin:"0 auto",padding:"20px 16px"}},sumKids));
@@ -2019,7 +2934,7 @@ function NiuNiu(){
       e("button",{onClick:function(){setSoundOn(!soundOn);},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:soundOn?"var(--accent)":"#444",fontSize:14,cursor:"pointer"}},soundOn?"🔊":"🔇"),
       e("button",{onClick:function(){setSettingsFrom(appMode);setAppMode("settings");},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-muted)",fontSize:14,cursor:"pointer"}},"⚙️"),
       e("button",{onClick:function(){setAppMode("home");setPhase("setup");setHands([]);setResults([]);setRoundNum(0);setRevealedCards([]);},
-        style:{padding:"3px 10px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-dim)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},"リセット"))));
+        style:{padding:"3px 10px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-dim)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("game.reset")))));
 
   // Scores
   gameChildren.push(e("div",{key:"scores",style:{display:"flex",justifyContent:"center",gap:appMode==="battle"?8:12,flexWrap:"wrap",padding:"6px 0",marginBottom:7,borderBottom:"1px solid var(--card-border)"}},
@@ -2027,8 +2942,8 @@ function NiuNiu(){
       var chipVal=appMode==="battle"?(chips[i]||0):scores[i]||0;
       return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:3,fontSize:11}},
         e("span",null,PEMOJI[i]),
-        e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:10}},names[i]),
-        i===dealer&&appMode==="battle"?e("span",{style:{fontSize:7,color:"#c0392b"}},"親"):null,
+        e("span",{style:{color:PCOLORS[i],fontWeight:700,fontSize:10}},displayName(names,i)),
+        i===dealer&&appMode==="battle"?e("span",{style:{fontSize:7,color:"#c0392b"}},t("battle.dealer_label")):null,
         appMode==="battle"?
           e("span",{style:{fontWeight:800,fontSize:12,color:chipVal>0?"#27ae60":chipVal<0?"#e74c3c":"#888"}},chipVal>0?"+"+chipVal:chipVal):
           e("span",{style:{color:"var(--accent)",fontWeight:800,fontSize:12}},chipVal));
@@ -2053,7 +2968,7 @@ function NiuNiu(){
   // Next round
   if(phase==="result"){
     gameChildren.push(e("div",{key:"next",style:{textAlign:"center",marginTop:14,animation:"fadeUp .5s ease",display:"flex",gap:10,justifyContent:"center"}},
-      appMode==="battle"?e("button",{onClick:function(){setPhase("summary");},style:{padding:"9px 20px",fontSize:12,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},"📊 集計"):null,
+      appMode==="battle"?e("button",{onClick:function(){setPhase("summary");},style:{padding:"9px 20px",fontSize:12,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},"📊 "+t("game.final")):null,
       e("button",{onClick:function(){
         if(soundOn)SFX.buttonClick();
         // Ad check: every 5 rounds, show ad (unless purchased noads/allpass)
@@ -2071,7 +2986,7 @@ function NiuNiu(){
           else{dealRound(scores);}
         }
       },style:{padding:"9px 30px",fontSize:14,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
-        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:2,boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},"次のラウンド →")));
+        background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:2,boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},t("game.next_round_arrow"))));
   }
 
   // Ad placeholder overlay
@@ -2080,16 +2995,16 @@ function NiuNiu(){
       background:"rgba(0,0,0,0.85)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
       animation:"fadeUp 0.3s ease"}},
       e("div",{style:{padding:"30px 40px",borderRadius:16,background:"rgba(10,26,15,0.95)",border:"1px solid var(--card-border)",textAlign:"center"}},
-        e("div",{style:{fontSize:12,color:"var(--text-muted)",marginBottom:10}},"広告"),
+        e("div",{style:{fontSize:12,color:"var(--text-muted)",marginBottom:10}},t("ad.label")),
         e("div",{style:{width:250,height:150,borderRadius:8,background:"rgba(0,0,0,0.3)",border:"1px dashed rgba(212,175,55,0.2)",
           display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}},
-          e("div",{style:{color:"var(--text-dim)",fontSize:11}},"広告エリア（Capacitor移行後に実装）")),
-        e("div",{style:{fontSize:10,color:"var(--text-dim)"}},"3秒後に自動で閉じます..."),
+          e("div",{style:{color:"var(--text-dim)",fontSize:11}},t("ad.area"))),
+        e("div",{style:{fontSize:10,color:"var(--text-dim)"}},t("ad.close")),
         e("div",{style:{marginTop:10}},
           e("button",{onClick:function(){setAppMode("shop");setShowAdPlaceholder(false);},style:{
             padding:"5px 14px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
             background:"transparent",border:"1px solid var(--card-border)",color:"var(--accent)"}},
-            "🚫 広告を消す → ショップ")))));
+            t("ad.remove"))))));
   }
 
   return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},gameChildren);
