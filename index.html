@@ -21,6 +21,11 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif JP',Georgia,
     repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(0,0,0,0.03) 8px,rgba(0,0,0,0.03) 16px),
     linear-gradient(180deg,#0a1a0f 0%,#0d2818 30%,#0f3020 60%,#0a1a0f 100%)}
 @keyframes cardDeal{from{opacity:0;transform:translateY(-14px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes specialCowGlow{0%{filter:drop-shadow(0 0 4px rgba(255,80,80,0.9)) drop-shadow(0 0 8px rgba(255,215,0,0.7))}25%{filter:drop-shadow(0 0 5px rgba(255,215,0,0.95)) drop-shadow(0 0 10px rgba(120,220,120,0.7))}50%{filter:drop-shadow(0 0 6px rgba(120,220,120,0.95)) drop-shadow(0 0 12px rgba(100,200,255,0.7))}75%{filter:drop-shadow(0 0 5px rgba(100,200,255,0.95)) drop-shadow(0 0 10px rgba(200,120,255,0.7))}100%{filter:drop-shadow(0 0 4px rgba(255,80,80,0.9)) drop-shadow(0 0 8px rgba(255,215,0,0.7))}}
+@keyframes specialCowPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.08)}}
+@keyframes bubblesRise{0%{background-position:0% 0%,0% 0%,0% 0%,0% 0%,0% 0%,0% 0%,0% 0%,0% 0%,0% 0%,0% 0%,0% 0%}100%{background-position:0% -120%,0% -120%,0% -120%,0% -120%,0% -120%,0% -120%,0% -120%,0% 6%,0% -4%,0% 0%,0% 0%}}
+@keyframes goldShimmer{0%,100%{filter:brightness(1) saturate(1)}50%{filter:brightness(1.15) saturate(1.1)}}
+@keyframes auroraDrift{0%,100%{background-position:0% 0%,0% 0%,0% 0%,0% 0%;opacity:1}33%{background-position:10% 5%,-8% 8%,6% -4%,0% 0%;opacity:0.85}66%{background-position:-6% 10%,12% -4%,-8% 6%,0% 0%;opacity:1}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes winPulse{0%,100%{box-shadow:0 0 8px rgba(212,175,55,.15),inset 0 0 8px rgba(212,175,55,.05)}50%{box-shadow:0 0 22px rgba(212,175,55,.35),inset 0 0 15px rgba(212,175,55,.1)}}
 @keyframes bullGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(212,175,55,.3))}50%{filter:drop-shadow(0 0 12px rgba(212,175,55,.7))}}
@@ -32,12 +37,8 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif JP',Georgia,
 @keyframes alertBorderRainbow{0%{border-color:#f00}14%{border-color:#f70}28%{border-color:#ff0}42%{border-color:#0f0}57%{border-color:#07f}71%{border-color:#4b0082}85%{border-color:#9400d3}100%{border-color:#f00}}
 @keyframes alertGlitch{0%{transform:translate(0,0)}10%{transform:translate(-2px,1px)}20%{transform:translate(2px,-1px)}30%{transform:translate(0,2px)}40%{transform:translate(1px,-2px)}50%{transform:translate(-1px,0)}60%{transform:translate(2px,1px)}70%{transform:translate(-2px,-1px)}80%{transform:translate(0,0)}85%{transform:translate(1px,2px)}90%{transform:translate(-1px,-1px)}100%{transform:translate(0,0)}}
 @keyframes alertGlitchShadow{0%,80%{box-shadow:none;filter:none}82%{box-shadow:2px 0 0 rgba(255,0,0,0.4),-2px 0 0 rgba(0,255,255,0.4);filter:brightness(1.3)}84%{box-shadow:none;filter:none}90%{box-shadow:-1px 0 0 rgba(255,0,255,0.3),1px 0 0 rgba(0,255,0,0.3);filter:brightness(0.8)}92%{box-shadow:none;filter:none}}
-@keyframes alertFlash{0%{background:var(--card)}8%{background:rgba(255,255,255,0.95)}20%{background:var(--card)}28%{background:rgba(255,255,240,0.6)}40%{background:var(--card)}}
-@keyframes alertBlackout{0%{background:var(--card)}5%{background:rgba(0,0,0,1)}30%{background:rgba(0,0,0,1)}50%{background:var(--card)}}
 @keyframes alertQuake{0%{transform:translate(0,0)}5%{transform:translate(-3px,2px)}10%{transform:translate(3px,-2px)}15%{transform:translate(-2px,-3px)}20%{transform:translate(2px,3px)}25%{transform:translate(-3px,1px)}30%{transform:translate(3px,-1px)}35%{transform:translate(0,0)}100%{transform:translate(0,0)}}
 @keyframes alertQuakeCard{0%{transform:translate(0,0) rotate(0)}8%{transform:translate(-4px,2px) rotate(-2deg)}16%{transform:translate(4px,-3px) rotate(2deg)}24%{transform:translate(-3px,-2px) rotate(-1deg)}32%{transform:translate(3px,3px) rotate(1deg)}40%{transform:translate(-2px,1px) rotate(-1deg)}50%{transform:translate(0,0) rotate(0)}}
-@keyframes alertSpecial{0%{box-shadow:0 0 15px rgba(212,175,55,0.6),0 0 30px rgba(212,175,55,0.3)}25%{box-shadow:0 0 20px rgba(255,215,0,0.7),0 0 40px rgba(255,215,0,0.3)}50%{box-shadow:0 0 25px rgba(255,255,255,0.6),0 0 50px rgba(212,175,55,0.4)}75%{box-shadow:0 0 20px rgba(255,200,0,0.7),0 0 40px rgba(255,200,0,0.3)}100%{box-shadow:0 0 15px rgba(212,175,55,0.6),0 0 30px rgba(212,175,55,0.3)}}
-@keyframes alertSpecialBorder{0%{border-color:#d4af37}33%{border-color:#fff}66%{border-color:#ffd700}100%{border-color:#d4af37}}
 @keyframes growBull{0%{font-size:6px;opacity:0}5%{opacity:0.05}20%{font-size:20px;opacity:0.08}40%{font-size:50px;opacity:0.12}60%{font-size:100px;opacity:0.16}80%{font-size:200px;opacity:0.2}100%{font-size:300px;opacity:0.3}}
 @keyframes cowPipIn{0%{opacity:0;transform:translate(-50%,-50%) scale(0.3)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 @keyframes fadeOut{0%{opacity:1}100%{opacity:0}}
@@ -192,11 +193,8 @@ var ALERT_CLASSIC={
   alertRed:function(){playTone(120,0.6,"sawtooth",0.18);playTone(127,0.6,"sawtooth",0.15);playTone(180,0.4,"square",0.1,0.15);playNoise(0.3,0.15,0.1);playTone(240,0.5,"sawtooth",0.12,0.3);playTone(300,0.3,"square",0.08,0.4);},
   alertRainbow:function(){playTone(80,1.2,"sawtooth",0.16);playTone(85,1.2,"sawtooth",0.12);playNoise(0.3,0.1,0.05);var sp=[2093,2349,2637,2793,3136,3520,3951,4186];sp.forEach(function(f,i){playTone(f,0.12,"sine",0.08,i*0.07);playTone(f*1.005,0.1,"sine",0.05,i*0.07+0.02);});setTimeout(function(){var sp2=[3951,3520,3136,2793,2637,2349,2093,2637,3136,3951];sp2.forEach(function(f,i){playTone(f,0.1,"sine",0.06,i*0.06);playTone(f*0.998,0.08,"sine",0.04,i*0.06+0.01);});},500);playTone(4186,0.3,"sine",0.07,0.15);playTone(5274,0.25,"sine",0.05,0.3);playTone(6272,0.2,"sine",0.04,0.5);},
   alertGlitch:function(){playNoise(0.03,0.12,0);playNoise(0.02,0.08,0.15);playTone(440,0.04,"square",0.06,0.1);playNoise(0.03,0.1,0.4);playTone(880,0.02,"square",0.04,0.45);playNoise(0.02,0.06,0.7);playTone(220,0.05,"sawtooth",0.05,0.75);playTone(55,0.8,"sine",0.06,0.2);playTone(57,0.8,"sine",0.04,0.2);},
-  alertFlash:function(){playNoise(0.08,0.25,0);playTone(3000,0.06,"square",0.15,0);playTone(4000,0.04,"square",0.1,0.03);playTone(2000,0.1,"sine",0.08,0.08);playTone(5000,0.15,"sine",0.06,0.12);playTone(6000,0.1,"sine",0.04,0.2);},
-  alertBlackout:function(){playTone(30,0.8,"sawtooth",0.25,0);playTone(35,0.8,"sawtooth",0.2,0);playNoise(0.15,0.2,0);playTone(60,0.5,"sine",0.1,0.3);playTone(200,0.15,"sine",0.08,0.7);playTone(400,0.1,"sine",0.06,0.8);},
-  alertQuake:function(){playTone(40,1.0,"sawtooth",0.2,0);playTone(45,1.0,"sawtooth",0.15,0);playNoise(0.6,0.15,0);playTone(60,0.4,"square",0.1,0.2);playTone(80,0.3,"sawtooth",0.08,0.4);playNoise(0.3,0.1,0.5);},
+  alertQuake:function(){var sp=[2637,2793,3136,3520,3951,4186,4699,5274];sp.forEach(function(f,i){playTone(f,0.1,"sine",0.07,i*0.05);playTone(f*1.008,0.08,"sine",0.04,i*0.05+0.015);});setTimeout(function(){var sp2=[5274,4699,4186,3951,3520,3136,2793,2637];sp2.forEach(function(f,i){playTone(f,0.1,"triangle",0.06,i*0.05);});},450);playTone(1760,0.6,"sine",0.09,0);playTone(2093,0.6,"sine",0.07,0.15);playTone(2637,0.5,"sine",0.06,0.3);playNoise(0.15,0.08,0.05);playNoise(0.12,0.06,0.5);},
   alertCow:function(){playTone(130,0.6,"sawtooth",0.12,0);playTone(138,0.6,"sawtooth",0.1,0);playTone(523,0.2,"sine",0.1,0.2);playTone(659,0.2,"sine",0.1,0.35);playTone(784,0.3,"sine",0.12,0.5);playTone(110,0.4,"triangle",0.08,0.3);},
-  alertSpecial:function(){playTone(130,0.8,"sawtooth",0.15,0);playTone(196,0.6,"sawtooth",0.12,0.1);playTone(262,0.4,"sine",0.1,0.2);playTone(330,0.3,"sine",0.12,0.3);playTone(523,0.4,"sine",0.15,0.4);playTone(784,0.5,"sine",0.12,0.55);playTone(1047,0.4,"sine",0.1,0.7);playTone(2093,0.1,"sine",0.06,0.5);playTone(2637,0.1,"sine",0.05,0.6);playTone(3951,0.15,"sine",0.05,0.75);},
   alertGrowBull:function(){playTone(60,2.5,"sine",0.04,0);playTone(63,2.5,"sine",0.03,0);playTone(90,1.5,"triangle",0.03,0.8);playTone(120,1.0,"sine",0.05,1.5);playTone(180,0.8,"sine",0.06,2.0);}
 };
 
@@ -212,11 +210,8 @@ var SFX={
   alertRed:function(){ALERT_CLASSIC.alertRed();},
   alertRainbow:function(){ALERT_CLASSIC.alertRainbow();},
   alertGlitch:function(){ALERT_CLASSIC.alertGlitch();},
-  alertFlash:function(){ALERT_CLASSIC.alertFlash();},
-  alertBlackout:function(){ALERT_CLASSIC.alertBlackout();},
   alertQuake:function(){ALERT_CLASSIC.alertQuake();},
   alertCow:function(){ALERT_CLASSIC.alertCow();},
-  alertSpecial:function(){ALERT_CLASSIC.alertSpecial();},
   alertGrowBull:function(){ALERT_CLASSIC.alertGrowBull();},
   alertFizzle:function(){SFX_CLASSIC.alertFizzle();}
 };
@@ -418,16 +413,17 @@ function CardFace(props){
   var bgGrad=highlight?"linear-gradient(145deg,"+ft.hlBg[0]+" 0%,"+ft.hlBg[1]+" 100%)":"linear-gradient(145deg,"+ft.bg[0]+" 0%,"+ft.bg[1]+" 100%)";
   var cardFont=ft.font||"'Georgia',serif";
   var rw=ft.rankWeight||800;
+  var italicStyle=ft.italic?{fontStyle:"italic"}:{};
   var children=[];
   if(showRank){
-    children.push(e("div",{key:"tl",style:{position:"absolute",top:h*0.03,left:w*0.07,textAlign:"center",lineHeight:1,color:color,fontFamily:cardFont}},
+    children.push(e("div",{key:"tl",style:Object.assign({position:"absolute",top:h*0.03,left:w*0.07,textAlign:"center",lineHeight:1,color:color,fontFamily:cardFont},italicStyle)},
       e("div",{style:{fontSize:w*0.19,fontWeight:rw}},card.rank),e("div",{style:{fontSize:w*0.16*(ft.suitScale||1),marginTop:-1}},card.suit)));
-    children.push(e("div",{key:"br",style:{position:"absolute",bottom:h*0.03,right:w*0.07,textAlign:"center",lineHeight:1,color:color,fontFamily:cardFont,transform:"rotate(180deg)"}},
+    children.push(e("div",{key:"br",style:Object.assign({position:"absolute",bottom:h*0.03,right:w*0.07,textAlign:"center",lineHeight:1,color:color,fontFamily:cardFont,transform:"rotate(180deg)"},italicStyle)},
       e("div",{style:{fontSize:w*0.19,fontWeight:rw}},card.rank),e("div",{style:{fontSize:w*0.16*(ft.suitScale||1),marginTop:-1}},card.suit)));
   }
   if(isFace){
     var fc2Kids=[];
-    if(showRank)fc2Kids.push(e("div",{key:"rank",style:{fontSize:w*0.36,fontWeight:rw,color:color,lineHeight:1,fontFamily:cardFont}},card.rank));
+    if(showRank)fc2Kids.push(e("div",{key:"rank",style:Object.assign({fontSize:w*0.36,fontWeight:rw,color:color,lineHeight:1,fontFamily:cardFont},italicStyle)},card.rank));
     var faceBg,faceBorder;
     if(ft.faceBgs&&ft.faceBgs[card.suit]){
       var fbg=ft.faceBgs[card.suit];
@@ -438,11 +434,11 @@ function CardFace(props){
       faceBorder=isRed?ft.faceRedBorder:ft.faceBlackBorder;
     }
     if(cowPip){
-      fc2Kids.push(e("div",{key:"suit",style:{position:"relative",width:w*0.38,height:w*0.38,marginTop:showRank?2:0}},
-        e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",fontSize:w*0.38,color:color,animation:"fadeOut 0.5s ease 10s forwards"}},card.suit),
-        e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",fontSize:w*0.34,animation:"cowPipIn 0.5s ease 10s both"}},"🐮")));
+      fc2Kids.push(e("div",{key:"suit",style:{position:"relative",width:w*0.38*(ft.suitScale||1),height:w*0.38*(ft.suitScale||1),marginTop:showRank?2:0}},
+        e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",fontSize:w*0.38*(ft.suitScale||1),color:color,animation:"fadeOut 0.5s ease 10s forwards"}},card.suit),
+        e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",fontSize:w*0.34*(ft.suitScale||1),animation:"cowPipIn 0.5s ease 10s both,specialCowGlow 3s ease-in-out 10.5s infinite"}},"🐮")));
     }else{
-      fc2Kids.push(e("div",{key:"suit",style:{fontSize:w*0.38,color:color,marginTop:showRank?2:0}},card.suit));
+      fc2Kids.push(e("div",{key:"suit",style:{fontSize:w*0.38*(ft.suitScale||1),color:color,marginTop:showRank?2:0}},card.suit));
     }
     children.push(e("div",{key:"fc",style:{position:"absolute",top:cTop,left:cLeft,width:cW2,height:cH2,display:"flex",alignItems:"center",justifyContent:"center"}},
       e("div",{style:{width:cW2*0.82,height:cH2*0.82,borderRadius:5,background:faceBg,
@@ -461,7 +457,7 @@ function CardFace(props){
             e("span",{style:{position:"relative",display:"inline-block"}},
               e("span",{style:{animation:"fadeOut 0.4s ease "+delay+" forwards",color:color}},card.suit),
               e("span",{style:{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",
-                animation:"cowPipIn 0.4s ease "+delay+" both",fontSize:pipSize*0.85}},"🐮")));
+                animation:"cowPipIn 0.4s ease "+delay+" both,specialCowGlow 3s ease-in-out "+(parseFloat(delay)+0.5)+"s infinite",fontSize:pipSize*0.85}},"🐮")));
         }
         return e("div",{key:idx,style:{position:"absolute",left:p[0]+"%",top:p[1]+"%",
           transform:"translate(-50%,-50%)"+(p[1]>55?" rotate(180deg)":""),fontSize:pipSize,color:color,lineHeight:1}},card.suit);
@@ -800,10 +796,6 @@ var CARD_FACES=[
     bg:["#fdfdfd","#f5f4ef"],hlBg:["#fffde7","#fff9c4"],red:"#c0392b",black:"#0d2818",border:"#bbb8b0",
     faceRedBg:["#fce4ec","#f8bbd0"],faceBlackBg:["#e8eaf6","#c5cae9"],faceRedBorder:"#e57373",faceBlackBorder:"#7986cb",
     font:"'Georgia','Times New Roman',serif",rankWeight:800,suitScale:1,free:true},
-  {id:"noir",name:"ノワール",desc:"シックなモノトーンカード",
-    bg:["#3a3a3a","#2a2a2a"],hlBg:["#555530","#444420"],red:"#ff5555",black:"#f0f0f0",border:"#555555",
-    faceRedBg:["#5a2028","#4a1818"],faceBlackBg:["#383848","#2e2e3e"],faceRedBorder:"#884444",faceBlackBorder:"#6a6a88",
-    font:"'Playfair Display',Georgia,serif",rankWeight:900,suitScale:1,free:false},
   {id:"fourcolor",name:"4色",desc:"スートごとに異なる色",
     bg:["#fdfdfd","#f5f4ef"],hlBg:["#fffde7","#fff9c4"],red:"#c0392b",black:"#0d2818",border:"#bbb8b0",
     suitColors:{"♠":"#0d2818","♥":"#c0392b","♦":"#2196f3","♣":"#1e7a3a"},
@@ -816,32 +808,76 @@ var CARD_FACES=[
     faceBorders:{"♠":"#7986cb","♥":"#e57373","♦":"#64b5f6","♣":"#6dba72"},
     faceRedBg:["#fce4ec","#f8bbd0"],faceBlackBg:["#e8eaf6","#c5cae9"],faceRedBorder:"#e57373",faceBlackBorder:"#7986cb",
     font:"'Georgia','Times New Roman',serif",rankWeight:800,suitScale:1,free:false},
+  {id:"antique",name:"アンティーク",desc:"古紙・セピア・褪色赤",
+    bg:["#f0e4c8","#e8dcbc"],hlBg:["#fdf2cf","#f5e8b0"],red:"#a04030",black:"#5a3a1a",border:"#8b7040",
+    faceRedBg:["#e8d5a8","#d8c090"],faceBlackBg:["#ddd0a8","#c8bc90"],faceRedBorder:"#a04030",faceBlackBorder:"#5a3a1a",
+    font:"'Georgia','Times New Roman',serif",rankWeight:700,suitScale:1,italic:true,free:false},
+  {id:"glass",name:"グラス4色",desc:"半透明・スート別カラー",
+    bg:["rgba(245,245,250,0.9)","rgba(232,232,240,0.85)"],hlBg:["rgba(255,250,230,0.9)","rgba(250,240,210,0.85)"],
+    red:"#b87595",black:"#5a5a7a",border:"rgba(180,180,200,0.6)",
+    suitColors:{"♠":"#5a5a7a","♥":"#b87595","♦":"#6a8fb8","♣":"#5a8a6a"},
+    faceBgs:{
+      "♠":["rgba(220,220,240,0.85)","rgba(200,200,225,0.8)"],
+      "♥":["rgba(255,220,230,0.85)","rgba(240,200,215,0.8)"],
+      "♦":["rgba(215,232,248,0.85)","rgba(195,218,240,0.8)"],
+      "♣":["rgba(218,238,222,0.85)","rgba(200,225,208,0.8)"]
+    },
+    faceBorders:{"♠":"rgba(90,90,122,0.5)","♥":"rgba(184,117,149,0.5)","♦":"rgba(106,143,184,0.5)","♣":"rgba(90,138,106,0.5)"},
+    faceRedBg:["rgba(255,220,230,0.85)","rgba(240,200,215,0.8)"],faceBlackBg:["rgba(220,220,240,0.85)","rgba(200,200,225,0.8)"],
+    faceRedBorder:"rgba(184,117,149,0.5)",faceBlackBorder:"rgba(90,90,122,0.5)",
+    font:"'Helvetica Neue',Arial,sans-serif",rankWeight:300,suitScale:0.95,free:false},
+  {id:"noir",name:"ノワール",desc:"シックなモノトーンカード",
+    bg:["#3a3a3a","#2a2a2a"],hlBg:["#555530","#444420"],red:"#ff5555",black:"#f0f0f0",border:"#555555",
+    faceRedBg:["#5a2028","#4a1818"],faceBlackBg:["#383848","#2e2e3e"],faceRedBorder:"#884444",faceBlackBorder:"#6a6a88",
+    font:"'Playfair Display',Georgia,serif",rankWeight:900,suitScale:0.92,free:false},
+  {id:"noir4c",name:"ノワール4色",desc:"暗い背景にスート別の色",
+    bg:["#3a3a3a","#2a2a2a"],hlBg:["#555530","#444420"],red:"#ff5555",black:"#f0f0f0",border:"#555555",
+    suitColors:{"♠":"#f0f0f0","♥":"#ff5a5a","♦":"#5aa0ff","♣":"#5ed878"},
+    faceBgs:{
+      "♠":["#2e2e38","#26262e"],
+      "♥":["#4a1e24","#3a1418"],
+      "♦":["#1e3048","#162438"],
+      "♣":["#1e3a28","#16301e"]
+    },
+    faceBorders:{"♠":"#606070","♥":"#884444","♦":"#4a6a90","♣":"#3e6e50"},
+    faceRedBg:["#5a2028","#4a1818"],faceBlackBg:["#383848","#2e2e3e"],faceRedBorder:"#884444",faceBlackBorder:"#6a6a88",
+    font:"'Playfair Display',Georgia,serif",rankWeight:900,suitScale:0.92,free:false},
 ];
 var TABLE_BGS=[
   {id:"default",name:"カジノグリーン",bg:"#0a1a0f",grad:"rgba(20,60,30,0.5)",
     card:"var(--card)",cardBorder:"rgba(212,175,55,0.08)",
     accent:"#d4af37",accentDark:"#b8960c",text:"#f0e6d2",textMuted:"#8faa8f",textDim:"#5a7a5a",
     btnBg:"rgba(212,175,55,0.06)",tabActive:"rgba(212,175,55,0.15)",free:true},
-  {id:"ocean",name:"ディープオーシャン",bg:"#152838",grad:"rgba(60,120,180,0.45)",
+  {id:"ocean",name:"ディープオーシャン",bg:"#0e2538",grad:"rgba(60,120,180,0.45)",
     card:"rgba(20,40,60,0.92)",cardBorder:"rgba(150,200,240,0.14)",
     accent:"#8ed0f0",accentDark:"#5aa8d0",text:"#e8f2fc",textMuted:"#a8c8e0",textDim:"#708aa8",
-    btnBg:"rgba(150,200,240,0.08)",tabActive:"rgba(150,200,240,0.2)",free:false},
+    btnBg:"rgba(150,200,240,0.08)",tabActive:"rgba(150,200,240,0.2)",
+    bgImage:"radial-gradient(circle at 20% 15%,rgba(150,220,255,0.35) 0%,rgba(150,220,255,0) 2px),radial-gradient(circle at 78% 22%,rgba(150,220,255,0.3) 0%,rgba(150,220,255,0) 1.5px),radial-gradient(circle at 45% 38%,rgba(150,220,255,0.4) 0%,rgba(150,220,255,0) 2.5px),radial-gradient(circle at 88% 55%,rgba(150,220,255,0.3) 0%,rgba(150,220,255,0) 2px),radial-gradient(circle at 12% 68%,rgba(150,220,255,0.35) 0%,rgba(150,220,255,0) 2px),radial-gradient(circle at 62% 80%,rgba(150,220,255,0.3) 0%,rgba(150,220,255,0) 1.5px),radial-gradient(circle at 30% 92%,rgba(150,220,255,0.35) 0%,rgba(150,220,255,0) 2px),repeating-radial-gradient(ellipse 600px 80px at 50% 10%,transparent 0,transparent 40px,rgba(140,200,240,0.05) 40px,rgba(140,200,240,0.05) 44px,transparent 44px,transparent 90px),repeating-radial-gradient(ellipse 500px 60px at 50% 50%,transparent 0,transparent 32px,rgba(120,180,220,0.04) 32px,rgba(120,180,220,0.04) 36px,transparent 36px,transparent 72px),linear-gradient(180deg,#134060 0%,#0a1a2a 100%)",
+    bgAnim:"bubblesRise 18s ease-in-out infinite",free:false},
   {id:"wine",name:"ワインレッド",bg:"#2a1520",grad:"rgba(120,60,80,0.45)",
     card:"rgba(42,20,30,0.92)",cardBorder:"rgba(230,160,180,0.14)",
     accent:"#f4a0b0",accentDark:"#c87088",text:"#fce8ec",textMuted:"#d8a8b8",textDim:"#957080",
-    btnBg:"rgba(230,160,180,0.08)",tabActive:"rgba(230,160,180,0.2)",free:false},
-  {id:"noir",name:"ノワール",bg:"#1a1a1a",grad:"rgba(70,70,70,0.5)",
+    btnBg:"rgba(230,160,180,0.08)",tabActive:"rgba(230,160,180,0.2)",
+    bgImage:"radial-gradient(ellipse 8px 80px at 10% 50%,rgba(180,90,120,0.07) 0%,transparent 100%),radial-gradient(ellipse 8px 80px at 25% 50%,rgba(180,90,120,0.06) 0%,transparent 100%),radial-gradient(ellipse 8px 80px at 40% 50%,rgba(180,90,120,0.07) 0%,transparent 100%),radial-gradient(ellipse 8px 80px at 55% 50%,rgba(180,90,120,0.06) 0%,transparent 100%),radial-gradient(ellipse 8px 80px at 70% 50%,rgba(180,90,120,0.07) 0%,transparent 100%),radial-gradient(ellipse 8px 80px at 85% 50%,rgba(180,90,120,0.06) 0%,transparent 100%),radial-gradient(ellipse 70% 45% at 50% 50%,rgba(180,90,120,0.22) 0%,transparent 70%),radial-gradient(ellipse 100% 60% at 50% 0%,rgba(40,10,20,0.4) 0%,transparent 60%),radial-gradient(ellipse 100% 60% at 50% 100%,rgba(40,10,20,0.5) 0%,transparent 60%),linear-gradient(180deg,#3a1a28 0%,#2a1520 50%,#1a0b14 100%)",
+    free:false},
+  {id:"noir",name:"ノワール",bg:"#131313",grad:"rgba(70,70,70,0.4)",
     card:"rgba(30,30,30,0.92)",cardBorder:"rgba(200,200,200,0.1)",
     accent:"#e8e8e8",accentDark:"#aaaaaa",text:"#f0f0f0",textMuted:"#a0a0a0",textDim:"#707070",
-    btnBg:"rgba(200,200,200,0.08)",tabActive:"rgba(200,200,200,0.2)",free:false},
+    btnBg:"rgba(200,200,200,0.08)",tabActive:"rgba(200,200,200,0.2)",
+    bgImage:"repeating-linear-gradient(45deg,transparent 0,transparent 20px,rgba(200,200,200,0.025) 20px,rgba(200,200,200,0.025) 22px,transparent 22px,transparent 42px),repeating-linear-gradient(-45deg,transparent 0,transparent 20px,rgba(200,200,200,0.025) 20px,rgba(200,200,200,0.025) 22px,transparent 22px,transparent 42px),radial-gradient(ellipse at 50% 0%,rgba(70,70,70,0.4) 0%,transparent 60%),linear-gradient(180deg,#131313 0%,#0a0a0a 100%)",
+    free:false},
   {id:"gold",name:"ゴールドルーム",bg:"#2a2210",grad:"rgba(120,90,30,0.5)",
     card:"rgba(42,34,16,0.92)",cardBorder:"rgba(240,210,100,0.14)",
     accent:"#ffd860",accentDark:"#d4a830",text:"#fff4d8",textMuted:"#d8c480",textDim:"#907840",
-    btnBg:"rgba(240,210,100,0.08)",tabActive:"rgba(240,210,100,0.2)",free:false},
-  {id:"aurora",name:"オーロラ",bg:"#142830",grad:"rgba(40,110,120,0.45)",
+    btnBg:"rgba(240,210,100,0.08)",tabActive:"rgba(240,210,100,0.2)",
+    bgImage:"radial-gradient(circle at 12% 8%,rgba(255,230,130,0.9) 0%,rgba(255,230,130,0) 1px),radial-gradient(circle at 78% 14%,rgba(255,220,100,0.7) 0%,rgba(255,220,100,0) 1.5px),radial-gradient(circle at 34% 22%,rgba(255,240,160,0.8) 0%,rgba(255,240,160,0) 1px),radial-gradient(circle at 58% 31%,rgba(255,220,100,0.6) 0%,rgba(255,220,100,0) 2px),radial-gradient(circle at 90% 42%,rgba(255,230,130,0.7) 0%,rgba(255,230,130,0) 1px),radial-gradient(circle at 18% 48%,rgba(255,220,100,0.6) 0%,rgba(255,220,100,0) 1.5px),radial-gradient(circle at 42% 58%,rgba(255,240,160,0.8) 0%,rgba(255,240,160,0) 1px),radial-gradient(circle at 70% 65%,rgba(255,220,100,0.7) 0%,rgba(255,220,100,0) 2px),radial-gradient(circle at 24% 78%,rgba(255,230,130,0.6) 0%,rgba(255,230,130,0) 1px),radial-gradient(circle at 56% 85%,rgba(255,240,160,0.7) 0%,rgba(255,240,160,0) 1.5px),radial-gradient(circle at 82% 92%,rgba(255,220,100,0.6) 0%,rgba(255,220,100,0) 1px),radial-gradient(ellipse 50% 40% at 50% 50%,rgba(240,200,80,0.18) 0%,transparent 70%),linear-gradient(140deg,#3a2e14 0%,#2a2210 50%,#1a1408 100%)",
+    bgAnim:"goldShimmer 6s ease-in-out infinite",free:false},
+  {id:"aurora",name:"オーロラ",bg:"#0a1828",grad:"rgba(40,110,120,0.35)",
     card:"rgba(18,38,46,0.92)",cardBorder:"rgba(120,230,210,0.14)",
     accent:"#6dd8cd",accentDark:"#3aaa9a",text:"#e0f4f0",textMuted:"#88c8c0",textDim:"#508880",
-    btnBg:"rgba(120,230,210,0.08)",tabActive:"rgba(120,230,210,0.2)",free:false},
+    btnBg:"rgba(120,230,210,0.08)",tabActive:"rgba(120,230,210,0.2)",
+    bgImage:"radial-gradient(ellipse 80% 50% at 30% 15%,rgba(110,220,195,0.28) 0%,transparent 60%),radial-gradient(ellipse 70% 40% at 70% 25%,rgba(130,110,220,0.22) 0%,transparent 60%),radial-gradient(ellipse 60% 35% at 50% 85%,rgba(160,220,180,0.18) 0%,transparent 60%),linear-gradient(180deg,#0a1828 0%,#071220 100%)",
+    bgAnim:"auroraDrift 24s ease-in-out infinite",free:false},
 ];
 var SHOP_ITEMS=[
   {id:"skins",icon:"🎴",price:"¥160"},
@@ -867,6 +903,30 @@ var I18N={
     "home.battle_desc":"親子＋チップ計算",
     "home.rulebook":"遊び方",
     "home.settings":"設定",
+    "home.history":"履歴",
+    "home.history_desc":"過去の対戦を確認",
+    // History
+    "history.title":"📊 履歴",
+    "history.tab.flip":"🎴 フリップ",
+    "history.tab.battle":"⚔️ 対戦",
+    "history.empty":"履歴がありません",
+    "history.flip_recent":"直近5回",
+    "history.battle_recent":"直近5回",
+    "history.date":"日時",
+    "history.winner":"勝者",
+    "history.rounds":"ラウンド数",
+    "history.players_count":"人数",
+    "history.clear":"🗑️ 履歴をクリア",
+    "history.clear_confirm":"全履歴を削除しますか？",
+    "history.view":"詳細",
+    "history.back_btn":"← 戻る",
+    "history.round":"R",
+    // Resume dialog
+    "resume.title":"中断した対戦があります",
+    "resume.desc":"前回の対戦が集計前に中断されました。",
+    "resume.round_info":"ラウンド",
+    "resume.resume":"再開する",
+    "resume.discard":"破棄して新規",
     // Settings
     "settings.title":"⚙️ 設定",
     "settings.back":"← 戻る",
@@ -899,7 +959,7 @@ var I18N={
     "shop.note":"※ 現在はデモ版です。実際の課金はCapacitor移行後に実装されます。",
     "shop.note2":"購入ボタンを押すと即時解放されます（テスト用）。",
     "shop.item.skins.name":"カードデザインパック",
-    "shop.item.skins.desc":"裏面6種＋表面3種",
+    "shop.item.skins.desc":"裏面6種＋表面6種",
     "shop.item.tables.name":"テーブル背景パック",
     "shop.item.tables.desc":"テーブル背景6種",
     "shop.item.noads.name":"広告解除",
@@ -918,8 +978,14 @@ var I18N={
     "face.default.desc":"定番デザイン",
     "face.noir":"ノワール",
     "face.noir.desc":"シックなモノトーンカード",
+    "face.noir4c":"ノワール4色",
+    "face.noir4c.desc":"暗い背景にスート別の色",
     "face.fourcolor":"4色",
     "face.fourcolor.desc":"スートごとに異なる色",
+    "face.antique":"アンティーク",
+    "face.antique.desc":"古紙風セピア調",
+    "face.glass":"グラス4色",
+    "face.glass.desc":"半透明・スート別カラー",
     // Table bgs
     "table.default":"カジノグリーン",
     "table.ocean":"ディープオーシャン",
@@ -942,11 +1008,13 @@ var I18N={
     "setup.start":"ゲーム開始",
     // Game screen
     "game.reset":"リセット",
+    "game.reset_confirm":"ゲームを中断しますか？ 現在の進行は履歴に保存されます。",
     "game.round":"R",
     "game.open_three":"3枚オープン",
     "game.drag_squeeze":"ドラッグして絞る",
     "game.next_round":"次のラウンド",
     "game.final":"最終結果",
+    "game.end":"終了する",
     "game.home":"ホームへ",
     "game.again":"もう一度",
     "game.home_back":"← ホームへ",
@@ -1125,6 +1193,8 @@ var I18N={
     "squeeze.hint":"絞",
     // Common
     "common.back":"← 戻る",
+    "common.ok":"OK",
+    "common.cancel":"キャンセル",
     "common.selected":"✓ 使用中",
     "common.locked":"🔒 要購入",
     "common.yes":"はい",
@@ -1138,6 +1208,28 @@ var I18N={
     "home.battle_desc":"Dealer + chips",
     "home.rulebook":"How to Play",
     "home.settings":"Settings",
+    "home.history":"History",
+    "home.history_desc":"View past games",
+    "history.title":"📊 History",
+    "history.tab.flip":"🎴 Flip",
+    "history.tab.battle":"⚔️ Battle",
+    "history.empty":"No history yet",
+    "history.flip_recent":"Last 5 games",
+    "history.battle_recent":"Last 5 games",
+    "history.date":"Date",
+    "history.winner":"Winner",
+    "history.rounds":"Rounds",
+    "history.players_count":"Players",
+    "history.clear":"🗑️ Clear history",
+    "history.clear_confirm":"Delete all history?",
+    "history.view":"Details",
+    "history.back_btn":"← Back",
+    "history.round":"R",
+    "resume.title":"Interrupted game found",
+    "resume.desc":"Your last battle game was interrupted before tally.",
+    "resume.round_info":"Round",
+    "resume.resume":"Resume",
+    "resume.discard":"Discard & New",
     "settings.title":"⚙️ Settings",
     "settings.back":"← Back",
     "settings.card_design":"🎴 Card Design",
@@ -1168,7 +1260,7 @@ var I18N={
     "shop.note":"* Demo version. Real IAP after Capacitor migration.",
     "shop.note2":"Purchase button unlocks immediately (test mode).",
     "shop.item.skins.name":"Card Design Pack",
-    "shop.item.skins.desc":"6 backs + 3 faces",
+    "shop.item.skins.desc":"6 backs + 6 faces",
     "shop.item.tables.name":"Table Background Pack",
     "shop.item.tables.desc":"6 table backgrounds",
     "shop.item.noads.name":"Remove Ads",
@@ -1185,8 +1277,14 @@ var I18N={
     "face.default.desc":"Standard design",
     "face.noir":"Noir",
     "face.noir.desc":"Chic monotone card",
+    "face.noir4c":"Noir 4-Color",
+    "face.noir4c.desc":"Dark bg with suit colors",
     "face.fourcolor":"4-Color",
     "face.fourcolor.desc":"Different color per suit",
+    "face.antique":"Antique",
+    "face.antique.desc":"Aged paper sepia",
+    "face.glass":"Glass 4-Color",
+    "face.glass.desc":"Translucent · suit colors",
     "table.default":"Casino Green",
     "table.ocean":"Deep Ocean",
     "table.wine":"Wine Red",
@@ -1206,11 +1304,13 @@ var I18N={
     "setup.no_offset_desc":"Winner's multiplier",
     "setup.start":"Start Game",
     "game.reset":"Reset",
+    "game.reset_confirm":"Interrupt the game? Current progress will be saved to history.",
     "game.round":"R",
     "game.open_three":"Open 3",
     "game.drag_squeeze":"Drag to squeeze",
     "game.next_round":"Next Round",
     "game.final":"Final Results",
+    "game.end":"End Game",
     "game.home":"Home",
     "game.again":"Play Again",
     "game.home_back":"← Home",
@@ -1380,6 +1480,8 @@ var I18N={
     "trainer.hint":"Drag to squeeze",
     "squeeze.hint":"DRAG",
     "common.back":"← Back",
+    "common.ok":"OK",
+    "common.cancel":"Cancel",
     "common.selected":"✓ Selected",
     "common.locked":"🔒 Locked",
     "common.yes":"Yes",
@@ -1393,6 +1495,28 @@ var I18N={
     "home.battle_desc":"庄家+筹码",
     "home.rulebook":"玩法",
     "home.settings":"设置",
+    "home.history":"历史",
+    "home.history_desc":"查看过去的对战",
+    "history.title":"📊 历史",
+    "history.tab.flip":"🎴 翻牌",
+    "history.tab.battle":"⚔️ 对战",
+    "history.empty":"暂无历史",
+    "history.flip_recent":"最近5局",
+    "history.battle_recent":"最近5局",
+    "history.date":"日期",
+    "history.winner":"胜者",
+    "history.rounds":"轮次",
+    "history.players_count":"人数",
+    "history.clear":"🗑️ 清除历史",
+    "history.clear_confirm":"删除所有历史？",
+    "history.view":"详情",
+    "history.back_btn":"← 返回",
+    "history.round":"R",
+    "resume.title":"有中断的对战",
+    "resume.desc":"上次对战在结算前被中断。",
+    "resume.round_info":"轮次",
+    "resume.resume":"继续",
+    "resume.discard":"放弃重来",
     "settings.title":"⚙️ 设置",
     "settings.back":"← 返回",
     "settings.card_design":"🎴 扑克牌设计",
@@ -1423,7 +1547,7 @@ var I18N={
     "shop.note":"※ 现为演示版。正式付费将在 Capacitor 迁移后实装。",
     "shop.note2":"按下购买按钮即时解锁（测试用）。",
     "shop.item.skins.name":"扑克牌设计包",
-    "shop.item.skins.desc":"牌背6种+牌面3种",
+    "shop.item.skins.desc":"牌背6种+牌面6种",
     "shop.item.tables.name":"牌桌背景包",
     "shop.item.tables.desc":"牌桌背景6种",
     "shop.item.noads.name":"去除广告",
@@ -1440,8 +1564,14 @@ var I18N={
     "face.default.desc":"标准设计",
     "face.noir":"黑色",
     "face.noir.desc":"时尚单色牌",
+    "face.noir4c":"黑色4色",
+    "face.noir4c.desc":"深色背景·各花色不同",
     "face.fourcolor":"4色",
     "face.fourcolor.desc":"每种花色不同颜色",
+    "face.antique":"古董",
+    "face.antique.desc":"旧纸·褪色",
+    "face.glass":"玻璃4色",
+    "face.glass.desc":"半透明·花色区分",
     "table.default":"赌场绿",
     "table.ocean":"深海",
     "table.wine":"酒红",
@@ -1461,11 +1591,13 @@ var I18N={
     "setup.no_offset_desc":"胜者的倍率",
     "setup.start":"开始游戏",
     "game.reset":"重置",
+    "game.reset_confirm":"中断游戏？当前进度将保存到历史。",
     "game.round":"R",
     "game.open_three":"开3张",
     "game.drag_squeeze":"拖动挤牌",
     "game.next_round":"下一轮",
     "game.final":"最终结果",
+    "game.end":"结束游戏",
     "game.home":"回主页",
     "game.again":"再来一局",
     "game.home_back":"← 回主页",
@@ -1635,6 +1767,8 @@ var I18N={
     "trainer.hint":"拖动挤牌",
     "squeeze.hint":"挤",
     "common.back":"← 返回",
+    "common.ok":"确认",
+    "common.cancel":"取消",
     "common.selected":"✓ 使用中",
     "common.locked":"🔒 需购买",
     "common.yes":"是",
@@ -1664,6 +1798,31 @@ function displayName(nameArr,idx){
   if(n&&String(n).trim())return n;
   return t("setup.name_placeholder").replace("{n}",idx+1);
 }
+
+// ─── History storage ─────────────────────────────────────────
+var HISTORY_MAX=5;
+function loadHistory(key){
+  try{var v=localStorage.getItem(key);if(v){var arr=JSON.parse(v);if(Array.isArray(arr))return arr;}}catch(e){}
+  return [];
+}
+function pushHistory(key,entry){
+  var arr=loadHistory(key);
+  arr.unshift(entry); // newest first
+  if(arr.length>HISTORY_MAX)arr=arr.slice(0,HISTORY_MAX);
+  try{localStorage.setItem(key,JSON.stringify(arr));}catch(e){}
+}
+function clearHistory(key){try{localStorage.removeItem(key);}catch(e){}}
+
+// ─── Battle session (interrupt recovery) ─────────────────────
+var BATTLE_SESSION_KEY="niuniu_battle_session";
+function saveBattleSession(session){
+  try{localStorage.setItem(BATTLE_SESSION_KEY,JSON.stringify(session));}catch(e){}
+}
+function loadBattleSession(){
+  try{var v=localStorage.getItem(BATTLE_SESSION_KEY);if(v)return JSON.parse(v);}catch(e){}
+  return null;
+}
+function clearBattleSession(){try{localStorage.removeItem(BATTLE_SESSION_KEY);}catch(e){}}
 
 // ─── Main App ────────────────────────────────────────────────────
 var PCOLORS=["#e74c3c","#2980b9","#27ae60","#f39c12","#8e44ad","#1abc9c"];
@@ -1759,12 +1918,12 @@ function PlayerCards(props){
         var alertAnim,alertBorder,extraStyle={};
         if(alertType==="rainbow"){alertAnim="alertRainbow 1.2s linear infinite,alertBorderRainbow 1.2s linear infinite";alertBorder="2px solid #f00";}
         else if(alertType==="glitch"){alertAnim="alertGlitch 0.3s steps(1) infinite,alertGlitchShadow 2s steps(1) infinite";alertBorder="1px solid rgba(255,255,255,0.15)";}
-        else if(alertType==="quake"){alertAnim="alertQuakeCard 0.4s ease-in-out infinite";alertBorder="2px solid rgba(255,100,0,0.5)";extraStyle={boxShadow:"0 0 15px rgba(255,100,0,0.3)"};}
+        else if(alertType==="quake"){alertAnim="alertQuakeCard 0.4s ease-in-out infinite,alertBorderRainbow 1.2s linear infinite";alertBorder="2px solid #f00";extraStyle={boxShadow:"0 0 18px rgba(255,0,200,0.35)"};}
         else if(alertType==="cow"){alertAnim="bullGlow 1.2s ease-in-out infinite";alertBorder="2px solid #d4af37";}
         else{alertAnim="alertRed 1.5s ease-in-out infinite,alertBorderRed 1.5s ease-in-out infinite";alertBorder="2px solid rgba(255,0,0,0.5)";}
         if(alertType==="cow"){
           return e("div",{key:roundNum+"-"+i+"-"+ci+"-wrap",style:Object.assign({borderRadius:cw*0.09+4,animation:alertAnim,border:alertBorder,padding:1,position:"relative"},extraStyle)},
-            sqCard,e("div",{style:{position:"absolute",top:0,left:0,right:0,bottom:0,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none",zIndex:10,fontSize:sm?24:32,animation:"squeezePulse 1s ease-in-out infinite"}},"🐮"));
+            sqCard,e("div",{style:{position:"absolute",top:0,left:0,right:0,bottom:0,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none",zIndex:10,fontSize:sm?24:32,animation:"squeezePulse 1s ease-in-out infinite,specialCowGlow 3s ease-in-out infinite"}},"🐮"));
         }
         return e("div",{key:roundNum+"-"+i+"-"+ci+"-wrap",style:Object.assign({borderRadius:cw*0.09+4,animation:alertAnim,border:alertBorder,padding:1},extraStyle)},sqCard);
       }
@@ -1831,13 +1990,11 @@ function PlayerCards(props){
 
   var boxAnim=isW?"winPulse 1.5s ease infinite":"none";
   var boxBg=isW?"linear-gradient(135deg,rgba(212,175,55,0.07) 0%,var(--card) 100%)":"var(--card)";
-  if(alertActive&&alertType==="flash")boxAnim="alertFlash 1.5s ease-in-out 1";
-  else if(alertActive&&alertType==="blackout")boxAnim="alertBlackout 2s ease-in-out 1";
-  else if(alertActive&&alertType==="quake")boxAnim="alertQuake 0.5s ease-in-out infinite";
+  if(alertActive&&alertType==="quake")boxAnim="alertQuake 0.5s ease-in-out infinite";
 
   if(alertActive&&alertType==="growBull"){
     pKids.push(e("div",{key:"growbull",style:{position:"absolute",top:0,left:0,right:0,bottom:0,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none",zIndex:0,overflow:"hidden",borderRadius:pc>=4?8:11}},
-      e("div",{style:{animation:"growBull 15s ease-in forwards",opacity:0,lineHeight:1}},"🐮")));
+      e("div",{style:{animation:"growBull 15s ease-in forwards,specialCowGlow 3s ease-in-out infinite",opacity:0,lineHeight:1}},"🐮")));
   }
 
   return e("div",{key:i,style:{padding:pc>=4?7:11,borderRadius:pc>=4?8:11,transition:"all .3s ease",position:"relative",overflow:"hidden",
@@ -1871,7 +2028,6 @@ function NiuNiu(){
   var s10=useState(true),soundOn=s10[0],setSoundOn=s10[1];
   var s13=useState("sakibare"),gameMode=s13[0],setGameMode=s13[1];
   var s11=useState({}),alerts=s11[0],setAlerts=s11[1];
-  var s12=useState(null),forceAlert=s12[0],setForceAlert=s12[1];
 
   // Battle mode states
   var b1=useState(0),dealer=b1[0],setDealer=b1[1];
@@ -1907,6 +2063,10 @@ function NiuNiu(){
   var c3=useState("default"),soundPackId=c3[0],setSoundPackId=c3[1];  // unused, kept for backward compat
   var c4=useState({}),purchased=c4[0],setPurchased=c4[1]; // {skins:true,tables:true,...}
   var c5=useState(null),settingsFrom=c5[0],setSettingsFrom=c5[1]; // track where settings was opened from
+  var c5b=useState(null),shopFrom=c5b[0],setShopFrom=c5b[1]; // track where shop was opened from
+  var c5c=useState(null),pendingResume=c5c[0],setPendingResume=c5c[1]; // interrupted battle session to prompt
+  var c5d=useState("flip"),historyTab=c5d[0],setHistoryTab=c5d[1]; // history screen tab
+  var c5e=useState(false),showResetConfirm=c5e[0],setShowResetConfirm=c5e[1]; // reset confirm modal
   var c6=useState(0),adCounter=c6[0],setAdCounter=c6[1]; // count rounds for ad timing
   var c7=useState(false),showAdPlaceholder=c7[0],setShowAdPlaceholder=c7[1];
   var c8=useState(getLangFromStorage()),lang=c8[0],setLangState=c8[1];
@@ -1952,6 +2112,114 @@ function NiuNiu(){
 
   useEffect(function(){initConfetti();},[]);
 
+  // Check for interrupted battle session on mount
+  useEffect(function(){
+    var saved=loadBattleSession();
+    if(saved&&saved.roundNum>0){
+      setPendingResume(saved);
+    }
+  },[]);
+
+  // Auto-save battle session during a live battle (before summary)
+  useEffect(function(){
+    if(appMode!=="battle")return;
+    // Only save when in-game phases (not setup/summary)
+    if(phase==="setup"||phase==="summary")return;
+    // Don't save empty state
+    if(roundNum===0&&history.length===0)return;
+    var session={
+      ts:Date.now(),
+      pc:pc,
+      names:names,
+      betRule:betRule,
+      gameMode:gameMode,
+      chips:chips,
+      roundNum:roundNum,
+      history:history,
+      maxBet:maxBet,
+      dealer:dealer,
+      bets:bets,
+      phase:phase
+    };
+    saveBattleSession(session);
+  },[appMode,phase,roundNum,chips,history,pc,names,betRule,gameMode,maxBet,dealer,bets]);
+
+  function applyResume(session){
+    setPc(session.pc||2);
+    setNames(session.names||["","","","","",""]);
+    setBetRule(session.betRule||"offset");
+    setGameMode(session.gameMode||"spoiler");
+    setChips(session.chips||{});
+    setRoundNum(session.roundNum||0);
+    setHistory(session.history||[]);
+    setMaxBet(session.maxBet||10);
+    setDealer(session.dealer||0);
+    setBets(session.bets||{});
+    // Always resume into pickDealer so player picks new dealer for next round
+    var sc={};for(var i=0;i<(session.pc||2);i++)sc[i]=0;
+    setScores(sc);
+    setAppMode("battle");
+    setPhase("pickDealer");
+    setPendingResume(null);
+  }
+  function discardResume(){
+    clearBattleSession();
+    setPendingResume(null);
+  }
+
+  // Save flip history when a flip game has content and is being exited
+  function saveFlipHistoryIfNeeded(){
+    if(appMode!=="flip")return;
+    if(!roundNum||roundNum<1)return; // no rounds played
+    var sc=scores||{};
+    // Find winner(s) by score
+    var maxScore=-1,winners=[];
+    for(var k=0;k<pc;k++){var sv=sc[k]||0;if(sv>maxScore){maxScore=sv;winners=[k];}else if(sv===maxScore){winners.push(k);}}
+    var entry={
+      ts:Date.now(),
+      pc:pc,
+      names:names.slice(0,pc),
+      scores:sc,
+      rounds:roundNum,
+      winners:winners,
+      maxScore:maxScore
+    };
+    pushHistory("niuniu_history_flip",entry);
+  }  // Save battle history when summary is reached
+  function saveBattleHistoryIfNeeded(){
+    if(appMode!=="battle")return;
+    if(!history||history.length===0)return; // no rounds played
+    var cs=chips||{};
+    var maxChip=-Infinity,winners=[];
+    for(var k=0;k<pc;k++){var cv=cs[k]||0;if(cv>maxChip){maxChip=cv;winners=[k];}else if(cv===maxChip){winners.push(k);}}
+    var entry={
+      ts:Date.now(),
+      pc:pc,
+      names:names.slice(0,pc),
+      chips:cs,
+      rounds:history.length,
+      winners:winners,
+      maxChip:maxChip,
+      betRule:betRule,
+      roundHistory:history // full per-round breakdown
+    };
+    pushHistory("niuniu_history_battle",entry);
+    clearBattleSession(); // Clear interrupted session since we tallied
+  }
+
+  // When entering summary (battle), save history and clear interrupted session (once)
+  var battleSavedRef=useRef({phase:null});
+  useEffect(function(){
+    if(appMode==="battle"&&phase==="summary"&&history&&history.length>0){
+      if(battleSavedRef.current.phase!=="summary"){
+        battleSavedRef.current.phase="summary";
+        saveBattleHistoryIfNeeded();
+      }
+    }else if(phase!=="summary"){
+      battleSavedRef.current.phase=null;
+    }
+  },[appMode,phase,history]);
+
   // Apply table theme to CSS custom properties
   useEffect(function(){
     var tb=TABLE_BGS.find(function(t){return t.id===tableId;})||TABLE_BGS[0];
@@ -1967,7 +2235,15 @@ function NiuNiu(){
     s.setProperty("--btn-bg",tb.btnBg);
     s.setProperty("--tab-active",tb.tabActive);
     document.body.style.background=tb.bg;
-    document.body.style.backgroundImage="radial-gradient(ellipse at 50% 0%,"+tb.grad+" 0%,transparent 70%),repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(0,0,0,0.03) 8px,rgba(0,0,0,0.03) 16px),linear-gradient(180deg,"+tb.bg+" 0%,"+tb.bg+" 100%)";
+    if(tb.bgImage){
+      document.body.style.backgroundImage=tb.bgImage;
+      document.body.style.backgroundSize=tb.bgSize||"cover";
+      document.body.style.animation=tb.bgAnim||"none";
+    }else{
+      document.body.style.backgroundImage="radial-gradient(ellipse at 50% 0%,"+tb.grad+" 0%,transparent 70%),repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(0,0,0,0.03) 8px,rgba(0,0,0,0.03) 16px),linear-gradient(180deg,"+tb.bg+" 0%,"+tb.bg+" 100%)";
+      document.body.style.backgroundSize="auto";
+      document.body.style.animation="none";
+    }
     document.body.style.color=tb.text;
   },[tableId]);
 
@@ -1980,11 +2256,6 @@ function NiuNiu(){
       var ev=evaluateHand(hand);
       var bv=ev.bullRank;
       var isNiuNiu=bv>=10;
-      if(forceAlert){
-        var ft=forceAlert==="cowPip"||forceAlert==="growBull"?"three":Math.random()<0.5?"three":"four";
-        newAlerts[pi]={type:forceAlert,timing:ft,cowPipIdx:Math.floor(Math.random()*3)};
-        return;
-      }
       var roll=Math.random();
       if(gameMode==="simple"){
         if(isNiuNiu){
@@ -1993,9 +2264,6 @@ function NiuNiu(){
           else if(roll<0.03){newAlerts[pi]={type:"quake",timing:Math.random()<0.5?"three":"four"};}
           else if(roll<0.04){newAlerts[pi]={type:"growBull",timing:"three"};}
           else if(roll<0.05){newAlerts[pi]={type:"cowPip",timing:"three",cowPipIdx:Math.floor(Math.random()*3)};}
-          else if(roll<0.15){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
-        }else{
-          if(roll<0.00645){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
         }
       }else{
         if(isNiuNiu){
@@ -2004,11 +2272,11 @@ function NiuNiu(){
           else if(roll<0.03){newAlerts[pi]={type:"quake",timing:Math.random()<0.5?"three":"four"};}
           else if(roll<0.04){newAlerts[pi]={type:"growBull",timing:"three"};}
           else if(roll<0.05){newAlerts[pi]={type:"cowPip",timing:"three",cowPipIdx:Math.floor(Math.random()*3)};}
-          else if(roll<0.15){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.25){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
           else if(roll<0.65){newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};}
         }else{
-          if(roll<0.00645){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
-          else if(roll<0.1193){newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};}
+          if(roll<0.01097){newAlerts[pi]={type:"glitch",timing:Math.random()<0.5?"three":"four"};}
+          else if(roll<0.08773){newAlerts[pi]={type:"red",timing:Math.random()<0.5?"three":"four"};}
         }
       }
     });
@@ -2018,11 +2286,8 @@ function NiuNiu(){
   function playAlertSFX(type){
     if(type==="rainbow")SFX.alertRainbow();
     else if(type==="glitch")SFX.alertGlitch();
-    else if(type==="flash")SFX.alertFlash();
-    else if(type==="blackout")SFX.alertBlackout();
     else if(type==="quake")SFX.alertQuake();
     else if(type==="cow")SFX.alertCow();
-    else if(type==="special")SFX.alertSpecial();
     else if(type==="growBull")SFX.alertGrowBull();
     else if(type==="cowPip"){}
     else SFX.alertRed();
@@ -2159,6 +2424,29 @@ function NiuNiu(){
 
   // ─── HOME Screen ───────────────────────────────────────────
   if(appMode==="home"){
+    // Resume dialog overlay (shown only if there's an interrupted battle session)
+    var resumeOverlay=null;
+    if(pendingResume){
+      resumeOverlay=e("div",{key:"resume",style:{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:999,
+        background:"rgba(0,0,0,0.85)",display:"flex",alignItems:"center",justifyContent:"center",padding:20,
+        animation:"fadeUp 0.3s ease"}},
+        e("div",{style:{maxWidth:360,width:"100%",padding:"24px 22px",borderRadius:16,
+          background:"var(--card)",border:"1.5px solid var(--accent)",
+          boxShadow:"0 8px 32px rgba(0,0,0,0.6)"}},
+          e("div",{style:{fontSize:20,marginBottom:10,textAlign:"center"}},"⏸️"),
+          e("div",{style:{fontSize:15,fontWeight:800,color:"var(--accent)",textAlign:"center",marginBottom:8,letterSpacing:1}},t("resume.title")),
+          e("div",{style:{fontSize:11,color:"var(--text-muted)",textAlign:"center",marginBottom:14,lineHeight:1.6}},
+            t("resume.desc"),e("br"),
+            t("resume.round_info")+" "+(pendingResume.roundNum||0)+" · "+(pendingResume.pc||0)+t("setup.people")),
+          e("div",{style:{display:"flex",gap:8,justifyContent:"center"}},
+            e("button",{onClick:function(){discardResume();if(soundOn)SFX.buttonClick();},style:{
+              padding:"9px 18px",borderRadius:8,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+              background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-muted)",flex:1}},t("resume.discard")),
+            e("button",{onClick:function(){applyResume(pendingResume);if(soundOn)SFX.buttonClick();},style:{
+              padding:"9px 18px",borderRadius:8,fontSize:12,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+              background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",
+              color:"var(--bg)",border:"none",flex:1,boxShadow:"0 2px 8px rgba(212,175,55,0.3)"}},t("resume.resume")))));
+    }
     return e("div",{style:{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",padding:20,maxWidth:860,margin:"0 auto",position:"relative"}},
       // Language switcher (top-right)
       e("div",{style:{position:"absolute",top:16,right:16,display:"flex",gap:4,zIndex:10}},
@@ -2183,52 +2471,60 @@ function NiuNiu(){
         e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:14}},
           // Flip mode
           e("button",{onClick:function(){setAppMode("flip");setPhase("setup");if(soundOn)SFX.buttonClick();},
-            style:{padding:"36px 16px",borderRadius:16,border:"1px solid var(--card-border)",
-              background:"linear-gradient(135deg,rgba(212,175,55,0.1) 0%,var(--card) 100%)",
+            style:{padding:"36px 16px",borderRadius:16,border:"1.5px solid rgba(212,175,55,0.45)",
+              background:"linear-gradient(165deg,rgba(212,175,55,0.22) 0%,rgba(0,0,0,0.4) 100%)",
               cursor:"pointer",textAlign:"center",fontFamily:"inherit",minHeight:260,
               display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:18,
-              boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(212,175,55,0.1)"}},
-            e("div",{style:{width:88,height:88,borderRadius:22,background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,boxShadow:"0 6px 20px rgba(212,175,55,0.4)"}},"🎴"),
+              boxShadow:"0 4px 20px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1),inset 0 -20px 40px rgba(0,0,0,0.25)"}},
+            e("div",{style:{width:88,height:88,borderRadius:22,background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,boxShadow:"0 6px 20px rgba(212,175,55,0.5),inset 0 1px 0 rgba(255,255,255,0.3)"}},"🎴"),
             e("div",null,
-              e("div",{style:{fontSize:20,fontWeight:800,color:"var(--text)",letterSpacing:1.5,marginBottom:6}},t("home.flip")),
-              e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.5}},t("home.flip_desc")))),
+              e("div",{style:{fontSize:20,fontWeight:800,color:"#fff",letterSpacing:1.5,marginBottom:6,textShadow:"0 1px 3px rgba(0,0,0,0.5)"}},t("home.flip")),
+              e("div",{style:{fontSize:10,color:"rgba(255,255,255,0.72)",lineHeight:1.5,textShadow:"0 1px 2px rgba(0,0,0,0.4)"}},t("home.flip_desc")))),
           // Battle mode
           e("button",{onClick:function(){setAppMode("battle");setPhase("setup");if(soundOn)SFX.buttonClick();},
-            style:{padding:"36px 16px",borderRadius:16,border:"1px solid rgba(192,57,43,0.2)",
-              background:"linear-gradient(135deg,rgba(192,57,43,0.1) 0%,var(--card) 100%)",
+            style:{padding:"36px 16px",borderRadius:16,border:"1.5px solid rgba(220,70,60,0.5)",
+              background:"linear-gradient(165deg,rgba(192,57,43,0.28) 0%,rgba(0,0,0,0.4) 100%)",
               cursor:"pointer",textAlign:"center",fontFamily:"inherit",minHeight:260,
               display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:18,
-              boxShadow:"0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(192,57,43,0.1)"}},
-            e("div",{style:{width:88,height:88,borderRadius:22,background:"linear-gradient(135deg,#c0392b,#962d22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,boxShadow:"0 6px 20px rgba(192,57,43,0.4)"}},"⚔️"),
+              boxShadow:"0 4px 20px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1),inset 0 -20px 40px rgba(0,0,0,0.25)"}},
+            e("div",{style:{width:88,height:88,borderRadius:22,background:"linear-gradient(135deg,#e04a38,#a02d20)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,boxShadow:"0 6px 20px rgba(220,70,60,0.5),inset 0 1px 0 rgba(255,255,255,0.3)"}},"⚔️"),
             e("div",null,
-              e("div",{style:{fontSize:20,fontWeight:800,color:"var(--text)",letterSpacing:1.5,marginBottom:6}},t("home.battle")),
-              e("div",{style:{fontSize:10,color:"var(--text-muted)",lineHeight:1.5}},t("home.battle_desc"))))),
-        // Sub buttons - 2 column
-        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}},
+              e("div",{style:{fontSize:20,fontWeight:800,color:"#fff",letterSpacing:1.5,marginBottom:6,textShadow:"0 1px 3px rgba(0,0,0,0.5)"}},t("home.battle")),
+              e("div",{style:{fontSize:10,color:"rgba(255,255,255,0.72)",lineHeight:1.5,textShadow:"0 1px 2px rgba(0,0,0,0.4)"}},t("home.battle_desc"))))),
+        // Sub buttons - 3 column (rulebook / history / settings)
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}},
           e("button",{onClick:function(){setAppMode("rulebook");if(soundOn)SFX.buttonClick();},
-            style:{padding:"14px 16px",borderRadius:12,border:"1px solid var(--card-border)",
+            style:{padding:"14px 10px",borderRadius:12,border:"1px solid var(--card-border)",
               background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
-              display:"flex",alignItems:"center",justifyContent:"center",gap:8}},
+              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:4}},
             e("span",{style:{fontSize:18}},"📖"),
-            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},t("home.rulebook"))),
-          e("button",{onClick:function(){setSettingsFrom("home");setAppMode("settings");if(soundOn)SFX.buttonClick();},
-            style:{padding:"14px 16px",borderRadius:12,border:"1px solid var(--card-border)",
+            e("span",{style:{fontSize:11,fontWeight:700,color:"var(--text-muted)"}},t("home.rulebook"))),
+          e("button",{onClick:function(){setAppMode("history");if(soundOn)SFX.buttonClick();},
+            style:{padding:"14px 10px",borderRadius:12,border:"1px solid var(--card-border)",
               background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
-              display:"flex",alignItems:"center",justifyContent:"center",gap:8}},
+              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:4}},
+            e("span",{style:{fontSize:18}},"📊"),
+            e("span",{style:{fontSize:11,fontWeight:700,color:"var(--text-muted)"}},t("home.history"))),
+          e("button",{onClick:function(){setSettingsFrom("home");setAppMode("settings");if(soundOn)SFX.buttonClick();},
+            style:{padding:"14px 10px",borderRadius:12,border:"1px solid var(--card-border)",
+              background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
+              display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:4}},
             e("span",{style:{fontSize:18}},"⚙️"),
-            e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},t("home.settings")))),
+            e("span",{style:{fontSize:11,fontWeight:700,color:"var(--text-muted)"}},t("home.settings")))),
         // Footer
-        e("div",{style:{marginTop:20,opacity:0.3,fontSize:9,color:"var(--text-muted)",letterSpacing:2,textAlign:"center"}},"v1.0")));
+        e("div",{style:{marginTop:20,opacity:0.3,fontSize:9,color:"var(--text-muted)",letterSpacing:2,textAlign:"center"}},"v1.0")),
+      resumeOverlay);
   }
 
   // ─── SHOP Screen ──────────────────────────────────────────
   if(appMode==="shop"){
     var shCard={padding:"14px 16px",borderRadius:12,background:"var(--card)",border:"1px solid var(--card-border)",marginBottom:12,boxShadow:"0 2px 12px rgba(0,0,0,0.2)"};
     var shKids=[];
+    var shopBackTo=shopFrom||"home";
 
     // Header
     shKids.push(e("div",{key:"hdr",style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}},
-      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("common.back")),
+      e("button",{onClick:function(){setAppMode(shopBackTo);setShopFrom(null);},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("common.back")),
       e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},t("shop.title")),
       e("div",{style:{width:50}})));
 
@@ -2265,6 +2561,97 @@ function NiuNiu(){
       e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},shKids));
   }
 
+  // ─── HISTORY Screen ────────────────────────────────────────
+  if(appMode==="history"){
+    var hsCard={padding:"12px 14px",borderRadius:10,background:"var(--card)",border:"1px solid var(--card-border)",marginBottom:10,boxShadow:"0 2px 8px rgba(0,0,0,0.2)"};
+    var hsKids=[];
+    var flipHist=loadHistory("niuniu_history_flip");
+    var battleHist=loadHistory("niuniu_history_battle");
+
+    // Header
+    hsKids.push(e("div",{key:"hdr",style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}},
+      e("button",{onClick:function(){setAppMode("home");},style:{padding:"5px 12px",borderRadius:6,border:"1px solid var(--card-border)",background:"transparent",color:"var(--text-muted)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("common.back")),
+      e("div",{style:{fontSize:16,fontWeight:900,color:"var(--accent)"}},t("history.title")),
+      e("div",{style:{width:50}})));
+
+    // Tab bar
+    var histTabs=[{id:"flip",labelKey:"history.tab.flip"},{id:"battle",labelKey:"history.tab.battle"}];
+    hsKids.push(e("div",{key:"tabs",style:{display:"flex",gap:0,marginBottom:14,borderRadius:10,overflow:"hidden",border:"1px solid var(--card-border)"}},
+      histTabs.map(function(tb){
+        var sel=historyTab===tb.id;
+        return e("button",{key:tb.id,onClick:function(){setHistoryTab(tb.id);},style:{
+          flex:1,padding:"10px 0",fontSize:12,fontWeight:sel?800:400,cursor:"pointer",fontFamily:"inherit",border:"none",
+          background:sel?"rgba(212,175,55,0.15)":"rgba(0,0,0,0.2)",
+          color:sel?"#d4af37":"#6b8f6b",letterSpacing:1,
+          borderBottom:sel?"2px solid #d4af37":"2px solid transparent"}},t(tb.labelKey));
+      })));
+
+    function fmtDate(ts){
+      var d=new Date(ts);
+      var pad=function(n){return n<10?"0"+n:n;};
+      return (d.getMonth()+1)+"/"+d.getDate()+" "+pad(d.getHours())+":"+pad(d.getMinutes());
+    }
+
+    var curHist=historyTab==="flip"?flipHist:battleHist;
+    var recentLabel=historyTab==="flip"?t("history.flip_recent"):t("history.battle_recent");
+
+    if(curHist.length===0){
+      hsKids.push(e("div",{key:"empty",style:{textAlign:"center",padding:"40px 20px",color:"var(--text-dim)",fontSize:12}},
+        e("div",{style:{fontSize:30,marginBottom:10,opacity:0.3}},"📭"),
+        e("div",null,t("history.empty"))));
+    }else{
+      hsKids.push(e("div",{key:"label",style:{fontSize:10,color:"var(--text-muted)",marginBottom:8,textAlign:"center"}},recentLabel));
+      curHist.forEach(function(entry,ei){
+        var kids=[];
+        // Header row: date + players count
+        kids.push(e("div",{key:"h",style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,fontSize:10,color:"var(--text-muted)"}},
+          e("span",null,fmtDate(entry.ts)),
+          e("span",null,entry.pc+(currentLang==="en"?"P":t("setup.people")+" · "+entry.rounds+t("game.round")))));
+        // Winner highlight
+        var winnerNames=(entry.winners||[]).map(function(idx){
+          var nm=entry.names&&entry.names[idx];
+          if(!nm||!nm.trim())nm=t("setup.name_placeholder").replace("{n}",idx+1);
+          return PEMOJI[idx]+nm;
+        }).join(" / ");
+        if(winnerNames){
+          kids.push(e("div",{key:"w",style:{padding:"6px 10px",borderRadius:6,background:"rgba(212,175,55,0.08)",border:"1px solid rgba(212,175,55,0.2)",marginBottom:8,fontSize:11,textAlign:"center"}},
+            e("span",{style:{color:"#d4af37",fontWeight:700}},"🏆 "+winnerNames)));
+        }
+        // Per-player results
+        var rowKids=[];
+        for(var pi=0;pi<entry.pc;pi++){
+          (function(i){
+            var pName=entry.names&&entry.names[i];
+            if(!pName||!pName.trim())pName=t("setup.name_placeholder").replace("{n}",i+1);
+            var val=historyTab==="flip"?(entry.scores&&entry.scores[i]||0):(entry.chips&&entry.chips[i]||0);
+            var isWin=(entry.winners||[]).indexOf(i)>=0;
+            rowKids.push(e("div",{key:i,style:{display:"flex",alignItems:"center",gap:6,padding:"4px 6px",borderRadius:5,
+              background:isWin?"rgba(39,174,96,0.08)":"transparent",fontSize:11}},
+              e("span",null,PEMOJI[i]),
+              e("span",{style:{color:PCOLORS[i],fontWeight:isWin?800:500,flex:1}},pName),
+              e("span",{style:{fontWeight:800,color:val>0?"#27ae60":val<0?"#e74c3c":"#888"}},val>0?"+"+val:val)));
+          })(pi);
+        }
+        kids.push(e("div",{key:"r",style:{display:"grid",gap:2}},rowKids));
+        hsKids.push(e("div",{key:ei,style:hsCard},kids));
+      });
+
+      // Clear button
+      hsKids.push(e("div",{key:"clr",style:{textAlign:"center",marginTop:14}},
+        e("button",{onClick:function(){
+          if(confirm(t("history.clear_confirm"))){
+            clearHistory(historyTab==="flip"?"niuniu_history_flip":"niuniu_history_battle");
+            setAppMode("home");
+            setTimeout(function(){setAppMode("history");},50); // re-render
+          }
+        },style:{padding:"6px 14px",borderRadius:6,fontSize:10,cursor:"pointer",fontFamily:"inherit",
+          background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-muted)"}},t("history.clear"))));
+    }
+
+    return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
+      e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},hsKids));
+  }
+
   // ─── SETTINGS Screen ──────────────────────────────────────
   if(appMode==="settings"){
     var setCard={padding:"14px 16px",borderRadius:12,background:"var(--card)",border:"1px solid var(--card-border)",marginBottom:12,boxShadow:"0 2px 12px rgba(0,0,0,0.2)"};
@@ -2281,10 +2668,12 @@ function NiuNiu(){
     setKids.push(e("div",{key:"cardsec",style:setCard},
       e("div",{style:{fontSize:12,fontWeight:800,color:"var(--accent)",marginBottom:10,letterSpacing:1}},t("settings.card_design")),
       // Preview
-      e("div",{style:{display:"flex",justifyContent:"center",gap:8,marginBottom:14,padding:"10px 0",background:"rgba(0,0,0,0.15)",borderRadius:8}},
-        e(CardBack,{w:48,h:72,skin:curSkin}),
-        e(CardFace,{card:{rank:"K",suit:"♠"},w:48,h:72,showRank:true,faceTheme:curFace}),
-        e(CardFace,{card:{rank:"7",suit:"♥"},w:48,h:72,showRank:true,faceTheme:curFace})),
+      e("div",{style:{display:"flex",justifyContent:"center",gap:5,marginBottom:14,padding:"10px 4px",background:"rgba(0,0,0,0.15)",borderRadius:8}},
+        e(CardBack,{w:42,h:63,skin:curSkin}),
+        e(CardFace,{card:{rank:"K",suit:"♠"},w:42,h:63,showRank:true,faceTheme:curFace}),
+        e(CardFace,{card:{rank:"9",suit:"♥"},w:42,h:63,showRank:true,faceTheme:curFace}),
+        e(CardFace,{card:{rank:"5",suit:"♦"},w:42,h:63,showRank:true,faceTheme:curFace}),
+        e(CardFace,{card:{rank:"2",suit:"♣"},w:42,h:63,showRank:true,faceTheme:curFace})),
       // Back label
       e("div",{style:{fontSize:10,fontWeight:700,color:"var(--text-muted)",marginBottom:6}},t("settings.back_design")),
       e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:14}},
@@ -2337,8 +2726,10 @@ function NiuNiu(){
               background:sel?"var(--tab-active)":"rgba(0,0,0,0.2)",
               border:sel?"1.5px solid var(--accent)":"1px solid var(--card-border)",
               opacity:unlocked?1:0.45}},
-            e("div",{style:{width:"100%",height:40,borderRadius:6,marginBottom:6,position:"relative",
-              background:"radial-gradient(ellipse at 50% 50%,"+tb.grad+","+tb.bg+")",
+            e("div",{style:{width:"100%",height:50,borderRadius:6,marginBottom:6,position:"relative",overflow:"hidden",
+              background:tb.bg,
+              backgroundImage:tb.bgImage||("radial-gradient(ellipse at 50% 50%,"+tb.grad+","+tb.bg+")"),
+              backgroundSize:tb.bgSize||"cover",
               border:"1px solid rgba(255,255,255,0.05)"}},
               e("div",{style:{position:"absolute",bottom:4,right:6,width:8,height:8,borderRadius:"50%",background:tb.accent}})),
             e("div",{style:{fontSize:10,fontWeight:sel?700:400,color:sel?"var(--accent)":"var(--text-muted)"}},t("table."+tb.id)),
@@ -2421,7 +2812,7 @@ function NiuNiu(){
           background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-muted)"}},t("settings.shortcut_reset")))));
 
     // Shop link
-    setKids.push(e("button",{key:"shoplink",onClick:function(){setAppMode("shop");if(soundOn)SFX.buttonClick();},
+    setKids.push(e("button",{key:"shoplink",onClick:function(){setShopFrom("settings");setAppMode("shop");if(soundOn)SFX.buttonClick();},
       style:{width:"100%",padding:"12px 16px",borderRadius:12,border:"1px solid var(--card-border)",
         background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
         display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginTop:6}},
@@ -2933,8 +3324,8 @@ function NiuNiu(){
     e("div",{style:{display:"flex",alignItems:"center",gap:5}},
       e("button",{onClick:function(){setSoundOn(!soundOn);},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:soundOn?"var(--accent)":"#444",fontSize:14,cursor:"pointer"}},soundOn?"🔊":"🔇"),
       e("button",{onClick:function(){setSettingsFrom(appMode);setAppMode("settings");},style:{padding:"2px 8px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-muted)",fontSize:14,cursor:"pointer"}},"⚙️"),
-      e("button",{onClick:function(){setAppMode("home");setPhase("setup");setHands([]);setResults([]);setRoundNum(0);setRevealedCards([]);},
-        style:{padding:"3px 10px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-dim)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("game.reset")))));
+      phase!=="result"?e("button",{onClick:function(){setShowResetConfirm(true);},
+        style:{padding:"3px 10px",borderRadius:5,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"var(--text-dim)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}},t("game.reset")):null)));
 
   // Scores
   gameChildren.push(e("div",{key:"scores",style:{display:"flex",justifyContent:"center",gap:appMode==="battle"?8:12,flexWrap:"wrap",padding:"6px 0",marginBottom:7,borderBottom:"1px solid var(--card-border)"}},
@@ -2969,6 +3360,11 @@ function NiuNiu(){
   if(phase==="result"){
     gameChildren.push(e("div",{key:"next",style:{textAlign:"center",marginTop:14,animation:"fadeUp .5s ease",display:"flex",gap:10,justifyContent:"center"}},
       appMode==="battle"?e("button",{onClick:function(){setPhase("summary");},style:{padding:"9px 20px",fontSize:12,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},"📊 "+t("game.final")):null,
+      appMode==="flip"?e("button",{onClick:function(){
+        if(soundOn)SFX.buttonClick();
+        saveFlipHistoryIfNeeded();
+        setAppMode("home");setPhase("setup");setHands([]);setResults([]);setRoundNum(0);setRevealedCards([]);
+      },style:{padding:"9px 20px",fontSize:12,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},"🏁 "+t("game.end")):null,
       e("button",{onClick:function(){
         if(soundOn)SFX.buttonClick();
         // Ad check: every 5 rounds, show ad (unless purchased noads/allpass)
@@ -3001,10 +3397,36 @@ function NiuNiu(){
           e("div",{style:{color:"var(--text-dim)",fontSize:11}},t("ad.area"))),
         e("div",{style:{fontSize:10,color:"var(--text-dim)"}},t("ad.close")),
         e("div",{style:{marginTop:10}},
-          e("button",{onClick:function(){setAppMode("shop");setShowAdPlaceholder(false);},style:{
+          e("button",{onClick:function(){setShopFrom(appMode);setAppMode("shop");setShowAdPlaceholder(false);},style:{
             padding:"5px 14px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
             background:"transparent",border:"1px solid var(--card-border)",color:"var(--accent)"}},
             t("ad.remove"))))));
+  }
+
+  // Reset confirmation modal (works on all platforms including PWA where confirm() may be blocked)
+  if(showResetConfirm){
+    gameChildren.push(e("div",{key:"resetConfirm",style:{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:999,
+      background:"rgba(0,0,0,0.85)",display:"flex",alignItems:"center",justifyContent:"center",padding:20,
+      animation:"fadeUp 0.3s ease"}},
+      e("div",{style:{maxWidth:340,width:"100%",padding:"24px 22px",borderRadius:16,
+        background:"var(--card)",border:"1.5px solid var(--accent)",
+        boxShadow:"0 8px 32px rgba(0,0,0,0.6)"}},
+        e("div",{style:{fontSize:20,marginBottom:10,textAlign:"center"}},"⚠️"),
+        e("div",{style:{fontSize:13,color:"var(--text)",textAlign:"center",marginBottom:18,lineHeight:1.6}},t("game.reset_confirm")),
+        e("div",{style:{display:"flex",gap:8,justifyContent:"center"}},
+          e("button",{onClick:function(){setShowResetConfirm(false);if(soundOn)SFX.buttonClick();},style:{
+            padding:"9px 18px",borderRadius:8,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+            background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-muted)",flex:1}},t("common.cancel")),
+          e("button",{onClick:function(){
+            setShowResetConfirm(false);
+            saveFlipHistoryIfNeeded();
+            if(appMode==="battle")saveBattleHistoryIfNeeded();
+            setAppMode("home");setPhase("setup");setHands([]);setResults([]);setRoundNum(0);setRevealedCards([]);
+            if(soundOn)SFX.buttonClick();
+          },style:{
+            padding:"9px 18px",borderRadius:8,fontSize:12,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+            background:"linear-gradient(135deg,#c0392b,#962d22)",
+            color:"#fff",border:"none",flex:1,boxShadow:"0 2px 8px rgba(192,57,43,0.35)"}},t("common.ok"))))));
   }
 
   return e("div",{style:{minHeight:"100vh",padding:10,maxWidth:860,margin:"0 auto"}},gameChildren);
