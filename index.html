@@ -895,6 +895,21 @@ var LANGS=[
 
 var I18N={
   ja:{
+    // Tutorial
+    "tutorial.skip":"スキップ",
+    "tutorial.next":"次へ",
+    "tutorial.start":"はじめる",
+    "tutorial.prev":"戻る",
+    "tutorial.step":"{current} / {total}",
+    "tutorial.s1.title":"ようこそ、牛牛へ！",
+    "tutorial.s1.body":"中国発祥のカードゲーム「牛牛（ニウニウ）」。5枚のカードで役を作り、絞って楽しむ大人の心理戦。",
+    "tutorial.s2.title":"🎴 2つのモード",
+    "tutorial.s2.body":"「フリップ」はサクッと勝負を楽しむカジュアルモード。「対戦」は親子＋チップ計算付きの本格ルール。",
+    "tutorial.s3.title":"👉 絞りの楽しさ",
+    "tutorial.s3.body":"カードを上下左右にドラッグして少しずつ見ていく「絞り」こそ牛牛の醍醐味。スートの見え方から中身を推理しよう。",
+    "tutorial.s4.title":"✨ 自分好みにカスタマイズ",
+    "tutorial.s4.body":"カードのデザインや背景、先告知演出など多くの設定が楽しめる。詳しいルールは「遊び方」で確認できるよ。",
+    "tutorial.replay":"チュートリアルを見直す",
     // Home
     "home.tagline":"",
     "home.flip":"フリップ",
@@ -1201,6 +1216,21 @@ var I18N={
     "common.no":"いいえ",
   },
   en:{
+    // Tutorial
+    "tutorial.skip":"Skip",
+    "tutorial.next":"Next",
+    "tutorial.start":"Let's go",
+    "tutorial.prev":"Back",
+    "tutorial.step":"{current} / {total}",
+    "tutorial.s1.title":"Welcome to NiuNiu!",
+    "tutorial.s1.body":"A Chinese-origin card game. Make hands from 5 cards and enjoy the art of slowly revealing them — a thrilling game of nerve.",
+    "tutorial.s2.title":"🎴 Two modes",
+    "tutorial.s2.body":"Flip mode for quick casual play. Battle mode adds a dealer and chip calculation for the full experience.",
+    "tutorial.s3.title":"👉 The squeeze",
+    "tutorial.s3.body":"Drag cards in any direction to slowly reveal them. Guessing the hidden ranks from the visible suits is the heart of NiuNiu.",
+    "tutorial.s4.title":"✨ Customize your table",
+    "tutorial.s4.body":"Card designs, backgrounds, and spoiler effects — make it yours. Check \"How to Play\" anytime for the full rules.",
+    "tutorial.replay":"Replay tutorial",
     "home.tagline":"",
     "home.flip":"Flip",
     "home.flip_desc":"Quick play",
@@ -1488,6 +1518,21 @@ var I18N={
     "common.no":"No",
   },
   zh:{
+    // Tutorial
+    "tutorial.skip":"跳过",
+    "tutorial.next":"下一步",
+    "tutorial.start":"开始",
+    "tutorial.prev":"返回",
+    "tutorial.step":"{current} / {total}",
+    "tutorial.s1.title":"欢迎来到牛牛！",
+    "tutorial.s1.body":"源自中国的扑克游戏。用5张牌组成牌型，慢慢挤牌揭晓——考验胆量的心理对决。",
+    "tutorial.s2.title":"🎴 两种模式",
+    "tutorial.s2.body":"「翻牌」是快速轻松的对战。「对战」含庄家和筹码计算，体验完整的玩法。",
+    "tutorial.s3.title":"👉 挤牌的乐趣",
+    "tutorial.s3.body":"向四个方向拖动牌面慢慢揭示。通过可见的花色推测隐藏的点数，正是牛牛的精髓。",
+    "tutorial.s4.title":"✨ 打造专属牌桌",
+    "tutorial.s4.body":"牌面、背景、先兆演出等随心定制。详细规则请查看「玩法」页面。",
+    "tutorial.replay":"重新观看教程",
     "home.tagline":"",
     "home.flip":"翻牌",
     "home.flip_desc":"快速对战",
@@ -2009,6 +2054,12 @@ function NiuNiu(){
   // Top-level mode: "splash", "home", "flip", "battle", "rulebook"
   var s0=useState("splash"),appMode=s0[0],setAppMode=s0[1];
 
+  // Tutorial state - show on first launch
+  var st0=useState(function(){
+    try{return localStorage.getItem("niuniu_tutorial_done")!=="1";}catch(e){return true;}
+  }),showTutorial=st0[0],setShowTutorial=st0[1];
+  var st1=useState(0),tutorialStep=st1[0],setTutorialStep=st1[1];
+
   // Auto transition from splash to home
   useEffect(function(){
     if(appMode==="splash"){
@@ -2025,13 +2076,16 @@ function NiuNiu(){
   var s7=useState({}),scores=s7[0],setScores=s7[1];
   var s8=useState(0),roundNum=s8[0],setRoundNum=s8[1];
   var s9=useState(null),winner=s9[0],setWinner=s9[1];
-  var s10=useState(true),soundOn=s10[0],setSoundOn=s10[1];
-  var s13=useState("sakibare"),gameMode=s13[0],setGameMode=s13[1];
+  var s10=useState(loadPref("niuniu_sound","1")==="1"),soundOn=s10[0],setSoundOnState=s10[1];
+  function setSoundOn(v){setSoundOnState(v);savePref("niuniu_sound",v?"1":"0");}
+  var s13=useState(loadPref("niuniu_mode","sakibare")),gameMode=s13[0],setGameModeState=s13[1];
+  function setGameMode(v){setGameModeState(v);savePref("niuniu_mode",v);}
   var s11=useState({}),alerts=s11[0],setAlerts=s11[1];
 
   // Battle mode states
   var b1=useState(0),dealer=b1[0],setDealer=b1[1];
-  var b2=useState("offset"),betRule=b2[0],setBetRule=b2[1]; // "offset" or "nooffset"
+  var b2=useState(loadPref("niuniu_bet_rule","offset")),betRule=b2[0],setBetRuleState=b2[1]; // "offset" or "nooffset"
+  function setBetRule(v){setBetRuleState(v);savePref("niuniu_bet_rule",v);}
   var b3=useState({}),chips=b3[0],setChips=b3[1];
   var b4=useState({}),bets=b4[0],setBets=b4[1];
   var b5=useState([]),history=b5[0],setHistory=b5[1];
@@ -2056,12 +2110,29 @@ function NiuNiu(){
     try{localStorage.setItem("niuniu_player_shortcuts",JSON.stringify(arr));}catch(e){}
   }
 
-  // Shop & customization
-  var c1=useState("default"),skinId=c1[0],setSkinId=c1[1];
-  var c1b=useState("default"),faceId=c1b[0],setFaceId=c1b[1];
-  var c2=useState("default"),tableId=c2[0],setTableId=c2[1];
+  // Generic localStorage helpers for simple string preferences
+  function loadPref(key,fallback){
+    try{var v=localStorage.getItem(key);if(v!==null)return v;}catch(e){}
+    return fallback;
+  }
+  function savePref(key,val){try{localStorage.setItem(key,String(val));}catch(e){}}
+
+  // Shop & customization (persisted)
+  var c1=useState(loadPref("niuniu_skin","default")),skinId=c1[0],setSkinIdState=c1[1];
+  function setSkinId(v){setSkinIdState(v);savePref("niuniu_skin",v);}
+  var c1b=useState(loadPref("niuniu_face","default")),faceId=c1b[0],setFaceIdState=c1b[1];
+  function setFaceId(v){setFaceIdState(v);savePref("niuniu_face",v);}
+  var c2=useState(loadPref("niuniu_table","default")),tableId=c2[0],setTableIdState=c2[1];
+  function setTableId(v){setTableIdState(v);savePref("niuniu_table",v);}
+
+  // Safety net: persist customization whenever it changes (in case setter somehow misses it)
+  useEffect(function(){savePref("niuniu_skin",skinId);},[skinId]);
+  useEffect(function(){savePref("niuniu_face",faceId);},[faceId]);
+  useEffect(function(){savePref("niuniu_table",tableId);},[tableId]);
+  useEffect(function(){savePref("niuniu_sound",soundOn?"1":"0");},[soundOn]);
+  useEffect(function(){savePref("niuniu_mode",gameMode);},[gameMode]);
   var c3=useState("default"),soundPackId=c3[0],setSoundPackId=c3[1];  // unused, kept for backward compat
-  var c4=useState({}),purchased=c4[0],setPurchased=c4[1]; // {skins:true,tables:true,...}
+  var c4=useState({allpass:true,skins:true,tables:true,noads:true}),purchased=c4[0],setPurchased=c4[1]; // All unlocked for public release
   var c5=useState(null),settingsFrom=c5[0],setSettingsFrom=c5[1]; // track where settings was opened from
   var c5b=useState(null),shopFrom=c5b[0],setShopFrom=c5b[1]; // track where shop was opened from
   var c5c=useState(null),pendingResume=c5c[0],setPendingResume=c5c[1]; // interrupted battle session to prompt
@@ -2098,14 +2169,7 @@ function NiuNiu(){
   var curSkin=CARD_SKINS.find(function(s){return s.id===skinId;})||CARD_SKINS[0];
   var curFace=CARD_FACES.find(function(f){return f.id===faceId;})||CARD_FACES[0];
   var curTable=TABLE_BGS.find(function(t){return t.id===tableId;})||TABLE_BGS[0];
-  function canUse(category,itemId){
-    if(purchased.allpass)return true;
-    var purchaseKey=category==="faces"?"skins":category;
-    if(purchased[purchaseKey])return true;
-    var list=category==="skins"?CARD_SKINS:category==="faces"?CARD_FACES:TABLE_BGS;
-    var item=list.find(function(x){return x.id===itemId;});
-    return item&&item.free;
-  }
+  function canUse(category,itemId){return true;} // All content unlocked
   function doPurchase(itemId){
     setPurchased(function(p){var n=Object.assign({},p);n[itemId]=true;return n;});
   }
@@ -2447,6 +2511,60 @@ function NiuNiu(){
               background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",
               color:"var(--bg)",border:"none",flex:1,boxShadow:"0 2px 8px rgba(212,175,55,0.3)"}},t("resume.resume")))));
     }
+
+    // Tutorial overlay (first-time users)
+    var tutorialOverlay=null;
+    if(showTutorial&&!pendingResume){
+      var tutSteps=[
+        {title:t("tutorial.s1.title"),body:t("tutorial.s1.body"),icon:"🎴"},
+        {title:t("tutorial.s2.title"),body:t("tutorial.s2.body"),icon:"⚔️"},
+        {title:t("tutorial.s3.title"),body:t("tutorial.s3.body"),icon:"👉"},
+        {title:t("tutorial.s4.title"),body:t("tutorial.s4.body"),icon:"✨"}
+      ];
+      var cur=tutSteps[tutorialStep];
+      var isLast=tutorialStep===tutSteps.length-1;
+      var finishTutorial=function(){
+        setShowTutorial(false);
+        try{localStorage.setItem("niuniu_tutorial_done","1");}catch(e){}
+        if(soundOn)SFX.buttonClick();
+      };
+      tutorialOverlay=e("div",{key:"tutorial",style:{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:999,
+        background:"rgba(0,0,0,0.88)",display:"flex",alignItems:"center",justifyContent:"center",padding:20,
+        animation:"fadeUp 0.3s ease"}},
+        e("div",{style:{maxWidth:380,width:"100%",padding:"28px 24px",borderRadius:18,
+          background:"var(--card)",border:"1.5px solid var(--accent)",
+          boxShadow:"0 8px 32px rgba(0,0,0,0.6)"}},
+          // Skip button top-right
+          e("div",{style:{textAlign:"right",marginBottom:4}},
+            e("button",{onClick:finishTutorial,style:{
+              padding:"4px 10px",borderRadius:5,fontSize:10,cursor:"pointer",fontFamily:"inherit",
+              background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-dim)"}},t("tutorial.skip"))),
+          // Icon
+          e("div",{style:{fontSize:48,textAlign:"center",marginBottom:14,animation:"splashIn 0.5s ease"}},cur.icon),
+          // Title
+          e("div",{style:{fontSize:17,fontWeight:800,color:"var(--accent)",textAlign:"center",marginBottom:12,letterSpacing:1,lineHeight:1.4}},cur.title),
+          // Body
+          e("div",{style:{fontSize:12,color:"var(--text)",textAlign:"center",marginBottom:22,lineHeight:1.75,padding:"0 4px"}},cur.body),
+          // Step indicator (dots)
+          e("div",{style:{display:"flex",justifyContent:"center",gap:6,marginBottom:18}},
+            tutSteps.map(function(_,i){
+              return e("div",{key:i,style:{width:i===tutorialStep?20:7,height:7,borderRadius:4,
+                background:i===tutorialStep?"var(--accent)":"rgba(255,255,255,0.15)",transition:"all 0.3s ease"}});
+            })),
+          // Buttons row
+          e("div",{style:{display:"flex",gap:8,justifyContent:"center"}},
+            tutorialStep>0?e("button",{onClick:function(){setTutorialStep(tutorialStep-1);if(soundOn)SFX.buttonClick();},style:{
+              padding:"10px 18px",borderRadius:8,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+              background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-muted)",flex:1}},t("tutorial.prev")):null,
+            e("button",{onClick:function(){
+              if(isLast){finishTutorial();}
+              else{setTutorialStep(tutorialStep+1);if(soundOn)SFX.buttonClick();}
+            },style:{
+              padding:"10px 18px",borderRadius:8,fontSize:12,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+              background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",
+              color:"var(--bg)",border:"none",flex:2,boxShadow:"0 2px 8px rgba(212,175,55,0.3)"}},
+              isLast?t("tutorial.start"):t("tutorial.next")))));
+    }
     return e("div",{style:{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",padding:20,maxWidth:860,margin:"0 auto",position:"relative"}},
       // Language switcher (top-right)
       e("div",{style:{position:"absolute",top:16,right:16,display:"flex",gap:4,zIndex:10}},
@@ -2513,7 +2631,7 @@ function NiuNiu(){
             e("span",{style:{fontSize:11,fontWeight:700,color:"var(--text-muted)"}},t("home.settings")))),
         // Footer
         e("div",{style:{marginTop:20,opacity:0.3,fontSize:9,color:"var(--text-muted)",letterSpacing:2,textAlign:"center"}},"v1.0")),
-      resumeOverlay);
+      resumeOverlay,tutorialOverlay);
   }
 
   // ─── SHOP Screen ──────────────────────────────────────────
@@ -2811,14 +2929,6 @@ function NiuNiu(){
         },style:{padding:"6px 16px",borderRadius:6,fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",
           background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-muted)"}},t("settings.shortcut_reset")))));
 
-    // Shop link
-    setKids.push(e("button",{key:"shoplink",onClick:function(){setShopFrom("settings");setAppMode("shop");if(soundOn)SFX.buttonClick();},
-      style:{width:"100%",padding:"12px 16px",borderRadius:12,border:"1px solid var(--card-border)",
-        background:"rgba(0,0,0,0.2)",cursor:"pointer",fontFamily:"inherit",
-        display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginTop:6}},
-      e("span",{style:{fontSize:16}},"🛍️"),
-      e("span",{style:{fontSize:12,fontWeight:700,color:"var(--text-muted)"}},t("settings.shop_link"))));
-
     return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},setKids));
   }
@@ -3084,6 +3194,16 @@ function NiuNiu(){
           t("rb.summary.desc_2"),e("br"),
           t("rb.summary.desc_3"))));
     }
+
+    // Replay tutorial link
+    rbKids.push(e("div",{key:"replayTut",style:{textAlign:"center",margin:"20px 0 6px"}},
+      e("button",{onClick:function(){
+        setShowTutorial(true);setTutorialStep(0);
+        try{localStorage.removeItem("niuniu_tutorial_done");}catch(e){}
+        setAppMode("home");
+        if(soundOn)SFX.buttonClick();
+      },style:{padding:"8px 18px",borderRadius:8,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",
+        background:"transparent",border:"1px solid var(--card-border)",color:"var(--text-muted)"}},"🎬 "+t("tutorial.replay"))));
 
     return e("div",{style:{minHeight:"100vh",padding:12,maxWidth:860,margin:"0 auto"}},
       e("div",{style:{maxWidth:440,margin:"0 auto",padding:"12px 0"}},rbKids));
@@ -3367,40 +3487,10 @@ function NiuNiu(){
       },style:{padding:"9px 20px",fontSize:12,fontWeight:700,fontFamily:"inherit",borderRadius:9,border:"1px solid rgba(255,255,255,0.08)",background:"transparent",color:"#7a9a7a",cursor:"pointer"}},"🏁 "+t("game.end")):null,
       e("button",{onClick:function(){
         if(soundOn)SFX.buttonClick();
-        // Ad check: every 5 rounds, show ad (unless purchased noads/allpass)
-        var nextCount=adCounter+1;
-        setAdCounter(nextCount);
-        if(nextCount%5===0&&!purchased.noads&&!purchased.allpass){
-          setShowAdPlaceholder(true);
-          setTimeout(function(){
-            setShowAdPlaceholder(false);
-            if(appMode==="battle"){setPhase("pickDealer");}
-            else{dealRound(scores);}
-          },3000);
-        }else{
-          if(appMode==="battle"){setPhase("pickDealer");}
-          else{dealRound(scores);}
-        }
+        if(appMode==="battle"){setPhase("pickDealer");}
+        else{dealRound(scores);}
       },style:{padding:"9px 30px",fontSize:14,fontWeight:800,fontFamily:"inherit",borderRadius:9,border:"none",cursor:"pointer",
         background:"linear-gradient(135deg,var(--accent),var(--accent-dark))",color:"var(--bg)",letterSpacing:2,boxShadow:"0 3px 12px rgba(212,175,55,0.22)"}},t("game.next_round_arrow"))));
-  }
-
-  // Ad placeholder overlay
-  if(showAdPlaceholder){
-    gameChildren.push(e("div",{key:"adoverlay",style:{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:999,
-      background:"rgba(0,0,0,0.85)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
-      animation:"fadeUp 0.3s ease"}},
-      e("div",{style:{padding:"30px 40px",borderRadius:16,background:"rgba(10,26,15,0.95)",border:"1px solid var(--card-border)",textAlign:"center"}},
-        e("div",{style:{fontSize:12,color:"var(--text-muted)",marginBottom:10}},t("ad.label")),
-        e("div",{style:{width:250,height:150,borderRadius:8,background:"rgba(0,0,0,0.3)",border:"1px dashed rgba(212,175,55,0.2)",
-          display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}},
-          e("div",{style:{color:"var(--text-dim)",fontSize:11}},t("ad.area"))),
-        e("div",{style:{fontSize:10,color:"var(--text-dim)"}},t("ad.close")),
-        e("div",{style:{marginTop:10}},
-          e("button",{onClick:function(){setShopFrom(appMode);setAppMode("shop");setShowAdPlaceholder(false);},style:{
-            padding:"5px 14px",borderRadius:6,fontSize:9,cursor:"pointer",fontFamily:"inherit",
-            background:"transparent",border:"1px solid var(--card-border)",color:"var(--accent)"}},
-            t("ad.remove"))))));
   }
 
   // Reset confirmation modal (works on all platforms including PWA where confirm() may be blocked)
